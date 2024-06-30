@@ -7,7 +7,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://158.160.13.203:5432/practice
+    url: jdbc:postgresql://localhost:5432/postgres
     username: admin
     password: admin1
     driver-class-name: org.postgresql.Driver
