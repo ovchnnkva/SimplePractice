@@ -6,7 +6,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ClientType {
-    ADULT("Ребенок"), CHILD("Взрослый"), PAIR("Пара");
+    ADULT("Ребенок"),
+    CHILD("Взрослый"),
+    PAIR("Пара");
 
     private final String tittle;
 }
