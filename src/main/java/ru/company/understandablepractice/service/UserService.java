@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.company.understandablepractice.model.User;
 import ru.company.understandablepractice.repository.UserRepository;
 
+import java.math.BigInteger;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -17,11 +18,11 @@ public class UserService {
         return repository.findById(id);
     }
 
-    public long create(User user) {
-        return repository.save(user).getId();
+    public Optional<User> create(User user) {
+        return Optional.of(repository.save(user));
     }
 
-    public void delete(User user) {
-        repository.delete(user);
+    public void delete(long id) {
+        repository.deleteById(id);
     }
 }
