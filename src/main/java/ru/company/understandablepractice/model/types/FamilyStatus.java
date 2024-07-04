@@ -16,5 +16,5 @@ public enum FamilyStatus {
     LONELINESS("Одиночество/Не в постоянных отношениях"),
     FAMILIES_WITH_CHILDREN("Семьи с детьми");
 
-    private final String title;
+    private final String tittle;
 }

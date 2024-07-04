@@ -77,7 +77,7 @@ public class Customer extends Person{
     private PriorityCommunicationChannel priorityCommunicationChannel;
 
     @Column(name = "supervision_status_this_client")
-    private boolean supervision_status_this_client;
+    private boolean supervisionStatusThisClient;
 
     @Column(name = "name_and_contact_supervisor")
     private String contactSupervisor;

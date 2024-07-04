@@ -8,26 +8,28 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.company.understandablepractice.dto.CustomerResponse;
 import ru.company.understandablepractice.dto.UserResponse;
-import ru.company.understandablepractice.dto.mapper.UserMapper;
-import ru.company.understandablepractice.service.UserService;
+import ru.company.understandablepractice.dto.mapper.CustomerMapper;
+import ru.company.understandablepractice.service.CustomerService;
 
 @Tag(
-        name = "Пользователи",
-        description = "Операции над Пользователями"
+        name = "Клиенты",
+        description = "Операции над Клиентами"
 )
 @RequiredArgsConstructor
 @RestController
 @Slf4j
-@RequestMapping("/api/user")
-public class UserController {
-    private final UserService service;
+@RequestMapping("/api/customer")
+public class CustomerController {
 
-    private final UserMapper mapper;
+    private final CustomerService service;
 
-    @Operation(summary = "Получение по ID", description = "Позволяет получить пользователя по ключу")
+    private final CustomerMapper mapper;
+
+    @Operation(summary = "Получение по ID", description = "Позволяет получить клиента по ключу")
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getById(@PathVariable @Parameter(description = "ID пользователя") long id) {
+    public ResponseEntity<CustomerResponse> getById(@PathVariable @Parameter(description = "ID клиента") long id) {
         log.info("get user by id {}", id);
 
         return service.getById(id)
@@ -35,25 +37,25 @@ public class UserController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @Operation(summary = "Обновление", description = "Позволяет обновить данные пользователя")
+    @Operation(summary = "Обновление", description = "Позволяет обновить данные клиента")
     @PutMapping
-    public ResponseEntity<?> update(@RequestParam @Parameter(description = "Пользователь") UserResponse response) {
+    public ResponseEntity<?> update(@RequestParam @Parameter(description = "Клиент") CustomerResponse response) {
         return service.create(mapper.fromResponseToEntity(response))
                 .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
-    @Operation(summary = "Создать", description = "Создать пользователя")
+    @Operation(summary = "Создать", description = "Создать клиента")
     @PostMapping
-    public ResponseEntity<?> create(@RequestParam @Parameter(description = "Пользователь") UserResponse response) {
+    public ResponseEntity<?> create(@RequestParam @Parameter(description = "Клиент") CustomerResponse response) {
         return service.create(mapper.fromResponseToEntity(response))
                 .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
-    @Operation(summary = "Удалить", description = "Удаление пользователя")
+    @Operation(summary = "Удалить", description = "Удаление клиента")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable @Parameter(description = "ID пользователя") long id) {
+    public ResponseEntity<?> delete(@PathVariable @Parameter(description = "ID клиента") long id) {
         service.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
