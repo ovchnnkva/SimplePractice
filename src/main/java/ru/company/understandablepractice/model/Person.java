@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Setter
 @Entity
 @Table(name = "persons")
-@MappedSuperclass
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Person {
 
     @Id
@@ -24,29 +24,25 @@ public class Person {
     @Column(name = "client_type")
     protected ClientType clientType;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
     @Column(name = "full_name")
-    private String fullName;
+    protected String fullName;
 
     @Column(name = "first_name")
-    private String firstName;
+    protected String firstName;
 
     @Column(name = "second_name")
-    private String secondName;
+    protected String secondName;
 
     @Column(name = "last_name")
-    private String lastName;
+    protected String lastName;
 
     @Column(name = "phone_number", length = 20)
-    private String phoneNumber;
+    protected String phoneNumber;
 
     @Column(name = "mail")
-    private String mail;
+    protected String mail;
 
     @Convert(converter = GenderConverter.class)
     @Column(name = "gender")
-    private Gender gender;
+    protected Gender gender;
 }

@@ -12,20 +12,15 @@ import java.time.LocalDate;
 @Setter
 @Entity
 @Table(name = "customers")
-@MappedSuperclass
-public class Customer {
+public class Customer extends Person{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customer_id")
-    protected long id;
+    private long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
-    @OneToOne(optional = false)
-    @PrimaryKeyJoinColumn
-    private Person person;
 
     @Convert(converter = ClientStatusConverter.class)
     @Column(name = "client_status")
