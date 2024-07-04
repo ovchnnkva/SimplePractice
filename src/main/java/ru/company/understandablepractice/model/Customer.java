@@ -19,26 +19,13 @@ public class Customer {
     @Column(name = "customer_id")
     protected long id;
 
-    @Convert(converter = ClientTypeConverter.class)
-    @Column(name = "client_type")
-    protected ClientType clientType;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "full_name")
-    private String fullName;
-
-    @Column(name = "phone_number", length = 20)
-    private String phoneNumber;
-
-    @Column(name = "mail")
-    private String mail;
-
-    @Convert(converter = GenderConverter.class)
-    @Column(name = "gender")
-    private Gender gender;
+    @OneToOne(optional = false)
+    @PrimaryKeyJoinColumn
+    private Person person;
 
     @Convert(converter = ClientStatusConverter.class)
     @Column(name = "client_status")
@@ -68,8 +55,8 @@ public class Customer {
     @Column(name = "client_request_for_therapy", columnDefinition = "TEXT")
     private String clientTherapyRequest;
 
-    @Column(name = "fixed_time_day", length = 30)
-    private String fixedTimeDay;
+    @Column(name = "meeting_time_day")
+    private String meetingTimeDay;
 
     @Column(name = "financial_condition")
     private Integer financialCondition;
