@@ -2,7 +2,6 @@ package ru.company.understandablepractice.model.types.converters;
 
 import jakarta.persistence.AttributeConverter;
 import ru.company.understandablepractice.model.types.FamilyStatus;
-import ru.company.understandablepractice.model.types.OnlinePlatform;
 
 public class FamilyStatusConverter implements AttributeConverter<FamilyStatus, String> {
 

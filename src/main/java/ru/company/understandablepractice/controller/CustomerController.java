@@ -31,7 +31,6 @@ public class CustomerController {
     @GetMapping("/{id}")
     public ResponseEntity<CustomerResponse> getById(@PathVariable @Parameter(description = "ID клиента") long id) {
         log.info("get user by id {}", id);
-
         return service.getById(id)
                 .map(value -> new ResponseEntity<>(mapper.fromEntityToResponse(value), HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -40,6 +39,7 @@ public class CustomerController {
     @Operation(summary = "Обновление", description = "Позволяет обновить данные клиента")
     @PutMapping
     public ResponseEntity<?> update(@RequestParam @Parameter(description = "Клиент") CustomerResponse response) {
+        log.info("update customer {}", response);
         return service.create(mapper.fromResponseToEntity(response))
                 .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
@@ -48,6 +48,7 @@ public class CustomerController {
     @Operation(summary = "Создать", description = "Создать клиента")
     @PostMapping
     public ResponseEntity<?> create(@RequestParam @Parameter(description = "Клиент") CustomerResponse response) {
+        log.info("create customer {}", response);
         return service.create(mapper.fromResponseToEntity(response))
                 .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
@@ -56,6 +57,7 @@ public class CustomerController {
     @Operation(summary = "Удалить", description = "Удаление клиента")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable @Parameter(description = "ID клиента") long id) {
+        log.info("delete customer {}", id);
         service.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
