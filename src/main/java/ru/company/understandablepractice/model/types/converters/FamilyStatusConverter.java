@@ -9,7 +9,7 @@ public class FamilyStatusConverter implements AttributeConverter<FamilyStatus, S
     @Override
     public String convertToDatabaseColumn(FamilyStatus familyStatus) {
         if(familyStatus == null) return null;
-        return familyStatus.getTitle();
+        return familyStatus.getTittle();
     }
 
     @Override
