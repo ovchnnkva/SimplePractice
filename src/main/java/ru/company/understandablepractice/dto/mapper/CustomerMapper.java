@@ -16,7 +16,7 @@ import java.util.NoSuchElementException;
 @Mapper(componentModel = "spring", uses = {UserMapper.class})
 public abstract class CustomerMapper {
     @Autowired
-    private YesNoConverter yesNoConverter;
+    YesNoConverter yesNoConverter;
 
     @Autowired
     private UserMapper userMapper;
@@ -86,7 +86,7 @@ public abstract class CustomerMapper {
         return customer.getOnlinePlatform().getTittle();
     }
 
-    OnlinePlatform mapOnlinePlatfotm(CustomerResponse response) {
+    OnlinePlatform mapOnlinePlatform(CustomerResponse response) {
         return Arrays.stream(OnlinePlatform.values())
                 .filter(status -> status.getTittle().equals(response.getClientStatus()))
                 .findFirst()
