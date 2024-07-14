@@ -10,18 +10,12 @@ import ru.company.understandablepractice.model.types.FamilyStatus;
 @Entity
 @Table(name = "pair")
 public class Pair extends Person{
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "pair_id")
-    private long id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "first_customer")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "first_customer_id")
     private Customer firstCustomer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "second_customer")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "second_customer_id")
     private Customer secondCustomer;
 
     @Column(name = "client_request_for_therapy_reason", columnDefinition = "TEXT")

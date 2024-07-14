@@ -39,16 +39,16 @@ public class MeetController {
     public ResponseEntity<?> update(@RequestParam @Parameter(description = "Встреча") MeetResponse response) {
         log.info("update meet {}", response);
         return service.create(mapper.fromResponseToEntity(response))
-                .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .map(value -> new ResponseEntity<>(HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
     @Operation(summary = "Создать", description = "Создать встречу")
     @PostMapping
-    public ResponseEntity<?> create(@RequestParam @Parameter(description = "Встреча") MeetResponse response) {
+    public ResponseEntity<Long> create(@RequestParam @Parameter(description = "Встреча") MeetResponse response) {
         log.info("create meet {}", response);
         return service.create(mapper.fromResponseToEntity(response))
-                .map(value -> new ResponseEntity<>(response, HttpStatus.OK))
+                .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 

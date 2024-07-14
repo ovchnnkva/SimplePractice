@@ -39,7 +39,7 @@ public class PairController {
     public ResponseEntity<?> update(@RequestParam @Parameter(description = "Пара") PairResponse response) {
         log.info("update pair {}", response);
         return service.create(mapper.fromResponseToEntity(response))
-                .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .map(value -> new ResponseEntity<>(HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
@@ -48,7 +48,7 @@ public class PairController {
     public ResponseEntity<?> create(@RequestParam @Parameter(description = "Пара") PairResponse response) {
         log.info("create pair {}", response);
         return service.create(mapper.fromResponseToEntity(response))
-                .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 

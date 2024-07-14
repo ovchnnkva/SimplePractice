@@ -1,8 +1,6 @@
 package ru.company.understandablepractice.dto;
 
 import lombok.Data;
-import ru.company.understandablepractice.model.Customer;
-import ru.company.understandablepractice.model.types.BringsClient;
 
 @Data
 public class ChildResponse {

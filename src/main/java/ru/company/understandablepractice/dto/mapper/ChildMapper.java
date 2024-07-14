@@ -28,8 +28,8 @@ public abstract class ChildMapper {
     @Mapping(target = "secondParent", expression = "java(mapSecondParentResponse(child))")
     public abstract ChildResponse fromEntityToResponse(Child child);
 
-    String mapBringsClientString(BringsClient bringsClient){
-        return bringsClient.getTitle();
+    String mapBringsClientString(Child child){
+        return child.getBringsClient().getTitle();
     }
 
     BringsClient mapBringsClient(ChildResponse response) throws NoSuchElementException{
