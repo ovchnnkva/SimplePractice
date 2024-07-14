@@ -37,7 +37,7 @@ public class UserController {
 
     @Operation(summary = "Обновление", description = "Позволяет обновить данные пользователя")
     @PutMapping
-    public ResponseEntity<?> update(@RequestParam @Parameter(description = "Пользователь") UserResponse response) {
+    public ResponseEntity<?> update(@RequestBody @Parameter(description = "Пользователь") UserResponse response) {
         return service.create(mapper.fromResponseToEntity(response))
                 .map(value -> new ResponseEntity<>(HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
@@ -45,7 +45,7 @@ public class UserController {
 
     @Operation(summary = "Создать", description = "Создать пользователя")
     @PostMapping
-    public ResponseEntity<Long> create(@RequestParam @Parameter(description = "Пользователь") UserResponse response) {
+    public ResponseEntity<Long> create(@RequestBody @Parameter(description = "Пользователь") UserResponse response) {
         return service.create(mapper.fromResponseToEntity(response))
                 .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));

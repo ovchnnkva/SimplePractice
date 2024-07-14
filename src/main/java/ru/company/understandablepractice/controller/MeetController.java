@@ -36,7 +36,7 @@ public class MeetController {
 
     @Operation(summary = "Обновление", description = "Позволяет обновить данные встречи")
     @PutMapping
-    public ResponseEntity<?> update(@RequestParam @Parameter(description = "Встреча") MeetResponse response) {
+    public ResponseEntity<?> update(@RequestBody @Parameter(description = "Встреча") MeetResponse response) {
         log.info("update meet {}", response);
         return service.create(mapper.fromResponseToEntity(response))
                 .map(value -> new ResponseEntity<>(HttpStatus.OK))
@@ -45,7 +45,7 @@ public class MeetController {
 
     @Operation(summary = "Создать", description = "Создать встречу")
     @PostMapping
-    public ResponseEntity<Long> create(@RequestParam @Parameter(description = "Встреча") MeetResponse response) {
+    public ResponseEntity<Long> create(@RequestBody @Parameter(description = "Встреча") MeetResponse response) {
         log.info("create meet {}", response);
         return service.create(mapper.fromResponseToEntity(response))
                 .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))

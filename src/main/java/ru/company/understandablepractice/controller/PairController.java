@@ -36,7 +36,7 @@ public class PairController {
 
     @Operation(summary = "Обновление", description = "Позволяет обновить данные пары")
     @PutMapping
-    public ResponseEntity<?> update(@RequestParam @Parameter(description = "Пара") PairResponse response) {
+    public ResponseEntity<?> update(@RequestBody @Parameter(description = "Пара") PairResponse response) {
         log.info("update pair {}", response);
         return service.create(mapper.fromResponseToEntity(response))
                 .map(value -> new ResponseEntity<>(HttpStatus.OK))
@@ -45,7 +45,7 @@ public class PairController {
 
     @Operation(summary = "Создать", description = "Создать пару")
     @PostMapping
-    public ResponseEntity<?> create(@RequestParam @Parameter(description = "Пара") PairResponse response) {
+    public ResponseEntity<?> create(@RequestBody @Parameter(description = "Пара") PairResponse response) {
         log.info("create pair {}", response);
         return service.create(mapper.fromResponseToEntity(response))
                 .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))

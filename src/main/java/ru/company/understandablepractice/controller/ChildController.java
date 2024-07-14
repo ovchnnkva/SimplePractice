@@ -37,7 +37,7 @@ public class ChildController {
 
     @Operation(summary = "Обновление", description = "Позволяет обновить данные о ребенке")
     @PutMapping
-    public ResponseEntity<?> update(@RequestParam @Parameter(description = "Ребенок") ChildResponse response){
+    public ResponseEntity<?> update(@RequestBody @Parameter(description = "Ребенок") ChildResponse response){
         return service.create(mapper.fromResponseToEntity(response))
                 .map(value -> new ResponseEntity<>(HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
@@ -45,7 +45,7 @@ public class ChildController {
 
     @Operation(summary = "Создать", description = "Добавить информацию о ребенке")
     @PostMapping
-    public ResponseEntity<Long> create(@RequestParam @Parameter(description = "Ребенок") ChildResponse response){
+    public ResponseEntity<Long> create(@RequestBody @Parameter(description = "Ребенок") ChildResponse response){
         return service.create(mapper.fromResponseToEntity(response))
                 .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
