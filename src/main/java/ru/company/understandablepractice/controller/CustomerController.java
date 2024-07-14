@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.company.understandablepractice.dto.CustomerResponse;
-import ru.company.understandablepractice.dto.UserResponse;
 import ru.company.understandablepractice.dto.mapper.CustomerMapper;
 import ru.company.understandablepractice.service.CustomerService;
 
@@ -41,16 +40,16 @@ public class CustomerController {
     public ResponseEntity<?> update(@RequestParam @Parameter(description = "Клиент") CustomerResponse response) {
         log.info("update customer {}", response);
         return service.create(mapper.fromResponseToEntity(response))
-                .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .map(value -> new ResponseEntity<>(HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
     @Operation(summary = "Создать", description = "Создать клиента")
     @PostMapping
-    public ResponseEntity<?> create(@RequestParam @Parameter(description = "Клиент") CustomerResponse response) {
+    public ResponseEntity<Long> create(@RequestParam @Parameter(description = "Клиент") CustomerResponse response) {
         log.info("create customer {}", response);
         return service.create(mapper.fromResponseToEntity(response))
-                .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 

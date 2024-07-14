@@ -11,21 +11,16 @@ import ru.company.understandablepractice.model.types.converters.BringsClientConv
 @Entity
 @Table(name = "child")
 public class Child extends Person{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "child_id")
-    private long id;
-
     @Convert(converter = BringsClientConverter.class)
     @Column(name = "brings_client")
     private BringsClient bringsClient;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "person_id", referencedColumnName = "first_parent_id")
     private Customer firstParent;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "person_id", referencedColumnName = "second_parent_id")
     private Customer secondParent;
 
     @Column(name = "payer_full_name")

@@ -1,6 +1,7 @@
 package ru.company.understandablepractice.dto;
 
 import lombok.Data;
+import ru.company.understandablepractice.model.Person;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -10,7 +11,7 @@ public class MeetResponse {
 
     private long id;
 
-    private CustomerResponse customer;
+    private Person person;
 
     private UserResponse user;
 

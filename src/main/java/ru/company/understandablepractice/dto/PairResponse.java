@@ -1,6 +1,7 @@
 package ru.company.understandablepractice.dto;
 
 import lombok.Data;
+import ru.company.understandablepractice.model.Person;
 
 @Data
 public class PairResponse{
@@ -19,7 +20,6 @@ public class PairResponse{
 
     private String clientSecondRequestTherapyDesiredOutcome;
 
-    private String familyStatus;
 
     private String fullNameCotherapy;
 

@@ -7,6 +7,7 @@ import ru.company.understandablepractice.dto.CustomerResponse;
 import ru.company.understandablepractice.dto.PairResponse;
 import ru.company.understandablepractice.model.Customer;
 import ru.company.understandablepractice.model.Pair;
+import ru.company.understandablepractice.model.Person;
 import ru.company.understandablepractice.model.types.ClientType;
 import ru.company.understandablepractice.model.types.FamilyStatus;
 import ru.company.understandablepractice.model.types.Gender;
@@ -21,14 +22,12 @@ public abstract class PairMapper {
     @Mapping(target = "clientType", expression = "java(mapClientType(response))")
     @Mapping(target = "firstCustomer", expression = "java(mapFirstCustomer(response))")
     @Mapping(target = "secondCustomer", expression = "java(mapSecondCustomer(response))")
-    @Mapping(target = "familyStatus", expression = "java(mapFamilyStatus(response))")
     @Mapping(target = "gender", expression = "java(mapGender(response))")
     public abstract Pair fromResponseToEntity(PairResponse response);
 
     @Mapping(target = "clientType", expression = "java(mapCLientTypeString(entity))")
     @Mapping(target = "firstCustomer", expression = "java(mapFirstCustomerResponse(entity))")
     @Mapping(target = "secondCustomer", expression = "java(mapSecondCustomerResponse(entity))")
-    @Mapping(target = "familyStatus", expression = "java(mapFamilyStatusString(entity))")
     @Mapping(target = "gender", expression = "java(mapGenderString(entity))")
     public abstract PairResponse fromEntityToResponse(Pair entity);
 
@@ -46,17 +45,6 @@ public abstract class PairMapper {
 
     CustomerResponse mapSecondCustomerResponse(Pair entity) {
         return customerMapper.fromEntityToResponse(entity.getSecondCustomer());
-    }
-
-    FamilyStatus mapFamilyStatus(PairResponse response) {
-        return Arrays.stream(FamilyStatus.values())
-                .filter(value -> value.getTittle().equals(response.getFamilyStatus()))
-                .findFirst()
-                .orElseThrow();
-    }
-
-    String mapFamilyStatusString(Pair entity) {
-        return entity.getFamilyStatus().getTittle();
     }
 
     ClientType mapClientType(PairResponse response) {

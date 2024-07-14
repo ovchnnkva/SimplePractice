@@ -21,11 +21,11 @@ public class Meet {
     private long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "customer_id")
-    private Customer customer;
+    @JoinColumn(name = "person_id")
+    private Person person;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "user_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column(name = "name_meet")

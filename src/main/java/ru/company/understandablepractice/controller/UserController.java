@@ -39,15 +39,15 @@ public class UserController {
     @PutMapping
     public ResponseEntity<?> update(@RequestParam @Parameter(description = "Пользователь") UserResponse response) {
         return service.create(mapper.fromResponseToEntity(response))
-                .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .map(value -> new ResponseEntity<>(HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
     @Operation(summary = "Создать", description = "Создать пользователя")
     @PostMapping
-    public ResponseEntity<?> create(@RequestParam @Parameter(description = "Пользователь") UserResponse response) {
+    public ResponseEntity<Long> create(@RequestParam @Parameter(description = "Пользователь") UserResponse response) {
         return service.create(mapper.fromResponseToEntity(response))
-                .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
