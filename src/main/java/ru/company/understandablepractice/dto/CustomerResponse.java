@@ -1,13 +1,14 @@
 package ru.company.understandablepractice.dto;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import ru.company.understandablepractice.model.types.ClientType;
 
 import java.time.LocalDate;
 
-@Data
-public class CustomerResponse {
-
-    private long id;
+@Getter
+@Setter
+public class CustomerResponse extends PersonResponse {
 
     private UserResponse user;
 
@@ -50,4 +51,8 @@ public class CustomerResponse {
     private String supervisionMaterial;
 
     private String notes;
+
+    public CustomerResponse() {
+        super(ClientType.ADULT.getTittle());
+    }
 }

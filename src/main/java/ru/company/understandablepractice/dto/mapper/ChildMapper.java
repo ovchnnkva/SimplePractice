@@ -8,6 +8,7 @@ import ru.company.understandablepractice.dto.CustomerResponse;
 import ru.company.understandablepractice.model.Child;
 import ru.company.understandablepractice.model.Customer;
 import ru.company.understandablepractice.model.types.BringsClient;
+import ru.company.understandablepractice.model.types.ClientType;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;
@@ -18,6 +19,7 @@ public abstract class ChildMapper {
     @Autowired
     private CustomerMapper customerMapper;
 
+    @Mapping(target = "clientType", expression = "java(mapClientType(response))")
     @Mapping(target = "bringsClient", expression = "java(mapBringsClient(response))")
     @Mapping(target = "firstParent", expression = "java(mapFirstParent(response))")
     @Mapping(target = "secondParent", expression = "java(mapSecondParent(response))")
@@ -28,6 +30,16 @@ public abstract class ChildMapper {
     @Mapping(target = "secondParent", expression = "java(mapSecondParentResponse(child))")
     public abstract ChildResponse fromEntityToResponse(Child child);
 
+    ClientType mapClientType(ChildResponse response) {
+        return Arrays.stream(ClientType.values())
+                .filter(value -> value.getTittle().equals(response.getClientType()))
+                .findFirst()
+                .orElseThrow();
+    }
+
+    String mapCLientTypeString(Child entity) {
+        return entity.getClientType().getTittle();
+    }
     String mapBringsClientString(Child child){
         return child.getBringsClient().getTitle();
     }

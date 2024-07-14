@@ -5,6 +5,7 @@ import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.company.understandablepractice.dto.CustomerResponse;
 import ru.company.understandablepractice.dto.MeetResponse;
+import ru.company.understandablepractice.dto.PersonResponse;
 import ru.company.understandablepractice.dto.UserResponse;
 import ru.company.understandablepractice.model.Customer;
 import ru.company.understandablepractice.model.Meet;
@@ -20,6 +21,8 @@ public abstract class MeetMapper {
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private PersonMapper personMapper;
 
     @Mapping(target = "person", expression = "java(mapPerson(response))")
     @Mapping(target = "user", expression = "java(mapUser(response))")
@@ -34,11 +37,11 @@ public abstract class MeetMapper {
     public abstract MeetResponse fromEntityToResponse(Meet entity);
 
     Person mapPerson(MeetResponse response) {
-        return response.getPerson();
+        return personMapper.fromResponseToEntity(response.getPerson());
     }
 
-    Person mapPersonResponse(Meet entity) {
-        return entity.getPerson();
+    PersonResponse mapPersonResponse(Meet entity) {
+        return personMapper.fromEntityToResponse(entity.getPerson());
     }
 
     User mapUser(MeetResponse response) {

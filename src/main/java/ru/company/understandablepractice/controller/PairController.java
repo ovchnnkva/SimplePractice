@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.company.understandablepractice.dto.PairResponse;
 import ru.company.understandablepractice.dto.mapper.PairMapper;
+import ru.company.understandablepractice.model.types.ClientType;
 import ru.company.understandablepractice.service.PairService;
 
 @Tag(

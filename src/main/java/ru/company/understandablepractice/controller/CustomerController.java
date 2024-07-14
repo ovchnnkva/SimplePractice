@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.company.understandablepractice.dto.CustomerResponse;
 import ru.company.understandablepractice.dto.mapper.CustomerMapper;
+import ru.company.understandablepractice.model.types.ClientType;
 import ru.company.understandablepractice.service.CustomerService;
 
 @Tag(

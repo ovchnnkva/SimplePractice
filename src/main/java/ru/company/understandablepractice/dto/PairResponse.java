@@ -1,12 +1,12 @@
 package ru.company.understandablepractice.dto;
 
-import lombok.Data;
-import ru.company.understandablepractice.model.Person;
+import lombok.Getter;
+import lombok.Setter;
+import ru.company.understandablepractice.model.types.ClientType;
 
-@Data
-public class PairResponse{
-
-    private long id;
+@Getter
+@Setter
+public class PairResponse extends PersonResponse{
 
     private CustomerResponse firstCustomer;
 
@@ -20,7 +20,6 @@ public class PairResponse{
 
     private String clientSecondRequestTherapyDesiredOutcome;
 
-
     private String fullNameCotherapy;
 
     private String phoneNumberCotherapy;
@@ -29,19 +28,9 @@ public class PairResponse{
 
     private String financialTermsCotherapists;
 
-    protected String clientType;
+    private String familyStatus;
 
-    protected String fullName;
-
-    protected String firstName;
-
-    protected String secondName;
-
-    protected String lastName;
-
-    protected String phoneNumber;
-
-    protected String mail;
-
-    protected String gender;
+    public PairResponse() {
+        super(ClientType.PAIR.getTittle());
+    }
 }

@@ -11,7 +11,7 @@ public class MeetResponse {
 
     private long id;
 
-    private Person person;
+    private PersonResponse person;
 
     private UserResponse user;
 
