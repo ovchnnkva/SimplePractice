@@ -11,11 +11,11 @@ import ru.company.understandablepractice.model.types.FamilyStatus;
 @Table(name = "pair")
 public class Pair extends Person{
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "person_id", referencedColumnName = "first_customer_id")
+    @JoinColumn(name = "first_customer_id")
     private Customer firstCustomer;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "person_id", referencedColumnName = "second_customer_id")
+    @JoinColumn(name = "second_customer_id")
     private Customer secondCustomer;
 
     @Column(name = "client_request_for_therapy_reason", columnDefinition = "TEXT")

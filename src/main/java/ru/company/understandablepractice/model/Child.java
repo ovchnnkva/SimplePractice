@@ -16,11 +16,11 @@ public class Child extends Person{
     private BringsClient bringsClient;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "person_id", referencedColumnName = "first_parent_id")
+    @JoinColumn(name = "person_id")
     private Customer firstParent;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "person_id", referencedColumnName = "second_parent_id")
+    @JoinColumn(name = "second_parent_id")
     private Customer secondParent;
 
     @Column(name = "payer_full_name")
