@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.company.understandablepractice.dto.CustomerResponse;
 import ru.company.understandablepractice.dto.mapper.CustomerMapper;
+import ru.company.understandablepractice.model.types.ClientType;
 import ru.company.understandablepractice.service.CustomerService;
 
 @Tag(
@@ -37,7 +38,7 @@ public class CustomerController {
 
     @Operation(summary = "Обновление", description = "Позволяет обновить данные клиента")
     @PutMapping
-    public ResponseEntity<?> update(@RequestParam @Parameter(description = "Клиент") CustomerResponse response) {
+    public ResponseEntity<?> update(@RequestBody @Parameter(description = "Клиент") CustomerResponse response) {
         log.info("update customer {}", response);
         return service.create(mapper.fromResponseToEntity(response))
                 .map(value -> new ResponseEntity<>(HttpStatus.OK))
@@ -46,7 +47,7 @@ public class CustomerController {
 
     @Operation(summary = "Создать", description = "Создать клиента")
     @PostMapping
-    public ResponseEntity<Long> create(@RequestParam @Parameter(description = "Клиент") CustomerResponse response) {
+    public ResponseEntity<Long> create(@RequestBody @Parameter(description = "Клиент") CustomerResponse response) {
         log.info("create customer {}", response);
         return service.create(mapper.fromResponseToEntity(response))
                 .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))

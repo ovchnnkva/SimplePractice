@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.company.understandablepractice.dto.PairResponse;
 import ru.company.understandablepractice.dto.mapper.PairMapper;
+import ru.company.understandablepractice.model.types.ClientType;
 import ru.company.understandablepractice.service.PairService;
 
 @Tag(
@@ -36,7 +37,7 @@ public class PairController {
 
     @Operation(summary = "Обновление", description = "Позволяет обновить данные пары")
     @PutMapping
-    public ResponseEntity<?> update(@RequestParam @Parameter(description = "Пара") PairResponse response) {
+    public ResponseEntity<?> update(@RequestBody @Parameter(description = "Пара") PairResponse response) {
         log.info("update pair {}", response);
         return service.create(mapper.fromResponseToEntity(response))
                 .map(value -> new ResponseEntity<>(HttpStatus.OK))
@@ -45,7 +46,7 @@ public class PairController {
 
     @Operation(summary = "Создать", description = "Создать пару")
     @PostMapping
-    public ResponseEntity<?> create(@RequestParam @Parameter(description = "Пара") PairResponse response) {
+    public ResponseEntity<?> create(@RequestBody @Parameter(description = "Пара") PairResponse response) {
         log.info("create pair {}", response);
         return service.create(mapper.fromResponseToEntity(response))
                 .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))

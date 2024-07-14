@@ -4,23 +4,26 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.company.understandablepractice.dto.CustomerResponse;
+import ru.company.understandablepractice.dto.PairResponse;
 import ru.company.understandablepractice.dto.UserResponse;
 import ru.company.understandablepractice.dto.converter.YesNoConverter;
 import ru.company.understandablepractice.model.Customer;
+import ru.company.understandablepractice.model.Pair;
 import ru.company.understandablepractice.model.User;
 import ru.company.understandablepractice.model.types.*;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
-@Mapper(componentModel = "spring", uses = {UserMapper.class})
+@Mapper(componentModel = "spring")
 public abstract class CustomerMapper {
     @Autowired
     YesNoConverter yesNoConverter;
 
     @Autowired
-    private UserMapper userMapper;
+    UserMapper userMapper;
 
+    @Mapping(target = "clientType", expression = "java(mapClientType(response))")
     @Mapping(target = "user", expression = "java(mapUser(response))")
     @Mapping(target = "clientStatus", expression = "java(mapClientStatus(response))")
     @Mapping(target = "contactMethod", expression = "java(mapContactMethod(response))")
@@ -29,6 +32,7 @@ public abstract class CustomerMapper {
     @Mapping(target = "familyStatus", expression = "java(mapFamilyStatus(response))")
     @Mapping(target = "priorityCommunicationChannel", expression = "java(mapPriorityCommunicationChannel(response))")
     @Mapping(target = "supervisionStatusThisClient", expression = "java(yesNoConverter.stringToBoolean(response.getSupervisionStatusThisClient()))")
+    @Mapping(target = "gender", expression = "java(mapGender(response))")
     public abstract Customer fromResponseToEntity(CustomerResponse response);
 
     @Mapping(target = "user", expression = "java(mapUserResponse(customer))")
@@ -39,7 +43,30 @@ public abstract class CustomerMapper {
     @Mapping(target = "familyStatus", expression = "java(mapFamilyStatusString(customer))")
     @Mapping(target = "priorityCommunicationChannel", expression = "java(mapPriorityCommunicationChannelString(customer))")
     @Mapping(target = "supervisionStatusThisClient", expression = "java(yesNoConverter.booleanToString(customer.isSupervisionStatusThisClient()))")
+    @Mapping(target = "gender", expression = "java(mapGenderString(customer))")
     public abstract CustomerResponse fromEntityToResponse(Customer customer);
+
+    ClientType mapClientType(CustomerResponse response) {
+        return Arrays.stream(ClientType.values())
+                .filter(value -> value.getTittle().equals(response.getClientType()))
+                .findFirst()
+                .orElseThrow();
+    }
+
+    Gender mapGender(CustomerResponse response) {
+        return Arrays.stream(Gender.values())
+                .filter(value -> value.getTittle().equals(response.getGender()))
+                .findFirst()
+                .orElseThrow();
+    }
+
+    String mapGenderString(Customer entity) {
+        return entity.getGender().getTittle();
+    }
+
+    String mapCLientTypeString(Customer entity) {
+        return entity.getClientType().getTittle();
+    }
 
     UserResponse mapUserResponse(Customer customer) {
         return userMapper.fromEntityToResponse(customer.getUser());
@@ -66,7 +93,7 @@ public abstract class CustomerMapper {
 
     ContactMethod mapContactMethod(CustomerResponse response) {
         return Arrays.stream(ContactMethod.values())
-                .filter(status -> status.getTittle().equals(response.getClientStatus()))
+                .filter(status -> status.getTittle().equals(response.getContactMethod()))
                 .findFirst()
                 .orElseThrow();
     }
@@ -77,7 +104,7 @@ public abstract class CustomerMapper {
 
     MeetingFormat mapMeetingFormat(CustomerResponse response) {
         return Arrays.stream(MeetingFormat.values())
-                .filter(status -> status.getTittle().equals(response.getClientStatus()))
+                .filter(status -> status.getTittle().equals(response.getMeetingFormat()))
                 .findFirst()
                 .orElseThrow();
     }
@@ -88,7 +115,7 @@ public abstract class CustomerMapper {
 
     OnlinePlatform mapOnlinePlatform(CustomerResponse response) {
         return Arrays.stream(OnlinePlatform.values())
-                .filter(status -> status.getTittle().equals(response.getClientStatus()))
+                .filter(status -> status.getTittle().equals(response.getOnlinePlatform()))
                 .findFirst()
                 .orElseThrow();
     }
@@ -99,7 +126,7 @@ public abstract class CustomerMapper {
 
     FamilyStatus mapFamilyStatus(CustomerResponse response) {
         return Arrays.stream(FamilyStatus.values())
-                .filter(status -> status.getTittle().equals(response.getClientStatus()))
+                .filter(status -> status.getTittle().equals(response.getFamilyStatus()))
                 .findFirst()
                 .orElseThrow();
     }
@@ -110,7 +137,7 @@ public abstract class CustomerMapper {
 
     PriorityCommunicationChannel mapPriorityCommunicationChannel(CustomerResponse response) {
         return Arrays.stream(PriorityCommunicationChannel.values())
-                .filter(status -> status.getTittle().equals(response.getClientStatus()))
+                .filter(status -> status.getTittle().equals(response.getPriorityCommunicationChannel()))
                 .findFirst()
                 .orElseThrow();
     }

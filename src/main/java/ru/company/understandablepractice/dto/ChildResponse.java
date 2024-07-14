@@ -1,11 +1,12 @@
 package ru.company.understandablepractice.dto;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import ru.company.understandablepractice.model.types.ClientType;
 
-@Data
-public class ChildResponse {
-    private long id;
-
+@Getter
+@Setter
+public class ChildResponse extends PersonResponse {
     private String bringsClient;
 
     private CustomerResponse firstParent;
@@ -21,4 +22,8 @@ public class ChildResponse {
     private String childExplanationForSeeingPsychologist;
 
     private String childDesiredChanges;
+
+    public ChildResponse() {
+        super(ClientType.CHILD.getTittle());
+    }
 }

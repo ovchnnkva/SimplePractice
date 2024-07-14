@@ -20,12 +20,13 @@ public abstract class PairMapper {
     private CustomerMapper customerMapper;
 
     @Mapping(target = "clientType", expression = "java(mapClientType(response))")
+    @Mapping(target = "familyStatus", expression = "java(mapFamilyStatus(response))")
     @Mapping(target = "firstCustomer", expression = "java(mapFirstCustomer(response))")
     @Mapping(target = "secondCustomer", expression = "java(mapSecondCustomer(response))")
     @Mapping(target = "gender", expression = "java(mapGender(response))")
     public abstract Pair fromResponseToEntity(PairResponse response);
 
-    @Mapping(target = "clientType", expression = "java(mapCLientTypeString(entity))")
+    @Mapping(target = "familyStatus", expression = "java(mapFamilyStatusString(entity))")
     @Mapping(target = "firstCustomer", expression = "java(mapFirstCustomerResponse(entity))")
     @Mapping(target = "secondCustomer", expression = "java(mapSecondCustomerResponse(entity))")
     @Mapping(target = "gender", expression = "java(mapGenderString(entity))")
@@ -68,4 +69,16 @@ public abstract class PairMapper {
     String mapGenderString(Pair entity) {
         return entity.getGender().getTittle();
     }
+
+    String mapFamilyStatusString(Pair entity) {
+        return entity.getClientType().getTittle();
+    }
+
+    FamilyStatus mapFamilyStatus(PairResponse response) {
+        return Arrays.stream(FamilyStatus.values())
+                .filter(value -> value.getTittle().equals(response.getFamilyStatus()))
+                .findFirst()
+                .orElseThrow();
+    }
+
 }

@@ -3,10 +3,10 @@ package ru.company.understandablepractice.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import ru.company.understandablepractice.model.types.*;
-import ru.company.understandablepractice.model.types.converters.*;
-
-import java.time.LocalDate;
+import ru.company.understandablepractice.model.types.ClientType;
+import ru.company.understandablepractice.model.types.Gender;
+import ru.company.understandablepractice.model.types.converters.ClientTypeConverter;
+import ru.company.understandablepractice.model.types.converters.GenderConverter;
 
 @Getter
 @Setter
@@ -18,7 +18,7 @@ public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "person_id")
-    private long id;
+    protected long id;
 
     @Convert(converter = ClientTypeConverter.class)
     @Column(name = "client_type")
