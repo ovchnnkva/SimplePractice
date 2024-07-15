@@ -2,6 +2,7 @@ package ru.company.understandablepractice.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.company.understandablepractice.model.types.ClientType;
 
@@ -30,6 +31,10 @@ public class PersonResponse {
 
     public PersonResponse(String clientType) {
         this.clientType = clientType;
+    }
+
+    public PersonResponse() {
+        this.clientType = ClientType.ADULT.getTittle();
     }
 
     @Override
