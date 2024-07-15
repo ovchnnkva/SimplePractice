@@ -45,4 +45,11 @@ public class Person {
     @Convert(converter = GenderConverter.class)
     @Column(name = "gender")
     protected Gender gender;
+
+    public Person(long id) {
+        this.id = id;
+    }
+
+    public Person() {
+    }
 }

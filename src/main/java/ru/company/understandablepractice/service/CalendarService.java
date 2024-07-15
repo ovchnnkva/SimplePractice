@@ -22,8 +22,7 @@ import static ru.company.understandablepractice.utils.HttpErrorResponse.getNotFo
 public class CalendarService {
     private final CalendarMeetMapper calendarMeetMapper;
     private final CalendarClientDataMapper calendarClientDataMapper;
-
-    private MeetRepository meetRepository;
+    private final MeetRepository meetRepository;
     public CalendarResponse getCalendar(long userId, String year) {
         CalendarResponse response = new CalendarResponse();
 
