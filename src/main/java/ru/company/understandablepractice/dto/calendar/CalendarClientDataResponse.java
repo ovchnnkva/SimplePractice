@@ -14,5 +14,7 @@ public class CalendarClientDataResponse {
 
     private String lastName;
 
+    private String clientType;
+
     private List<CalendarMeetResponse> meetings;
 }
