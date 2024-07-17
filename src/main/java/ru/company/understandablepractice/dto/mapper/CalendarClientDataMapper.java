@@ -11,10 +11,11 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public abstract class CalendarClientDataMapper {
 
-    @Mapping(target = "fullName", source = "person.fullName")
-    @Mapping(target = "firstName", source = "person.firstName")
-    @Mapping(target = "secondName", source = "person.secondName")
-    @Mapping(target = "lastName", source = "person.lastName")
     @Mapping(target = "meetings", source = "meetings")
+    @Mapping(target = "clientType", expression = "java(mapClientType(person))")
     public abstract CalendarClientDataResponse toResponse(Person person, List<CalendarMeetResponse> meetings);
+
+    String mapClientType(Person person) {
+        return person.getClientType().getTittle();
+    }
 }
