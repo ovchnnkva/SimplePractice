@@ -1,8 +1,14 @@
 package ru.company.understandablepractice.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 import ru.company.understandablepractice.model.types.MeetingFormat;
 import ru.company.understandablepractice.model.types.PaymentType;
 
@@ -22,7 +28,7 @@ public class Meet {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "person_id")
-    private Person person;
+    private Customer customer;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -35,9 +41,11 @@ public class Meet {
     private LocalDate dateMeet;
 
     @Column(name = "start_meet")
+    @JsonFormat(pattern = "hh:mm:ss")
     private LocalTime startMeet;
 
     @Column(name = "end_meet")
+    @JsonFormat(pattern = "hh:mm:ss")
     private LocalTime endMeet;
 
     @Column(name = "format_meet")
@@ -50,9 +58,11 @@ public class Meet {
     private LocalDate nextDayMeet;
 
     @Column(name = "next_start_meet")
+    @JsonFormat(pattern = "hh:mm:ss")
     private LocalTime nextStartMeet;
 
     @Column(name = "next_end_meet")
+    @JsonFormat(pattern = "hh:mm:ss")
     private LocalTime nextEndMeet;
 
     @Column(name = "client_session_request", columnDefinition = "TEXT")

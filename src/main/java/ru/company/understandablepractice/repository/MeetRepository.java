@@ -9,7 +9,7 @@ import java.util.List;
 public interface MeetRepository extends JpaRepository<Meet, Long> {
 
     @Query(value =
-            "SELECT m.person, m.dateMeet, m.startMeet, m.endMeet " +
+            "SELECT m.customer, m.dateMeet, m.startMeet, m.endMeet " +
             "FROM Meet m " +
             "WHERE m.user = :userId AND EXTRACT(year FROM m.startMeet) = :year"
     )

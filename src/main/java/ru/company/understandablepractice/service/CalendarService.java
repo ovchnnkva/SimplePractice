@@ -30,7 +30,7 @@ public class CalendarService {
         response.setCurrentDate(formatDateToString(LocalDate.now()));
         Map<Person, List<Meet>> meetings = meetRepository.findByUserIdAndYear(userId, year)
                 .stream()
-                .collect(Collectors.groupingBy(Meet::getPerson));
+                .collect(Collectors.groupingBy(Meet::getCustomer));
 
         if (meetings.isEmpty()) {
             response.setError(getNotFoundResponse());
