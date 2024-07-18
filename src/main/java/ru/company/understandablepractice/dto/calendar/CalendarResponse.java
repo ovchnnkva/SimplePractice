@@ -14,7 +14,7 @@ public class CalendarResponse {
 
     private List<CalendarClientDataResponse> clientsData;
 
-    private ErrorResponse error;
+    private ErrorResponse error = new ErrorResponse();
 
-//    private WarningResponse warning;
+    private WarningResponse warning = new WarningResponse();
 }

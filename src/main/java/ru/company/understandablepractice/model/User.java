@@ -43,6 +43,15 @@ public class User {
     @Column(name = "diplomas", columnDefinition = "TEXT")
     private String diplomas;
 
+
+    public User(long id) {
+        this.id = id;
+    }
+
+    public User() {
+
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -44,7 +44,7 @@ public abstract class MeetMapper {
     }
 
     User mapUser(MeetResponse response) {
-        return userMapper.fromResponseToEntity(response.getUser());
+        return new User(response.getUser().getId());
     }
 
     UserResponse mapUserResponse(Meet entity) {

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.company.understandablepractice.dto.calendar.CalendarResponse;
 import ru.company.understandablepractice.dto.mapper.CalendarClientDataMapper;
 import ru.company.understandablepractice.dto.mapper.CalendarMeetMapper;
+import ru.company.understandablepractice.model.Customer;
 import ru.company.understandablepractice.model.Meet;
 import ru.company.understandablepractice.model.Person;
 import ru.company.understandablepractice.repository.MeetRepository;
@@ -22,8 +23,7 @@ import static ru.company.understandablepractice.utils.HttpErrorResponse.getNotFo
 public class CalendarService {
     private final CalendarMeetMapper calendarMeetMapper;
     private final CalendarClientDataMapper calendarClientDataMapper;
-
-    private MeetRepository meetRepository;
+    private final MeetRepository meetRepository;
     public CalendarResponse getCalendar(long userId, String year) {
         CalendarResponse response = new CalendarResponse();
 

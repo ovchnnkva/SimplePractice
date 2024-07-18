@@ -17,3 +17,6 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: false
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
