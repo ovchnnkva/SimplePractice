@@ -1,8 +1,6 @@
 package ru.company.understandablepractice.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import ru.company.understandablepractice.model.Person;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -12,7 +10,7 @@ public class MeetResponse {
 
     private long id;
 
-    private CustomerResponse customer;
+    private PersonResponse person;
 
     private UserResponse user;
 
