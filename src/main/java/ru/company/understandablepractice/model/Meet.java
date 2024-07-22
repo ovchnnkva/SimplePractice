@@ -1,5 +1,6 @@
 package ru.company.understandablepractice.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,9 +36,11 @@ public class Meet {
     private LocalDate dateMeet;
 
     @Column(name = "start_meet")
+    @JsonFormat(pattern = "hh:mm:ss")
     private LocalTime startMeet;
 
     @Column(name = "end_meet")
+    @JsonFormat(pattern = "hh:mm:ss")
     private LocalTime endMeet;
 
     @Column(name = "format_meet")
@@ -50,9 +53,11 @@ public class Meet {
     private LocalDate nextDayMeet;
 
     @Column(name = "next_start_meet")
+    @JsonFormat(pattern = "hh:mm:ss")
     private LocalTime nextStartMeet;
 
     @Column(name = "next_end_meet")
+    @JsonFormat(pattern = "hh:mm:ss")
     private LocalTime nextEndMeet;
 
     @Column(name = "client_session_request", columnDefinition = "TEXT")

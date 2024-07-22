@@ -16,7 +16,7 @@ public class Child extends Person{
     private BringsClient bringsClient;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "person_id")
+    @JoinColumn(name = "first_parent_id")
     private Customer firstParent;
 
     @OneToOne(fetch = FetchType.LAZY)

@@ -9,6 +9,7 @@ import ru.company.understandablepractice.model.Child;
 import ru.company.understandablepractice.model.Customer;
 import ru.company.understandablepractice.model.types.BringsClient;
 import ru.company.understandablepractice.model.types.ClientType;
+import ru.company.understandablepractice.model.types.Gender;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;
@@ -23,11 +24,13 @@ public abstract class ChildMapper {
     @Mapping(target = "bringsClient", expression = "java(mapBringsClient(response))")
     @Mapping(target = "firstParent", expression = "java(mapFirstParent(response))")
     @Mapping(target = "secondParent", expression = "java(mapSecondParent(response))")
+    @Mapping(target = "gender", expression = "java(mapGender(response))")
     public abstract Child fromResponseToEntity(ChildResponse response);
 
     @Mapping(target = "bringsClient", expression = "java(mapBringsClientString(child))")
     @Mapping(target = "firstParent", expression = "java(mapFirstParentResponse(child))")
     @Mapping(target = "secondParent", expression = "java(mapSecondParentResponse(child))")
+    @Mapping(target = "gender", expression = "java(mapGenderString(child))")
     public abstract ChildResponse fromEntityToResponse(Child child);
 
     ClientType mapClientType(ChildResponse response) {
@@ -65,5 +68,16 @@ public abstract class ChildMapper {
 
     Customer mapSecondParent(ChildResponse response){
         return customerMapper.fromResponseToEntity(response.getSecondParent());
+    }
+
+    Gender mapGender(ChildResponse response) {
+        return Arrays.stream(Gender.values())
+                .filter(value -> value.getTittle().equals(response.getGender()))
+                .findFirst()
+                .orElseThrow();
+    }
+
+    String mapGenderString(Child entity) {
+        return entity.getGender().getTittle();
     }
 }
