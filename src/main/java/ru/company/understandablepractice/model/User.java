@@ -34,7 +34,7 @@ public class User {
     @Column(name = "specialization")
     private String specialization;
 
-    @Column(name = "professional_activity_descri[tion", columnDefinition = "TEXT")
+    @Column(name = "professional_activity_description", columnDefinition = "TEXT")
     private String professionalActivityDescription;
 
     @Column(name = "education", columnDefinition = "TEXT")
