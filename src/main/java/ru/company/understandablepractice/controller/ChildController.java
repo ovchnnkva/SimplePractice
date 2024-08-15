@@ -28,7 +28,7 @@ public class ChildController {
 
     @Operation(summary = "Получение по ID", description = "Позволяет получить информацию о ребенке по ключу")
     @GetMapping("/{id}")
-    public ResponseEntity<ChildResponse> getById(@PathVariable @Parameter(description = "ID ребенка") long id){
+    public ResponseEntity<ChildResponse> getById(@PathVariable("id") @Parameter(description = "ID ребенка") long id){
         log.info("get child by id {}", id);
 
         return service.getById(id)
@@ -54,7 +54,7 @@ public class ChildController {
 
     @Operation(summary = "Удалить", description = "Удалить информацию о ребенке")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable @Parameter(description = "Ребенок") long id){
+    public ResponseEntity<?> delete(@PathVariable("id") @Parameter(description = "Ребенок") long id){
         service.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

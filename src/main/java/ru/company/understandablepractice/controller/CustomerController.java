@@ -29,7 +29,7 @@ public class CustomerController {
 
     @Operation(summary = "Получение по ID", description = "Позволяет получить клиента по ключу")
     @GetMapping("/{id}")
-    public ResponseEntity<CustomerResponse> getById(@PathVariable @Parameter(description = "ID клиента") long id) {
+    public ResponseEntity<CustomerResponse> getById(@PathVariable("id") @Parameter(description = "ID клиента") long id) {
         log.info("get user by id {}", id);
         return service.getById(id)
                 .map(value -> new ResponseEntity<>(mapper.fromEntityToResponse(value), HttpStatus.OK))
@@ -56,7 +56,7 @@ public class CustomerController {
 
     @Operation(summary = "Удалить", description = "Удаление клиента")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable @Parameter(description = "ID клиента") long id) {
+    public ResponseEntity<?> delete(@PathVariable("id") @Parameter(description = "ID клиента") long id) {
         log.info("delete customer {}", id);
         service.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
