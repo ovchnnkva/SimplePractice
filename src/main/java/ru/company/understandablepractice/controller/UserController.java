@@ -27,7 +27,7 @@ public class UserController {
 
     @Operation(summary = "Получение по ID", description = "Позволяет получить пользователя по ключу")
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getById(@PathVariable("id") @Parameter(description = "ID пользователя") long id) {
+    public ResponseEntity<UserResponse> getById(@PathVariable(name = "id") @Parameter(description = "ID пользователя") long id) {
         log.info("get user by id {}", id);
 
         return service.getById(id)
@@ -53,7 +53,7 @@ public class UserController {
 
     @Operation(summary = "Удалить", description = "Удаление пользователя")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable("id") @Parameter(description = "ID пользователя") long id) {
+    public ResponseEntity<?> delete(@PathVariable(name = "id") @Parameter(description = "ID пользователя") long id) {
         service.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
