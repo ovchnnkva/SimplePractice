@@ -26,7 +26,7 @@ public class UserController {
     private final UserMapper mapper;
 
     @Operation(summary = "Получение по ID", description = "Позволяет получить пользователя по ключу")
-    @GetMapping("/{id}")
+    @GetMapping("get/{id}")
     public ResponseEntity<UserResponse> getById(@Parameter(description = "ID пользователя") @PathVariable("id") long id) {
         log.info("get user by id {}", id);
 
@@ -52,7 +52,7 @@ public class UserController {
     }
 
     @Operation(summary = "Удалить", description = "Удаление пользователя")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("delete/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id") @Parameter(description = "ID пользователя") long id) {
         service.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
