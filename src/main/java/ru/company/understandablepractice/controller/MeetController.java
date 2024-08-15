@@ -26,7 +26,7 @@ public class MeetController {
     private final MeetMapper mapper;
 
     @Operation(summary = "Получение по ID", description = "Позволяет получить встречу по ключу")
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<MeetResponse> getById(@PathVariable(name = "id") @Parameter(description = "ID встречи") long id) {
         log.info("get meet by id {}", id);
         return service.getById(id)
@@ -53,7 +53,7 @@ public class MeetController {
     }
 
     @Operation(summary = "Удалить", description = "Удаление встречи")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id") @Parameter(description = "ID встречи") long id) {
         log.info("delete meet by id {}", id);
         service.delete(id);

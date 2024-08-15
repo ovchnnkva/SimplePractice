@@ -27,7 +27,7 @@ public class PairController {
     private final PairMapper mapper;
 
     @Operation(summary = "Получение по ID", description = "Позволяет получить пару по ключу")
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<PairResponse> getById(@PathVariable(name = "id") @Parameter(description = "ID пары") long id) {
         log.info("get pair by id {}", id);
         return service.getById(id)
@@ -54,7 +54,7 @@ public class PairController {
     }
 
     @Operation(summary = "Удалить", description = "Удаление пары")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id") @Parameter(description = "ID пары") long id) {
         log.info("delete pair by id {}", id);
         service.delete(id);

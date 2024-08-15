@@ -24,7 +24,7 @@ public class LeftMenuController {
     private final LeftMenuService leftMenuService;
 
     @Operation(summary = "Левое меню", description = "Позволяет получить левое меню текущего пользователя")
-    @GetMapping("/{userId}")
+    @GetMapping("/get/{userId}")
     public LeftMenuResponse getLeftMenu(@PathVariable(name = "userId") @Parameter(name = "ID Пользователя") long userId){
         return leftMenuService.getLeftMenu(userId);
     }

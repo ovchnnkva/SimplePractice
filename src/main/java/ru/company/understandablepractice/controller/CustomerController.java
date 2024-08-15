@@ -28,7 +28,7 @@ public class CustomerController {
     private final CustomerMapper mapper;
 
     @Operation(summary = "Получение по ID", description = "Позволяет получить клиента по ключу")
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<CustomerResponse> getById(@PathVariable(name = "id") @Parameter(description = "ID клиента") long id) {
         log.info("get user by id {}", id);
         return service.getById(id)
@@ -55,7 +55,7 @@ public class CustomerController {
     }
 
     @Operation(summary = "Удалить", description = "Удаление клиента")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id") @Parameter(description = "ID клиента") long id) {
         log.info("delete customer {}", id);
         service.delete(id);
