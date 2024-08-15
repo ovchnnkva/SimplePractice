@@ -27,10 +27,10 @@ public class UserController {
 
     @Operation(summary = "Получение по ID", description = "Позволяет получить пользователя по ключу")
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getById(@Parameter(description = "ID пользователя") @PathVariable("id") int userId) {
-        log.info("get user by id {}", userId);
+    public ResponseEntity<UserResponse> getById(@Parameter(description = "ID пользователя") @PathVariable("id") long id) {
+        log.info("get user by id {}", id);
 
-        return service.getById(userId)
+        return service.getById(id)
                 .map(value -> new ResponseEntity<>(mapper.fromEntityToResponse(value), HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
