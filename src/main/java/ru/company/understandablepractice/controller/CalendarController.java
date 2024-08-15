@@ -28,8 +28,8 @@ public class CalendarController {
 
     @Operation(summary = "Встречи на текущий год", description = "Позволяет получить все встречи пользователя на текущий год")
     @GetMapping("/{userId}/{year}")
-    public CalendarResponse getCalendar(@PathVariable("userId") @Parameter(name = "ID Пользователя") long userId,
-                                        @PathVariable("year") @Parameter(name = "Год, в рамках которого находятся встречи") String year) {
+    public CalendarResponse getCalendar(@PathVariable(name = "userId") @Parameter(name = "ID Пользователя") long userId,
+                                        @PathVariable(name = "year") @Parameter(name = "Год, в рамках которого находятся встречи") String year) {
 
         return calendarService.getCalendar(userId, year); //
     }
