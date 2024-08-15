@@ -27,7 +27,7 @@ public class CalendarController {
     private final CalendarService calendarService;
 
     @Operation(summary = "Встречи на текущий год", description = "Позволяет получить все встречи пользователя на текущий год")
-    @GetMapping("/{userId}/{year}")
+    @GetMapping("/get/{userId}/{year}")
     public CalendarResponse getCalendar(@PathVariable(name = "userId") @Parameter(name = "ID Пользователя") long userId,
                                         @PathVariable(name = "year") @Parameter(name = "Год, в рамках которого находятся встречи") String year) {
 
