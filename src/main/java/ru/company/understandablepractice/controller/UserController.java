@@ -27,7 +27,7 @@ public class UserController {
 
     @Operation(summary = "Получение по ID", description = "Позволяет получить пользователя по ключу")
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getById(@PathVariable(name = "id") @Parameter(description = "ID пользователя") long id) {
+    public @ResponseBody ResponseEntity<UserResponse> getById(@Parameter(description = "ID пользователя") @PathVariable long id) {
         log.info("get user by id {}", id);
 
         return service.getById(id)
