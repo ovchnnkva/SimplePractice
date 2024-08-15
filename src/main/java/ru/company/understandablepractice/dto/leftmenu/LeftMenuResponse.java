@@ -14,7 +14,7 @@ public class LeftMenuResponse {
 
     private String actualTimestamp;
 
-    private LeftMenuClientDataResponse clientData;
+    private LeftMenuUserDataResponse userData;
 
     private ErrorResponse error = new ErrorResponse();
 
