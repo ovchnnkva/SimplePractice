@@ -31,6 +31,6 @@ public class PairResponse extends PersonResponse{
     private String familyStatus;
 
     public PairResponse() {
-        super(ClientType.PAIR.getTittle());
+        super(ClientType.PAIR.getKey());
     }
 }

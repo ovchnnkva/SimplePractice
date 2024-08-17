@@ -20,7 +20,7 @@ public abstract class PersonMapper {
 
     ClientType mapClientType(PersonResponse response) {
         return Arrays.stream(ClientType.values())
-                .filter(value -> value.getTittle().equals(response.getClientType()))
+                .filter(value -> value.getKey() == response.getClientType())
                 .findFirst()
                 .orElseThrow();
     }
@@ -30,10 +30,6 @@ public abstract class PersonMapper {
                 .filter(value -> value.getTittle().equals(response.getGender()))
                 .findFirst()
                 .orElseThrow();
-    }
-
-    String mapCLientTypeString(Person entity) {
-        return entity.getClientType().getTittle();
     }
 
 }

@@ -3,24 +3,24 @@ package ru.company.understandablepractice.model.types.converters;
 import jakarta.persistence.AttributeConverter;
 import ru.company.understandablepractice.model.types.ClientType;
 
-public class ClientTypeConverter implements AttributeConverter<ClientType, String> {
+public class ClientTypeConverter implements AttributeConverter<ClientType, Integer> {
     @Override
-    public String convertToDatabaseColumn(ClientType clientType) {
-        if(clientType == null) return null;
-        return clientType.getTittle();
+    public Integer convertToDatabaseColumn(ClientType clientType) {
+        if(clientType == null) return 0;
+        return clientType.getKey();
     }
 
     @Override
-    public ClientType convertToEntityAttribute(String s) {
+    public ClientType convertToEntityAttribute(Integer s) {
         if(s == null) return null;
         switch (s) {
-            case "Пара" -> {
+            case 3 -> {
                 return ClientType.PAIR;
             }
-            case "Взрослый" -> {
+            case 1 -> {
                 return ClientType.ADULT;
             }
-            case "Ребенок" -> {
+            case 2 -> {
                 return ClientType.CHILD;
             }
             default -> throw new IllegalArgumentException(s + " not supported.");

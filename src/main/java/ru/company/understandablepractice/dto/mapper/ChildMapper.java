@@ -35,13 +35,13 @@ public abstract class ChildMapper {
 
     ClientType mapClientType(ChildResponse response) {
         return Arrays.stream(ClientType.values())
-                .filter(value -> value.getTittle().equals(response.getClientType()))
+                .filter(value -> value.getKey() == response.getClientType())
                 .findFirst()
                 .orElseThrow();
     }
 
-    String mapCLientTypeString(Child entity) {
-        return entity.getClientType().getTittle();
+    int mapCLientTypeString(Child entity) {
+        return entity.getClientType().getKey();
     }
     String mapBringsClientString(Child child){
         return child.getBringsClient().getTitle();

@@ -48,7 +48,7 @@ public abstract class CustomerMapper {
 
     ClientType mapClientType(CustomerResponse response) {
         return Arrays.stream(ClientType.values())
-                .filter(value -> value.getTittle().equals(response.getClientType()))
+                .filter(value -> value.getKey() == response.getClientType())
                 .findFirst()
                 .orElseThrow();
     }
@@ -62,10 +62,6 @@ public abstract class CustomerMapper {
 
     String mapGenderString(Customer entity) {
         return entity.getGender().getTittle();
-    }
-
-    String mapCLientTypeString(Customer entity) {
-        return entity.getClientType().getTittle();
     }
 
     UserResponse mapUserResponse(Customer customer) {

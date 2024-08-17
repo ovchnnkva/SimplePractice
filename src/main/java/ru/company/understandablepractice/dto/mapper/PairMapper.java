@@ -50,13 +50,9 @@ public abstract class PairMapper {
 
     ClientType mapClientType(PairResponse response) {
         return Arrays.stream(ClientType.values())
-                .filter(value -> value.getTittle().equals(response.getClientType()))
+                .filter(value -> value.getKey() == response.getClientType())
                 .findFirst()
                 .orElseThrow();
-    }
-
-    String mapCLientTypeString(Pair entity) {
-        return entity.getClientType().getTittle();
     }
 
     Gender mapGender(PairResponse response) {
@@ -71,7 +67,7 @@ public abstract class PairMapper {
     }
 
     String mapFamilyStatusString(Pair entity) {
-        return entity.getClientType().getTittle();
+        return entity.getFamilyStatus().getTittle();
     }
 
     FamilyStatus mapFamilyStatus(PairResponse response) {

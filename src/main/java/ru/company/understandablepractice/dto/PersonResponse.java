@@ -13,7 +13,7 @@ public class PersonResponse {
     @Setter
     protected long id;
     @JsonIgnore
-    private final String clientType;
+    private final int clientType;
     @Setter
     protected String fullName;
     @Setter
@@ -29,12 +29,12 @@ public class PersonResponse {
     @Setter
     protected String gender;
 
-    public PersonResponse(String clientType) {
+    public PersonResponse(int clientType) {
         this.clientType = clientType;
     }
 
     public PersonResponse() {
-        this.clientType = ClientType.ADULT.getTittle();
+        this.clientType = ClientType.ADULT.getKey();
     }
 
     @Override

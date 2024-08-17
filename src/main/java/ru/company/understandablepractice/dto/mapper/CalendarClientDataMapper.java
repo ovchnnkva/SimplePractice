@@ -15,7 +15,7 @@ public abstract class CalendarClientDataMapper {
     @Mapping(target = "clientType", expression = "java(mapClientType(person))")
     public abstract CalendarClientDataResponse toResponse(Person person, List<CalendarMeetResponse> meetings);
 
-    String mapClientType(Person person) {
-        return person.getClientType().getTittle();
+    int mapClientType(Person person) {
+        return person.getClientType().getKey();
     }
 }

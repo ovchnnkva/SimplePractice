@@ -24,6 +24,6 @@ public class ChildResponse extends PersonResponse {
     private String childDesiredChanges;
 
     public ChildResponse() {
-        super(ClientType.CHILD.getTittle());
+        super(ClientType.CHILD.getKey());
     }
 }
