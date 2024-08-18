@@ -28,9 +28,11 @@ public class CalendarController {
 
     @Operation(summary = "Встречи на текущий год", description = "Позволяет получить все встречи пользователя на текущий год")
     @GetMapping("/get/{userId}/{year}")
-    public CalendarResponse getCalendar(@PathVariable(name = "userId") @Parameter(name = "ID Пользователя") long userId,
+    public ResponseEntity<CalendarResponse> getCalendar(@PathVariable(name = "userId") @Parameter(name = "ID Пользователя") long userId,
                                         @PathVariable(name = "year") @Parameter(name = "Год, в рамках которого находятся встречи") String year) {
 
-        return calendarService.getCalendar(userId, year); //
+        return calendarService.getCalendar(userId, year)
+                .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND)); //
     }
 }
