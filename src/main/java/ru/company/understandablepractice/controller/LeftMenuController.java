@@ -5,6 +5,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,8 +27,10 @@ public class LeftMenuController {
 
     @Operation(summary = "Левое меню", description = "Позволяет получить левое меню текущего пользователя")
     @GetMapping("/get/{userId}")
-    public LeftMenuResponse getLeftMenu(@PathVariable(name = "userId") @Parameter(name = "ID Пользователя") long userId){
-        return leftMenuService.getLeftMenu(userId);
+    public ResponseEntity<LeftMenuResponse> getLeftMenu(@PathVariable(name = "userId") @Parameter(name = "ID Пользователя") long userId){
+        return leftMenuService.getLeftMenu(userId)
+                .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
 }

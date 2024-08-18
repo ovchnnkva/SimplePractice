@@ -7,9 +7,9 @@ import ru.company.understandablepractice.dto.mapper.LeftMenuUserDataMapper;
 import ru.company.understandablepractice.repository.UserRepository;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static ru.company.understandablepractice.utils.DateFormatUtil.formatDateToString;
-import static ru.company.understandablepractice.utils.HttpErrorResponse.getNotFoundResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -18,19 +18,16 @@ public class LeftMenuService {
 
     private final LeftMenuUserDataMapper userDataMapper;
 
-    public LeftMenuResponse getLeftMenu(long userId) {
-        LeftMenuResponse response = new LeftMenuResponse();
-
-        response.setActualTimestamp(formatDateToString(LocalDate.now()));
+    public Optional<LeftMenuResponse> getLeftMenu(long userId) {
+        LeftMenuResponse response = null;
 
         //TODO: Сделать получение текущего пользователя
-
         var user = userRepository.findById(userId).orElse(null);
-        if (user == null) {
-            response.setError(getNotFoundResponse());
-        } else {
+        if (user != null) {
+            response = new LeftMenuResponse();
+            response.setActualTimestamp(formatDateToString(LocalDate.now()));
             response.setUserData(userDataMapper.fromEntityToResponse(user));
         }
-        return response;
+        return Optional.ofNullable(response);
     }
 }

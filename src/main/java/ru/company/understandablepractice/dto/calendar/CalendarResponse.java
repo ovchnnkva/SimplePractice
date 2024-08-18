@@ -13,8 +13,4 @@ public class CalendarResponse {
     private String currentDate;
 
     private List<CalendarClientDataResponse> clientsData;
-
-    private ErrorResponse error = new ErrorResponse();
-
-    private WarningResponse warning = new WarningResponse();
 }

@@ -12,10 +12,10 @@ import ru.company.understandablepractice.repository.MeetRepository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static ru.company.understandablepractice.utils.DateFormatUtil.formatDateToString;
-import static ru.company.understandablepractice.utils.HttpErrorResponse.getNotFoundResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -23,17 +23,16 @@ public class CalendarService {
     private final CalendarMeetMapper calendarMeetMapper;
     private final CalendarClientDataMapper calendarClientDataMapper;
     private final MeetRepository meetRepository;
-    public CalendarResponse getCalendar(long userId, String year) {
-        CalendarResponse response = new CalendarResponse();
+    public Optional<CalendarResponse> getCalendar(long userId, String year) {
+        CalendarResponse response = null;
 
-        response.setCurrentDate(formatDateToString(LocalDate.now()));
         Map<Person, List<Meet>> meetings = meetRepository.findByUserIdAndYear(userId, year)
                 .stream()
                 .collect(Collectors.groupingBy(Meet::getPerson));
 
-        if (meetings.isEmpty()) {
-            response.setError(getNotFoundResponse());
-        } else {
+        if (!meetings.isEmpty()) {
+            response = new CalendarResponse();
+            response.setCurrentDate(formatDateToString(LocalDate.now()));
             response.setClientsData(meetings.entrySet()
                     .stream()
                     .map(entry -> calendarClientDataMapper.toResponse(
@@ -47,6 +46,6 @@ public class CalendarService {
                     .collect(Collectors.toList())
             );
         }
-        return response;
+        return Optional.ofNullable(response);
     }
 }
