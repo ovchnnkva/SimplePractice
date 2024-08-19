@@ -1,10 +1,16 @@
 package ru.company.understandablepractice.model;
 
-import jakarta.persistence.*;
+import java.util.Objects;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.Objects;
 
 @Getter
 @Setter
@@ -42,6 +48,9 @@ public class User {
 
     @Column(name = "diplomas", columnDefinition = "TEXT")
     private String diplomas;
+
+    @OneToOne
+    private UserCredentials userCredentials;
 
 
     public User(long id) {
