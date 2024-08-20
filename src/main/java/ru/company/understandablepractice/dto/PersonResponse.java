@@ -2,10 +2,10 @@ package ru.company.understandablepractice.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.company.understandablepractice.model.types.ClientType;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Getter
@@ -23,11 +23,17 @@ public class PersonResponse {
     @Setter
     protected String lastName;
     @Setter
+    protected LocalDate birth;
+    @Setter
     protected String phoneNumber;
     @Setter
     protected String mail;
     @Setter
     protected String gender;
+    @Setter
+    private String clientStatus;
+    @Setter
+    private String meetingFormat;
 
     public PersonResponse(String clientType) {
         this.clientType = clientType;

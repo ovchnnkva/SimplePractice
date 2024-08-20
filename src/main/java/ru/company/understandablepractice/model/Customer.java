@@ -17,10 +17,6 @@ public class Customer extends Person{
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Convert(converter = ClientStatusConverter.class)
-    @Column(name = "client_status")
-    private ClientStatus clientStatus;
-
     @Convert(converter = ContactMethodConverter.class)
     @Column(name = "contact_method")
     private ContactMethod contactMethod;
@@ -30,10 +26,6 @@ public class Customer extends Person{
 
     @Column(name = "date_of_first_consultation")
     private LocalDate dateFirstConsultation;
-
-    @Convert(converter = MeetingFormatConverter.class)
-    @Column(name = "meeting_format")
-    private MeetingFormat meetingFormat;
 
     @Convert(converter = OnlinePlatformConverter.class)
     @Column(name = "online_platform")
@@ -50,9 +42,6 @@ public class Customer extends Person{
 
     @Column(name = "financial_condition")
     private Integer financialCondition;
-
-    @Column(name = "date_of_birth")
-    private LocalDate birth;
 
     @Column(name = "residence_address", columnDefinition = "TEXT")
     private String residenceAddress;
