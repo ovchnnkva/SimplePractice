@@ -3,10 +3,16 @@ package ru.company.understandablepractice.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import ru.company.understandablepractice.model.types.ClientStatus;
 import ru.company.understandablepractice.model.types.ClientType;
 import ru.company.understandablepractice.model.types.Gender;
+import ru.company.understandablepractice.model.types.MeetingFormat;
+import ru.company.understandablepractice.model.types.converters.ClientStatusConverter;
 import ru.company.understandablepractice.model.types.converters.ClientTypeConverter;
 import ru.company.understandablepractice.model.types.converters.GenderConverter;
+import ru.company.understandablepractice.model.types.converters.MeetingFormatConverter;
+
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -36,6 +42,9 @@ public class Person {
     @Column(name = "last_name")
     protected String lastName;
 
+    @Column(name = "date_of_birth")
+    private LocalDate birth;
+
     @Column(name = "phone_number", length = 20)
     protected String phoneNumber;
 
@@ -45,6 +54,14 @@ public class Person {
     @Convert(converter = GenderConverter.class)
     @Column(name = "gender")
     protected Gender gender;
+
+    @Convert(converter = ClientStatusConverter.class)
+    @Column(name = "client_status")
+    private ClientStatus clientStatus;
+
+    @Convert(converter = MeetingFormatConverter.class)
+    @Column(name = "meeting_format")
+    private MeetingFormat meetingFormat;
 
     public Person(long id) {
         this.id = id;
