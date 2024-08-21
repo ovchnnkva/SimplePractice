@@ -4,11 +4,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.company.understandablepractice.dto.CustomerResponse;
-import ru.company.understandablepractice.dto.PersonResponse;
 import ru.company.understandablepractice.dto.UserResponse;
 import ru.company.understandablepractice.dto.converter.YesNoConverter;
 import ru.company.understandablepractice.model.Customer;
-import ru.company.understandablepractice.model.Person;
 import ru.company.understandablepractice.model.User;
 import ru.company.understandablepractice.model.types.*;
 
