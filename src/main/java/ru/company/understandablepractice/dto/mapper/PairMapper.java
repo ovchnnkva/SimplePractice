@@ -7,12 +7,10 @@ import ru.company.understandablepractice.dto.CustomerResponse;
 import ru.company.understandablepractice.dto.PairResponse;
 import ru.company.understandablepractice.model.Customer;
 import ru.company.understandablepractice.model.Pair;
-import ru.company.understandablepractice.model.Person;
-import ru.company.understandablepractice.model.types.ClientType;
-import ru.company.understandablepractice.model.types.FamilyStatus;
-import ru.company.understandablepractice.model.types.Gender;
+import ru.company.understandablepractice.model.types.*;
 
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 
 @Mapper(componentModel = "spring")
 public abstract class PairMapper {
@@ -24,12 +22,16 @@ public abstract class PairMapper {
     @Mapping(target = "firstCustomer", expression = "java(mapFirstCustomer(response))")
     @Mapping(target = "secondCustomer", expression = "java(mapSecondCustomer(response))")
     @Mapping(target = "gender", expression = "java(mapGender(response))")
+    @Mapping(target = "clientStatus", expression = "java(mapClientStatus(response))")
+    @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormat(response))")
     public abstract Pair fromResponseToEntity(PairResponse response);
 
     @Mapping(target = "familyStatus", expression = "java(mapFamilyStatusString(entity))")
     @Mapping(target = "firstCustomer", expression = "java(mapFirstCustomerResponse(entity))")
     @Mapping(target = "secondCustomer", expression = "java(mapSecondCustomerResponse(entity))")
     @Mapping(target = "gender", expression = "java(mapGenderString(entity))")
+    @Mapping(target = "clientStatus", expression = "java(mapClientStatusString(entity))")
+    @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormatString(entity))")
     public abstract PairResponse fromEntityToResponse(Pair entity);
 
     Customer mapFirstCustomer(PairResponse response) {
@@ -81,4 +83,25 @@ public abstract class PairMapper {
                 .orElseThrow();
     }
 
+    String mapClientStatusString(Pair entity) {
+        return entity.getClientStatus().getTittle();
+    }
+
+    ClientStatus mapClientStatus(PairResponse response) throws NoSuchElementException {
+        return Arrays.stream(ClientStatus.values())
+                .filter(status -> status.getTittle().equals(response.getClientStatus()))
+                .findFirst()
+                .orElseThrow();
+    }
+
+    String mapMeetingFormatString(Pair entity) {
+        return entity.getMeetingFormat().getTittle();
+    }
+
+    MeetingFormat mapMeetingFormat(PairResponse response) {
+        return Arrays.stream(MeetingFormat.values())
+                .filter(status -> status.getTittle().equals(response.getMeetingFormat()))
+                .findFirst()
+                .orElseThrow();
+    }
 }

@@ -11,6 +11,7 @@ import ru.company.understandablepractice.model.User;
 import ru.company.understandablepractice.model.types.*;
 
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 
 @Mapper(componentModel = "spring")
 public abstract class CustomerMapper {
@@ -28,6 +29,8 @@ public abstract class CustomerMapper {
     @Mapping(target = "priorityCommunicationChannel", expression = "java(mapPriorityCommunicationChannel(response))")
     @Mapping(target = "supervisionStatusThisClient", expression = "java(yesNoConverter.stringToBoolean(response.getSupervisionStatusThisClient()))")
     @Mapping(target = "gender", expression = "java(mapGender(response))")
+    @Mapping(target = "clientStatus", expression = "java(mapClientStatus(response))")
+    @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormat(response))")
     public abstract Customer fromResponseToEntity(CustomerResponse response);
 
     @Mapping(target = "user", expression = "java(mapUserResponse(customer))")
@@ -37,6 +40,8 @@ public abstract class CustomerMapper {
     @Mapping(target = "priorityCommunicationChannel", expression = "java(mapPriorityCommunicationChannelString(customer))")
     @Mapping(target = "supervisionStatusThisClient", expression = "java(yesNoConverter.booleanToString(customer.isSupervisionStatusThisClient()))")
     @Mapping(target = "gender", expression = "java(mapGenderString(customer))")
+    @Mapping(target = "clientStatus", expression = "java(mapClientStatusString(customer))")
+    @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormatString(customer))")
     public abstract CustomerResponse fromEntityToResponse(Customer customer);
 
     ClientType mapClientType(CustomerResponse response) {
@@ -109,6 +114,28 @@ public abstract class CustomerMapper {
     PriorityCommunicationChannel mapPriorityCommunicationChannel(CustomerResponse response) {
         return Arrays.stream(PriorityCommunicationChannel.values())
                 .filter(status -> status.getTittle().equals(response.getPriorityCommunicationChannel()))
+                .findFirst()
+                .orElseThrow();
+    }
+
+    String mapClientStatusString(Customer customer) {
+        return customer.getClientStatus().getTittle();
+    }
+
+    ClientStatus mapClientStatus(CustomerResponse response) throws NoSuchElementException {
+        return Arrays.stream(ClientStatus.values())
+                .filter(status -> status.getTittle().equals(response.getClientStatus()))
+                .findFirst()
+                .orElseThrow();
+    }
+
+    String mapMeetingFormatString(Customer customer) {
+        return customer.getMeetingFormat().getTittle();
+    }
+
+    MeetingFormat mapMeetingFormat(CustomerResponse response) {
+        return Arrays.stream(MeetingFormat.values())
+                .filter(status -> status.getTittle().equals(response.getMeetingFormat()))
                 .findFirst()
                 .orElseThrow();
     }
