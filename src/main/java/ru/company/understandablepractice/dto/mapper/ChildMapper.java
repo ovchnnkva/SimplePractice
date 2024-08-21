@@ -7,9 +7,7 @@ import ru.company.understandablepractice.dto.ChildResponse;
 import ru.company.understandablepractice.dto.CustomerResponse;
 import ru.company.understandablepractice.model.Child;
 import ru.company.understandablepractice.model.Customer;
-import ru.company.understandablepractice.model.types.BringsClient;
-import ru.company.understandablepractice.model.types.ClientType;
-import ru.company.understandablepractice.model.types.Gender;
+import ru.company.understandablepractice.model.types.*;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;
@@ -25,12 +23,16 @@ public abstract class ChildMapper {
     @Mapping(target = "firstParent", expression = "java(mapFirstParent(response))")
     @Mapping(target = "secondParent", expression = "java(mapSecondParent(response))")
     @Mapping(target = "gender", expression = "java(mapGender(response))")
+    @Mapping(target = "clientStatus", expression = "java(mapClientStatus(response))")
+    @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormat(response))")
     public abstract Child fromResponseToEntity(ChildResponse response);
 
     @Mapping(target = "bringsClient", expression = "java(mapBringsClientString(child))")
     @Mapping(target = "firstParent", expression = "java(mapFirstParentResponse(child))")
     @Mapping(target = "secondParent", expression = "java(mapSecondParentResponse(child))")
     @Mapping(target = "gender", expression = "java(mapGenderString(child))")
+    @Mapping(target = "clientStatus", expression = "java(mapClientStatusString(child))")
+    @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormatString(child))")
     public abstract ChildResponse fromEntityToResponse(Child child);
 
     ClientType mapClientType(ChildResponse response) {
@@ -79,5 +81,27 @@ public abstract class ChildMapper {
 
     String mapGenderString(Child entity) {
         return entity.getGender().getTittle();
+    }
+
+    String mapClientStatusString(Child child) {
+        return child.getClientStatus().getTittle();
+    }
+
+    ClientStatus mapClientStatus(ChildResponse response) throws NoSuchElementException {
+        return Arrays.stream(ClientStatus.values())
+                .filter(status -> status.getTittle().equals(response.getClientStatus()))
+                .findFirst()
+                .orElseThrow();
+    }
+
+    String mapMeetingFormatString(Child child) {
+        return child.getMeetingFormat().getTittle();
+    }
+
+    MeetingFormat mapMeetingFormat(ChildResponse response) {
+        return Arrays.stream(MeetingFormat.values())
+                .filter(status -> status.getTittle().equals(response.getMeetingFormat()))
+                .findFirst()
+                .orElseThrow();
     }
 }
