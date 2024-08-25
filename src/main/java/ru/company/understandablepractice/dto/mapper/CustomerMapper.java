@@ -4,11 +4,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.company.understandablepractice.dto.CustomerResponse;
-import ru.company.understandablepractice.dto.PairResponse;
 import ru.company.understandablepractice.dto.UserResponse;
 import ru.company.understandablepractice.dto.converter.YesNoConverter;
 import ru.company.understandablepractice.model.Customer;
-import ru.company.understandablepractice.model.Pair;
 import ru.company.understandablepractice.model.User;
 import ru.company.understandablepractice.model.types.*;
 
@@ -25,25 +23,25 @@ public abstract class CustomerMapper {
 
     @Mapping(target = "clientType", expression = "java(mapClientType(response))")
     @Mapping(target = "user", expression = "java(mapUser(response))")
-    @Mapping(target = "clientStatus", expression = "java(mapClientStatus(response))")
     @Mapping(target = "contactMethod", expression = "java(mapContactMethod(response))")
-    @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormat(response))")
     @Mapping(target = "onlinePlatform", expression = "java(mapOnlinePlatform(response))")
     @Mapping(target = "familyStatus", expression = "java(mapFamilyStatus(response))")
     @Mapping(target = "priorityCommunicationChannel", expression = "java(mapPriorityCommunicationChannel(response))")
     @Mapping(target = "supervisionStatusThisClient", expression = "java(yesNoConverter.stringToBoolean(response.getSupervisionStatusThisClient()))")
     @Mapping(target = "gender", expression = "java(mapGender(response))")
+    @Mapping(target = "clientStatus", expression = "java(mapClientStatus(response))")
+    @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormat(response))")
     public abstract Customer fromResponseToEntity(CustomerResponse response);
 
     @Mapping(target = "user", expression = "java(mapUserResponse(customer))")
-    @Mapping(target = "clientStatus", expression = "java(mapClientStatusString(customer))")
     @Mapping(target = "contactMethod", expression = "java(mapContactMethodString(customer))")
-    @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormatString(customer))")
     @Mapping(target = "onlinePlatform", expression = "java(mapOnlinePlatformString(customer))")
     @Mapping(target = "familyStatus", expression = "java(mapFamilyStatusString(customer))")
     @Mapping(target = "priorityCommunicationChannel", expression = "java(mapPriorityCommunicationChannelString(customer))")
     @Mapping(target = "supervisionStatusThisClient", expression = "java(yesNoConverter.booleanToString(customer.isSupervisionStatusThisClient()))")
     @Mapping(target = "gender", expression = "java(mapGenderString(customer))")
+    @Mapping(target = "clientStatus", expression = "java(mapClientStatusString(customer))")
+    @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormatString(customer))")
     public abstract CustomerResponse fromEntityToResponse(Customer customer);
 
     ClientType mapClientType(CustomerResponse response) {
@@ -76,17 +74,6 @@ public abstract class CustomerMapper {
         return userMapper.fromResponseToEntity(response.getUser());
     }
 
-    String mapClientStatusString(Customer customer) {
-        return customer.getClientStatus().getTittle();
-    }
-
-    ClientStatus mapClientStatus(CustomerResponse response) throws NoSuchElementException {
-        return Arrays.stream(ClientStatus.values())
-                .filter(status -> status.getTittle().equals(response.getClientStatus()))
-                .findFirst()
-                .orElseThrow();
-    }
-
     String mapContactMethodString(Customer customer) {
         return customer.getContactMethod().getTittle();
     }
@@ -94,17 +81,6 @@ public abstract class CustomerMapper {
     ContactMethod mapContactMethod(CustomerResponse response) {
         return Arrays.stream(ContactMethod.values())
                 .filter(status -> status.getTittle().equals(response.getContactMethod()))
-                .findFirst()
-                .orElseThrow();
-    }
-
-    String mapMeetingFormatString(Customer customer) {
-        return customer.getMeetingFormat().getTittle();
-    }
-
-    MeetingFormat mapMeetingFormat(CustomerResponse response) {
-        return Arrays.stream(MeetingFormat.values())
-                .filter(status -> status.getTittle().equals(response.getMeetingFormat()))
                 .findFirst()
                 .orElseThrow();
     }
@@ -138,6 +114,28 @@ public abstract class CustomerMapper {
     PriorityCommunicationChannel mapPriorityCommunicationChannel(CustomerResponse response) {
         return Arrays.stream(PriorityCommunicationChannel.values())
                 .filter(status -> status.getTittle().equals(response.getPriorityCommunicationChannel()))
+                .findFirst()
+                .orElseThrow();
+    }
+
+    String mapClientStatusString(Customer customer) {
+        return customer.getClientStatus().getTittle();
+    }
+
+    ClientStatus mapClientStatus(CustomerResponse response) throws NoSuchElementException {
+        return Arrays.stream(ClientStatus.values())
+                .filter(status -> status.getTittle().equals(response.getClientStatus()))
+                .findFirst()
+                .orElseThrow();
+    }
+
+    String mapMeetingFormatString(Customer customer) {
+        return customer.getMeetingFormat().getTittle();
+    }
+
+    MeetingFormat mapMeetingFormat(CustomerResponse response) {
+        return Arrays.stream(MeetingFormat.values())
+                .filter(status -> status.getTittle().equals(response.getMeetingFormat()))
                 .findFirst()
                 .orElseThrow();
     }

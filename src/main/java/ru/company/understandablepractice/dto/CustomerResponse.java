@@ -12,15 +12,11 @@ public class CustomerResponse extends PersonResponse {
 
     private UserResponse user;
 
-    private String clientStatus;
-
     private String contactMethod;
 
     private LocalDate dateFirstRequest;
 
     private LocalDate dateFirstConsultation;
-
-    private String meetingFormat;
 
     private String onlinePlatform;
 
@@ -31,8 +27,6 @@ public class CustomerResponse extends PersonResponse {
     private String meetingTimeDay;
 
     private Integer financialCondition;
-
-    private LocalDate birth;
 
     private String residenceAddress;
 
