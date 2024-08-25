@@ -1,10 +1,10 @@
 package ru.company.understandablepractice.model;
 
+import java.util.Objects;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.Objects;
 
 @Getter
 @Setter
@@ -42,6 +42,14 @@ public class User {
 
     @Column(name = "diplomas", columnDefinition = "TEXT")
     private String diplomas;
+
+    @OneToOne(
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    private UserCredentials userCredentials;
 
 
     public User(long id) {
