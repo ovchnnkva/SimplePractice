@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-package security;
+package ru.company.understandablepractice.security;
 
 import org.springframework.security.core.AuthenticationException;
 

@@ -2,13 +2,7 @@ package ru.company.understandablepractice.model;
 
 import java.util.Objects;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -49,7 +43,12 @@ public class User {
     @Column(name = "diplomas", columnDefinition = "TEXT")
     private String diplomas;
 
-    @OneToOne
+    @OneToOne(
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
     private UserCredentials userCredentials;
 
 
