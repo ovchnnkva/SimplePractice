@@ -26,7 +26,7 @@ public class SearchPersonController {
 
     @Operation(summary = "Клиенты найденные по имени", description = "Позволяет получить всех пользователей по заданому имени")
     @GetMapping("/{personName}")
-    public List<SearchPersonResponse> getPersonsByName(@PathVariable @Parameter(name = "Имя клиента") String personName) {
+    public List<SearchPersonResponse> getPersonsByName(@PathVariable @Parameter(description = "Имя клиента") String personName) {
         return searchService.findByName(personName);
     }
 }

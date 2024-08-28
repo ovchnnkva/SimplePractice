@@ -27,7 +27,7 @@ public class LeftMenuController {
 
     @Operation(summary = "Левое меню", description = "Позволяет получить левое меню текущего пользователя")
     @GetMapping("/get/{userId}")
-    public ResponseEntity<LeftMenuResponse> getLeftMenu(@PathVariable(name = "userId") @Parameter(name = "ID Пользователя") long userId){
+    public ResponseEntity<LeftMenuResponse> getLeftMenu(@PathVariable(name = "userId") @Parameter(description = "ID Пользователя") long userId){
         return leftMenuService.getLeftMenu(userId)
                 .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
