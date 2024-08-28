@@ -6,7 +6,7 @@ import ru.company.understandablepractice.model.Customer;
 import java.util.Optional;
 
 public class CRUDService<T> {
-    private JpaRepository<T, Long> repository;
+    protected JpaRepository<T, Long> repository;
 
     CRUDService(JpaRepository<T, Long> repository) {
         this.repository = repository;
