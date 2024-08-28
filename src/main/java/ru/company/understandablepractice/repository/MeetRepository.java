@@ -23,7 +23,7 @@ public interface MeetRepository extends JpaRepository<Meet, Long> {
     @Query(value =
             "SELECT m.dateMeet " +
             "FROM Meet m " +
-            "WHERE m.person.id =: personId " +
+            "WHERE m.person.id = :personId " +
             "ORDER BY m.dateMeet DESC")
     Optional<List<LocalDate>> findClientDateMeet(@Param("personId") long personId);
 }

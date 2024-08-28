@@ -35,7 +35,7 @@ public class SearchPersonService {
 
             List<LocalDate> meetInfo = getMeetInfo(person.getId());
             if (!meetInfo.isEmpty()) {
-                searchPerson.setMeetDate(meetInfo.get(1));
+                searchPerson.setMeetDate(meetInfo.get(0));
                 searchPerson.setCountMeet(meetInfo.size());
             }
 

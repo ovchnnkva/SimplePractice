@@ -11,8 +11,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.company.understandablepractice.dto.NotificationResponse;
 import ru.company.understandablepractice.dto.leftmenu.LeftMenuResponse;
 import ru.company.understandablepractice.service.LeftMenuService;
+
+import java.util.List;
 
 @Tag(
         name = "Left Menu Bar"
@@ -33,4 +36,9 @@ public class LeftMenuController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @Operation(summary = "Оповещения", description = "Позволяет получить список новых клиентов")
+    @GetMapping("/notification/{userId}")
+    public List<NotificationResponse> getNotification(@PathVariable(name = "userId") @Parameter(description = "ID Пользователя") long userId) {
+        return leftMenuService.getNotification(userId);
+    }
 }
