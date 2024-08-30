@@ -3,7 +3,6 @@ package ru.company.understandablepractice.dto.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.company.understandablepractice.dto.SearchPersonResponse;
-import ru.company.understandablepractice.model.Meet;
 import ru.company.understandablepractice.model.Person;
 
 import java.time.LocalDate;

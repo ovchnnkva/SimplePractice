@@ -23,13 +23,14 @@ public class SearchPersonService {
     public Optional<List<SearchPersonResponse>> findByName(String name){
         List<SearchPersonResponse> response = null;
 
-        List<Person> personList = personRepository.findPersonsByName(name).orElse(new ArrayList<>());
+        List<Person> personList = personRepository.findPersonsByName(name).orElse(null);
+        if (personList != null){
+            response = personList.stream().map(person -> {
+                var meets = meetRepository.findClientDateMeet(person.getId()).orElse(new ArrayList<>());
+                return searchPersonMapper.fromEntityToResponse(person, meets);
+            }).collect(Collectors.toList());
+        }
 
-        response = personList.stream().map(person -> {
-            var meets = meetRepository.findClientDateMeet(person.getId()).orElse(new ArrayList<>());
-            return searchPersonMapper.fromEntityToResponse(person, meets);
-        }).collect(Collectors.toList());
-
-        return Optional.of(response);
+        return Optional.ofNullable(response);
     }
 }

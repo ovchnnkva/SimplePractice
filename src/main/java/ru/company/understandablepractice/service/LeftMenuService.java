@@ -44,9 +44,11 @@ public class LeftMenuService {
     public Optional<List<NotificationResponse>> getNotification(long userId) {
         List<NotificationResponse> response = null;
 
-        List<Customer> customers = customerRepository.findNewCustomerByUserAndStatus(userId, ClientStatus.REQUEST).orElse(new ArrayList<>());
-        response = customers.stream().map(notificationMapper::fromEntityToResponse).collect(Collectors.toList());
+        List<Customer> customers = customerRepository.findNewCustomerByUserAndStatus(userId, ClientStatus.REQUEST).orElse(null);
+        if (customers != null){
+            response = customers.stream().map(notificationMapper::fromEntityToResponse).collect(Collectors.toList());
+        }
 
-        return Optional.of(response);
+        return Optional.ofNullable(response);
     }
 }
