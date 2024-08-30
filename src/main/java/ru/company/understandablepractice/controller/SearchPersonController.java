@@ -5,6 +5,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +28,9 @@ public class SearchPersonController {
 
     @Operation(summary = "Клиенты найденные по имени", description = "Позволяет получить всех пользователей по заданому имени")
     @GetMapping("/{personName}")
-    public List<SearchPersonResponse> getPersonsByName(@PathVariable @Parameter(description = "Имя клиента") String personName) {
-        return searchService.findByName(personName);
+    public ResponseEntity<List<SearchPersonResponse>> getPersonsByName(@PathVariable @Parameter(description = "Имя клиента") String personName) {
+        return searchService.findByName(personName)
+                .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }
