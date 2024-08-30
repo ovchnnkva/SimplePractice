@@ -38,7 +38,9 @@ public class LeftMenuController {
 
     @Operation(summary = "Оповещения", description = "Позволяет получить список новых клиентов")
     @GetMapping("/notification/{userId}")
-    public List<NotificationResponse> getNotification(@PathVariable(name = "userId") @Parameter(description = "ID Пользователя") long userId) {
-        return leftMenuService.getNotification(userId);
+    public ResponseEntity<List<NotificationResponse>> getNotification(@PathVariable(name = "userId") @Parameter(description = "ID Пользователя") long userId) {
+        return leftMenuService.getNotification(userId)
+                .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }
