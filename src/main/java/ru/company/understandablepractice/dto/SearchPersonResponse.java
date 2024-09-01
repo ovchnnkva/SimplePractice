@@ -7,6 +7,8 @@ import java.time.LocalDate;
 @Data
 public class SearchPersonResponse {
 
+    private long personId;
+
     private String fullName;
 
     private int years;

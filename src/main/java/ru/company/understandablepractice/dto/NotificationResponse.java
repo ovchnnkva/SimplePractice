@@ -7,6 +7,8 @@ import java.time.LocalDate;
 @Data
 public class NotificationResponse {
 
+    private long customerId;
+
     private LocalDate dateFirstRequest;
 
     private String customerFullName;

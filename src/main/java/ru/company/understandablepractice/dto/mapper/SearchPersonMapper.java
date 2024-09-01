@@ -8,21 +8,25 @@ import ru.company.understandablepractice.model.Person;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
-import java.util.Optional;
 
 @Mapper(componentModel = "spring")
 public abstract class SearchPersonMapper {
 
+    @Mapping(target = "personId", expression = "java(mapPersonId(person))")
     @Mapping(target = "fullName", expression = "java(mapFullName(person))")
     @Mapping(target = "years", expression = "java(mapYears(person))")
     @Mapping(target = "clientType", expression = "java(mapClientType(person))")
     @Mapping(target = "mail", expression = "java(mapMail(person))")
     @Mapping(target = "phone", expression = "java(mapPhone(person))")
     @Mapping(target = "meetDate", expression = "java(mapMeetDate(meetDates))")
-    @Mapping(target = "meetCount", expression = "java(mapMeetCount(meetDates))")
+    @Mapping(target = "countMeet", expression = "java(mapMeetCount(meetDates))")
     @Mapping(target = "clientStatus", expression = "java(mapClientStatus(person))")
     @Mapping(target = "meetingType", expression = "java(mapMeetingType(person))")
     public abstract SearchPersonResponse fromEntityToResponse(Person person, List<LocalDate> meetDates);
+
+    long mapPersonId(Person person) {
+        return person.getId();
+    }
 
     String mapFullName(Person person){
         return person.getFullName();
@@ -44,12 +48,12 @@ public abstract class SearchPersonMapper {
         return person.getPhoneNumber();
     }
 
-    LocalDate mapMeetDate(List<LocalDate> meets){
-        return Optional.of(meets.getFirst()).orElse(null);
+    LocalDate mapMeetDate(List<LocalDate> meetDates){
+        return meetDates.stream().findFirst().orElse(null);
     }
 
-    int mapMeetCount(List<LocalDate> meets) {
-        return meets.size();
+    int mapMeetCount(List<LocalDate> meetDates) {
+        return meetDates.size();
     }
 
     String mapClientStatus(Person person){

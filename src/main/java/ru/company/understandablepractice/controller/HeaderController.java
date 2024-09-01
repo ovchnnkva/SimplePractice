@@ -22,12 +22,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @Slf4j
-@RequestMapping("/api/v1/Header/searchPersons/")
+@RequestMapping("/api/v1/Header/")
 public class HeaderController {
     private final HeaderService headerService;
 
     @Operation(summary = "Клиенты найденные по имени", description = "Позволяет получить всех пользователей по заданому имени")
-    @GetMapping("/{personName}")
+    @GetMapping("searchPersons/{personName}")
     public ResponseEntity<List<HeaderSearchPersonResponse>> getPersonsByName(@PathVariable @Parameter(description = "Имя клиента") String personName) {
         return headerService.findPersonsByName(personName)
                 .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
