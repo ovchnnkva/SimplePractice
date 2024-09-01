@@ -30,11 +30,13 @@ public class SearchMeetController {
     private final MeetService service;
     private final SearchMeetMapper mapper;
 
-    @GetMapping("{userId}/{personId}")
+    @GetMapping("{userId}/{personId}/{limit}/{offset}")
     public ResponseEntity<List<SearchMeetResponse>> getMeetsByUserAndPerson(@PathVariable @Parameter(description = "ИД Пользователя") long userId,
-                                                                           @PathVariable @Parameter(description = "ИД Клиента") long personId) {
+                                                                            @PathVariable @Parameter(description = "ИД Клиента") long personId,
+                                                                            @PathVariable @Parameter(description = "offset") long offset,
+                                                                            @PathVariable @Parameter(description = "limit") long limit) {
         log.info("get meets by userId = {}, personId = {}", userId, personId);
-        List<Meet> result = service.getByUserIdAndPersonId(userId, personId);
+        List<Meet> result = service.getByUserIdAndPersonId(userId, personId, offset, limit);
         return result.isEmpty()
                 ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
                 : new ResponseEntity<>(result.stream()
