@@ -39,7 +39,7 @@ public abstract class ChildMapper {
         return Arrays.stream(ClientType.values())
                 .filter(value -> value.getTittle().equals(response.getClientType()))
                 .findFirst()
-                .orElseThrow();
+                .orElse(null);
     }
 
     String mapCLientTypeString(Child entity) {
@@ -53,7 +53,7 @@ public abstract class ChildMapper {
         return Arrays.stream(BringsClient.values())
                 .filter(bringsClient -> bringsClient.getTitle().equals(response.getBringsClient()))
                 .findFirst()
-                .orElseThrow();
+                .orElse(null);
     }
 
     CustomerResponse mapFirstParentResponse(Child child){
@@ -76,7 +76,7 @@ public abstract class ChildMapper {
         return Arrays.stream(Gender.values())
                 .filter(value -> value.getTittle().equals(response.getGender()))
                 .findFirst()
-                .orElseThrow();
+                .orElse(null);
     }
 
     String mapGenderString(Child entity) {
@@ -91,7 +91,7 @@ public abstract class ChildMapper {
         return Arrays.stream(ClientStatus.values())
                 .filter(status -> status.getTittle().equals(response.getClientStatus()))
                 .findFirst()
-                .orElseThrow();
+                .orElse(null);
     }
 
     String mapMeetingFormatString(Child child) {
@@ -102,6 +102,6 @@ public abstract class ChildMapper {
         return Arrays.stream(MeetingFormat.values())
                 .filter(status -> status.getTittle().equals(response.getMeetingFormat()))
                 .findFirst()
-                .orElseThrow();
+                .orElse(null);
     }
 }

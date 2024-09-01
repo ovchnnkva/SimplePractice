@@ -48,14 +48,14 @@ public abstract class CustomerMapper {
         return Arrays.stream(ClientType.values())
                 .filter(value -> value.getTittle().equals(response.getClientType()))
                 .findFirst()
-                .orElseThrow();
+                .orElse(null);
     }
 
     Gender mapGender(CustomerResponse response) {
         return Arrays.stream(Gender.values())
                 .filter(value -> value.getTittle().equals(response.getGender()))
                 .findFirst()
-                .orElseThrow();
+                .orElse(null);
     }
 
     String mapGenderString(Customer entity) {
@@ -82,7 +82,7 @@ public abstract class CustomerMapper {
         return Arrays.stream(ContactMethod.values())
                 .filter(status -> status.getTittle().equals(response.getContactMethod()))
                 .findFirst()
-                .orElseThrow();
+                .orElse(null);
     }
 
     String mapOnlinePlatformString(Customer customer) {
@@ -93,7 +93,7 @@ public abstract class CustomerMapper {
         return Arrays.stream(OnlinePlatform.values())
                 .filter(status -> status.getTittle().equals(response.getOnlinePlatform()))
                 .findFirst()
-                .orElseThrow();
+                .orElse(null);
     }
 
     String mapFamilyStatusString(Customer customer) {
@@ -104,7 +104,7 @@ public abstract class CustomerMapper {
         return Arrays.stream(FamilyStatus.values())
                 .filter(status -> status.getTittle().equals(response.getFamilyStatus()))
                 .findFirst()
-                .orElseThrow();
+                .orElse(null);
     }
 
     String mapPriorityCommunicationChannelString(Customer customer) {
@@ -115,7 +115,7 @@ public abstract class CustomerMapper {
         return Arrays.stream(PriorityCommunicationChannel.values())
                 .filter(status -> status.getTittle().equals(response.getPriorityCommunicationChannel()))
                 .findFirst()
-                .orElseThrow();
+                .orElse(null);
     }
 
     String mapClientStatusString(Customer customer) {
@@ -126,7 +126,7 @@ public abstract class CustomerMapper {
         return Arrays.stream(ClientStatus.values())
                 .filter(status -> status.getTittle().equals(response.getClientStatus()))
                 .findFirst()
-                .orElseThrow();
+                .orElse(null);
     }
 
     String mapMeetingFormatString(Customer customer) {
@@ -137,6 +137,6 @@ public abstract class CustomerMapper {
         return Arrays.stream(MeetingFormat.values())
                 .filter(status -> status.getTittle().equals(response.getMeetingFormat()))
                 .findFirst()
-                .orElseThrow();
+                .orElse(null);
     }
 }

@@ -54,7 +54,7 @@ public abstract class PairMapper {
         return Arrays.stream(ClientType.values())
                 .filter(value -> value.getTittle().equals(response.getClientType()))
                 .findFirst()
-                .orElseThrow();
+                .orElse(null);
     }
 
     String mapCLientTypeString(Pair entity) {
@@ -65,7 +65,7 @@ public abstract class PairMapper {
         return Arrays.stream(Gender.values())
                 .filter(value -> value.getTittle().equals(response.getGender()))
                 .findFirst()
-                .orElseThrow();
+                .orElse(null);
     }
 
     String mapGenderString(Pair entity) {
@@ -80,7 +80,7 @@ public abstract class PairMapper {
         return Arrays.stream(FamilyStatus.values())
                 .filter(value -> value.getTittle().equals(response.getFamilyStatus()))
                 .findFirst()
-                .orElseThrow();
+                .orElse(null);
     }
 
     String mapClientStatusString(Pair entity) {
@@ -91,7 +91,7 @@ public abstract class PairMapper {
         return Arrays.stream(ClientStatus.values())
                 .filter(status -> status.getTittle().equals(response.getClientStatus()))
                 .findFirst()
-                .orElseThrow();
+                .orElse(null);
     }
 
     String mapMeetingFormatString(Pair entity) {
@@ -102,6 +102,6 @@ public abstract class PairMapper {
         return Arrays.stream(MeetingFormat.values())
                 .filter(status -> status.getTittle().equals(response.getMeetingFormat()))
                 .findFirst()
-                .orElseThrow();
+                .orElse(null);
     }
 }

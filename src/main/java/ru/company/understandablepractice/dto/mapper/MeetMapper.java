@@ -54,7 +54,7 @@ public abstract class MeetMapper {
         return Arrays.stream(MeetingFormat.values())
                 .filter(value -> value.getTittle().equals(response.getFormatMeet()))
                 .findFirst()
-                .orElseThrow();
+                .orElse(null);
     }
 
     String mapMeetingFormatString(Meet entity) {
@@ -65,7 +65,7 @@ public abstract class MeetMapper {
         return Arrays.stream(PaymentType.values())
                 .filter(value -> value.getTitle().equals(response.getPaymentType()))
                 .findFirst()
-                .orElseThrow();
+                .orElse(null);
     }
 
     String mapPaymentTypeString(Meet entity) {
