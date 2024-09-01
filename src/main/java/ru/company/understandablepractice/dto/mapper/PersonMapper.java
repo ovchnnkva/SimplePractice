@@ -29,14 +29,14 @@ public abstract class PersonMapper {
         return Arrays.stream(ClientType.values())
                 .filter(value -> value.getTittle().equals(response.getClientType()))
                 .findFirst()
-                .orElseThrow();
+                .orElse(null);
     }
 
     Gender mapGender(PersonResponse response) {
         return Arrays.stream(Gender.values())
                 .filter(value -> value.getTittle().equals(response.getGender()))
                 .findFirst()
-                .orElseThrow();
+                .orElse(null);
     }
 
     String mapCLientTypeString(Person entity) {
@@ -51,7 +51,7 @@ public abstract class PersonMapper {
         return Arrays.stream(ClientStatus.values())
                 .filter(status -> status.getTittle().equals(response.getClientStatus()))
                 .findFirst()
-                .orElseThrow();
+                .orElse(null);
     }
 
     String mapMeetingFormatString(Person entity) {
@@ -62,6 +62,6 @@ public abstract class PersonMapper {
         return Arrays.stream(MeetingFormat.values())
                 .filter(status -> status.getTittle().equals(response.getMeetingFormat()))
                 .findFirst()
-                .orElseThrow();
+                .orElse(null);
     }
 }
