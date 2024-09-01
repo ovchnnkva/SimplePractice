@@ -27,9 +27,11 @@ public class SearchPersonController {
     private final SearchPersonService searchService;
 
     @Operation(summary = "Клиенты найденные по имени", description = "Позволяет получить всех пользователей по заданому имени")
-    @GetMapping("/{personName}")
-    public ResponseEntity<List<SearchPersonResponse>> getPersonsByName(@PathVariable @Parameter(description = "Имя клиента") String personName) {
-        return searchService.findByName(personName)
+    @GetMapping("/{personName}/{offset}/{limit}")
+    public ResponseEntity<List<SearchPersonResponse>> getPersonsByName(@PathVariable @Parameter(description = "Имя клиента") String personName,
+                                                                       @PathVariable @Parameter(description = "offset") long offset,
+                                                                       @PathVariable @Parameter(description = "limit") long limit) {
+        return searchService.findByName(personName, offset, limit)
                 .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }

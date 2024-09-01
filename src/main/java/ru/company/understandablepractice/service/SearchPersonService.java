@@ -20,10 +20,10 @@ public class SearchPersonService {
     private final MeetRepository meetRepository;
     private final SearchPersonMapper searchPersonMapper;
 
-    public Optional<List<SearchPersonResponse>> findByName(String name){
+    public Optional<List<SearchPersonResponse>> findByName(String name, long offset, long limit){
         List<SearchPersonResponse> response = null;
 
-        List<Person> personList = personRepository.findPersonsByName(name).orElse(null);
+        List<Person> personList = personRepository.findPersonsByNamePagination(name, offset, limit).orElse(null);
         if (personList != null){
             response = personList.stream().map(person -> {
                 var meets = meetRepository.findClientDateMeet(person.getId()).orElse(new ArrayList<>());
