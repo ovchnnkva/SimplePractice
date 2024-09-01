@@ -19,7 +19,6 @@ public abstract class PairMapper {
 
     @Mapping(target = "clientType", expression = "java(mapClientType(response))")
     @Mapping(target = "familyStatus", expression = "java(mapFamilyStatus(response))")
-    @Mapping(target = "firstCustomer", expression = "java(mapFirstCustomer(response))")
     @Mapping(target = "secondCustomer", expression = "java(mapSecondCustomer(response))")
     @Mapping(target = "gender", expression = "java(mapGender(response))")
     @Mapping(target = "clientStatus", expression = "java(mapClientStatus(response))")
@@ -27,20 +26,11 @@ public abstract class PairMapper {
     public abstract Pair fromResponseToEntity(PairResponse response);
 
     @Mapping(target = "familyStatus", expression = "java(mapFamilyStatusString(entity))")
-    @Mapping(target = "firstCustomer", expression = "java(mapFirstCustomerResponse(entity))")
     @Mapping(target = "secondCustomer", expression = "java(mapSecondCustomerResponse(entity))")
     @Mapping(target = "gender", expression = "java(mapGenderString(entity))")
     @Mapping(target = "clientStatus", expression = "java(mapClientStatusString(entity))")
     @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormatString(entity))")
     public abstract PairResponse fromEntityToResponse(Pair entity);
-
-    Customer mapFirstCustomer(PairResponse response) {
-        return customerMapper.fromResponseToEntity(response.getFirstCustomer());
-    }
-
-    CustomerResponse mapFirstCustomerResponse(Pair entity) {
-        return customerMapper.fromEntityToResponse(entity.getFirstCustomer());
-    }
 
     Customer mapSecondCustomer(PairResponse response) {
         return customerMapper.fromResponseToEntity(response.getSecondCustomer());

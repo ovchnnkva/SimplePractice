@@ -3,6 +3,7 @@ package ru.company.understandablepractice.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import ru.company.understandablepractice.model.types.ClientStatus;
 import ru.company.understandablepractice.model.types.ClientType;
 import ru.company.understandablepractice.model.types.Gender;
@@ -14,6 +15,7 @@ import ru.company.understandablepractice.model.types.converters.MeetingFormatCon
 
 import java.time.LocalDate;
 
+@ToString
 @Getter
 @Setter
 @Entity
@@ -43,7 +45,7 @@ public class Person {
     protected String lastName;
 
     @Column(name = "date_of_birth")
-    private LocalDate birth;
+    protected LocalDate birth;
 
     @Column(name = "phone_number", length = 20)
     protected String phoneNumber;
@@ -57,11 +59,11 @@ public class Person {
 
     @Convert(converter = ClientStatusConverter.class)
     @Column(name = "client_status")
-    private ClientStatus clientStatus;
+    protected ClientStatus clientStatus;
 
     @Convert(converter = MeetingFormatConverter.class)
     @Column(name = "meeting_format")
-    private MeetingFormat meetingFormat;
+    protected MeetingFormat meetingFormat;
 
     public Person(long id) {
         this.id = id;

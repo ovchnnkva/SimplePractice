@@ -35,7 +35,7 @@ public abstract class MeetMapper {
     public abstract MeetResponse fromEntityToResponse(Meet entity);
 
     Person mapPerson(MeetResponse response) {
-        return new Person(response.getPerson().getId());
+        return personMapper.fromResponseToEntity(response.getPerson());
     }
 
     PersonResponse mapPersonResponse(Meet entity) {

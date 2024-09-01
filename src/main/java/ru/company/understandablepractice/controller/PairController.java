@@ -39,18 +39,32 @@ public class PairController {
     @PutMapping
     public ResponseEntity<?> update(@RequestBody @Parameter(description = "Пара") PairResponse response) {
         log.info("update pair {}", response);
-        return service.create(mapper.fromResponseToEntity(response))
-                .map(value -> new ResponseEntity<>(HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+        ResponseEntity<Long> responseEntity;
+        try {
+            responseEntity = service.create(mapper.fromResponseToEntity(response))
+                    .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
+                    .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+        } catch (Exception e) {
+            responseEntity = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return responseEntity;
     }
 
     @Operation(summary = "Создать", description = "Создать пару")
     @PostMapping
     public ResponseEntity<?> create(@RequestBody @Parameter(description = "Пара") PairResponse response) {
         log.info("create pair {}", response);
-        return service.create(mapper.fromResponseToEntity(response))
-                .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+        ResponseEntity<Long> responseEntity;
+        try {
+            responseEntity = service.create(mapper.fromResponseToEntity(response))
+                    .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
+                    .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+        } catch (Exception e) {
+            responseEntity = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return responseEntity;
     }
 
     @Operation(summary = "Удалить", description = "Удаление пары")

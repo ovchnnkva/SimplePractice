@@ -71,4 +71,19 @@ public class Customer extends Person{
 
     @Column(name = "notes", columnDefinition = "TEXT")
     private String notes;
+
+    public Customer(Person person) {
+        this.id = person.getId();
+        this.clientType = ClientType.ADULT;
+        this.fullName = person.getFullName();
+        this.firstName = person.getFirstName();
+        this.secondName = person.getSecondName();
+        this.lastName = person.getLastName();
+        this.birth = person.getBirth();
+        this.phoneNumber = person.getPhoneNumber();
+        this.mail = person.getMail();
+        this.gender = person.getGender();
+        this.clientStatus = person.getClientStatus();
+        this.meetingFormat = person.getMeetingFormat();
+    }
 }

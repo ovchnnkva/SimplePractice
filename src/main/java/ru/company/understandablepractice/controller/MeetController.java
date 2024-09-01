@@ -38,18 +38,33 @@ public class MeetController {
     @PutMapping
     public ResponseEntity<?> update(@RequestBody @Parameter(description = "Встреча") MeetResponse response) {
         log.info("update meet {}", response);
-        return service.create(mapper.fromResponseToEntity(response))
-                .map(value -> new ResponseEntity<>(HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+        ResponseEntity<Long> responseEntity;
+        try {
+            responseEntity = service.create(mapper.fromResponseToEntity(response))
+                    .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
+                    .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+        } catch (Exception e) {
+            responseEntity = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return responseEntity;
     }
 
     @Operation(summary = "Создать", description = "Создать встречу")
     @PostMapping
     public ResponseEntity<Long> create(@RequestBody @Parameter(description = "Встреча") MeetResponse response) {
         log.info("create meet {}", response);
-        return service.create(mapper.fromResponseToEntity(response))
-                .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+
+        ResponseEntity<Long> responseEntity;
+        try {
+            responseEntity = service.create(mapper.fromResponseToEntity(response))
+                    .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
+                    .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+        } catch (Exception e) {
+            responseEntity = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return responseEntity;
     }
 
     @Operation(summary = "Удалить", description = "Удаление встречи")

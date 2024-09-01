@@ -38,17 +38,33 @@ public class UserController {
     @Operation(summary = "Обновление", description = "Позволяет обновить данные пользователя")
     @PutMapping
     public ResponseEntity<?> update(@RequestBody @Parameter(description = "Пользователь") UserResponse response) {
-        return service.create(mapper.fromResponseToEntity(response))
-                .map(value -> new ResponseEntity<>(HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+        log.info("update user {}", response);
+        ResponseEntity<Long> responseEntity;
+        try {
+            responseEntity = service.create(mapper.fromResponseToEntity(response))
+                    .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
+                    .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+        } catch (Exception e) {
+            responseEntity = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return responseEntity;
     }
 
     @Operation(summary = "Создать", description = "Создать пользователя")
     @PostMapping
     public ResponseEntity<Long> create(@RequestBody @Parameter(description = "Пользователь") UserResponse response) {
-        return service.create(mapper.fromResponseToEntity(response))
-                .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+        log.info("create user {}", response);
+        ResponseEntity<Long> responseEntity;
+        try {
+            responseEntity = service.create(mapper.fromResponseToEntity(response))
+                    .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
+                    .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+        } catch (Exception e) {
+            responseEntity = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return responseEntity;
     }
 
     @Operation(summary = "Удалить", description = "Удаление пользователя")

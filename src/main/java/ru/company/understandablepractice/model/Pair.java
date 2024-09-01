@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.company.understandablepractice.model.types.ClientType;
 import ru.company.understandablepractice.model.types.FamilyStatus;
 
 @Getter
@@ -11,10 +12,6 @@ import ru.company.understandablepractice.model.types.FamilyStatus;
 @Entity
 @Table(name = "pair")
 public class Pair extends Person{
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "first_customer_id")
-    private Customer firstCustomer;
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "second_customer_id")
     private Customer secondCustomer;
@@ -45,4 +42,19 @@ public class Pair extends Person{
 
     @Column(name = "financial_terms_between_cotherapists")
     private String financialTermsCotherapists;
+
+    public Pair(Person person) {
+        this.id = person.getId();
+        this.clientType = ClientType.PAIR;
+        this.fullName = person.getFullName();
+        this.firstName = person.getFirstName();
+        this.secondName = person.getSecondName();
+        this.lastName = person.getLastName();
+        this.birth = person.getBirth();
+        this.phoneNumber = person.getPhoneNumber();
+        this.mail = person.getMail();
+        this.gender = person.getGender();
+        this.clientStatus = person.getClientStatus();
+        this.meetingFormat = person.getMeetingFormat();
+    }
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import ru.company.understandablepractice.model.types.BringsClient;
+import ru.company.understandablepractice.model.types.ClientType;
 import ru.company.understandablepractice.model.types.converters.BringsClientConverter;
 
 @Getter
@@ -37,4 +38,19 @@ public class Child extends Person{
 
     @Column(name = "child_desired_changes")
     private String childDesiredChanges;
+
+    public Child(Person person) {
+        this.id = person.getId();
+        this.clientType = ClientType.CHILD;
+        this.fullName = person.getFullName();
+        this.firstName = person.getFirstName();
+        this.secondName = person.getSecondName();
+        this.lastName = person.getLastName();
+        this.birth = person.getBirth();
+        this.phoneNumber = person.getPhoneNumber();
+        this.mail = person.getMail();
+        this.gender = person.getGender();
+        this.clientStatus = person.getClientStatus();
+        this.meetingFormat = person.getMeetingFormat();
+    }
 }

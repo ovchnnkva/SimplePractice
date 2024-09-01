@@ -17,7 +17,7 @@ public class CRUDService<T> {
         return repository.findById(id);
     }
 
-    public Optional<T> create(T entity) {
+    public Optional<T> create(T entity) throws Exception{
         return Optional.of(repository.save(entity));
     }
 

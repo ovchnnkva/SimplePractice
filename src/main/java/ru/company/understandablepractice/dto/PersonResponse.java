@@ -8,31 +8,32 @@ import ru.company.understandablepractice.model.types.ClientType;
 import java.time.LocalDate;
 import java.util.Objects;
 
+@Setter
 @Getter
 public class PersonResponse {
-    @Setter
+
     protected long id;
-    @JsonIgnore
-    private final String clientType;
-    @Setter
+
+    protected String clientType;
+
     protected String fullName;
-    @Setter
+
     protected String firstName;
-    @Setter
+
     protected String secondName;
-    @Setter
+
     protected String lastName;
-    @Setter
+
     protected LocalDate birth;
-    @Setter
+
     protected String phoneNumber;
-    @Setter
+
     protected String mail;
-    @Setter
+
     protected String gender;
-    @Setter
+
     private String clientStatus;
-    @Setter
+
     private String meetingFormat;
 
     public PersonResponse(String clientType) {

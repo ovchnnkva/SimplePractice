@@ -25,6 +25,7 @@ public class UnderstandablepracticeApplication {
 	public ApplicationRunner CommandLineRunnerBean() {
 		return (args) -> {
 			User user = new User();
+			user.setId(1);
 			UserCredentials userCredentials = new UserCredentials();
 			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 			userCredentials.setPassword(encoder.encode("pass"));
@@ -32,7 +33,7 @@ public class UnderstandablepracticeApplication {
 			user.setUserCredentials(userCredentials);
 			userCredentials.setUser(user);
 
-			service.create(user);
+			//service.create(user);
 		};
 	}
 

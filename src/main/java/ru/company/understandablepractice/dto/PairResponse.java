@@ -8,8 +8,6 @@ import ru.company.understandablepractice.model.types.ClientType;
 @Setter
 public class PairResponse extends PersonResponse{
 
-    private CustomerResponse firstCustomer;
-
     private CustomerResponse secondCustomer;
 
     private String clientFirstRequestTherapyReason;

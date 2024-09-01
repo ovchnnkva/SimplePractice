@@ -40,18 +40,32 @@ public class CustomerController {
     @PutMapping
     public ResponseEntity<?> update(@RequestBody @Parameter(description = "Клиент") CustomerResponse response) {
         log.info("update customer {}", response);
-        return service.create(mapper.fromResponseToEntity(response))
-                .map(value -> new ResponseEntity<>(HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+        ResponseEntity<Long> responseEntity;
+        try {
+            responseEntity = service.create(mapper.fromResponseToEntity(response))
+                    .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
+                    .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+        } catch (Exception e) {
+            responseEntity = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return responseEntity;
     }
 
     @Operation(summary = "Создать", description = "Создать клиента")
     @PostMapping
     public ResponseEntity<Long> create(@RequestBody @Parameter(description = "Клиент") CustomerResponse response) {
         log.info("create customer {}", response);
-        return service.create(mapper.fromResponseToEntity(response))
-                .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+        ResponseEntity<Long> responseEntity;
+        try {
+            responseEntity = service.create(mapper.fromResponseToEntity(response))
+                    .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
+                    .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+        } catch (Exception e) {
+            responseEntity = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return responseEntity;
     }
 
     @Operation(summary = "Удалить", description = "Удаление клиента")
