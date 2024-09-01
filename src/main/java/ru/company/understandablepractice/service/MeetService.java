@@ -16,7 +16,7 @@ public class MeetService extends CRUDService<Meet>{
         this.repository = repository;
     }
 
-    public List<Meet> getByUserIdAndPersonId(long userId, long personId) {
-        return repository.findByUserIdAndPersonId(userId, personId);
+    public List<Meet> getByUserIdAndPersonId(long userId, long personId, long offset, long limit) {
+        return repository.findByUserIdAndPersonId(userId, personId, offset, limit);
     }
 }
