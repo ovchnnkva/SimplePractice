@@ -2,11 +2,10 @@ package ru.company.understandablepractice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.company.understandablepractice.dto.CustomerResponse;
 import ru.company.understandablepractice.dto.NotificationResponse;
 import ru.company.understandablepractice.dto.leftmenu.LeftMenuResponse;
-import ru.company.understandablepractice.dto.mapper.CustomerMapper;
 import ru.company.understandablepractice.dto.mapper.LeftMenuUserDataMapper;
+import ru.company.understandablepractice.dto.mapper.NotificationMapper;
 import ru.company.understandablepractice.model.Customer;
 import ru.company.understandablepractice.model.types.ClientStatus;
 import ru.company.understandablepractice.repository.CustomerRepository;
@@ -27,7 +26,7 @@ public class LeftMenuService {
     private final CustomerRepository customerRepository;
 
     private final LeftMenuUserDataMapper userDataMapper;
-    private final CustomerMapper customerMapper;
+    private final NotificationMapper notificationMapper;
 
     public Optional<LeftMenuResponse> getLeftMenu(long userId) {
         LeftMenuResponse response = null;
@@ -42,24 +41,14 @@ public class LeftMenuService {
         return Optional.ofNullable(response);
     }
 
-    public List<NotificationResponse> getNotification(long userId) {
-        List<CustomerResponse> customers = getNewCustomersByUser(userId);
-        return customers.stream().map(customerResponse -> {
-           var notification = new NotificationResponse();
+    public Optional<List<NotificationResponse>> getNotification(long userId) {
+        List<NotificationResponse> response = null;
 
-           notification.setCustomerFullName(customerResponse.getFullName());
-           notification.setDateFirstRequest(customerResponse.getDateFirstRequest());
-
-           return notification;
-        }).collect(Collectors.toList());
-    }
-
-    private List<CustomerResponse> getNewCustomersByUser(long userId) {
         List<Customer> customers = customerRepository.findNewCustomerByUserAndStatus(userId, ClientStatus.REQUEST).orElse(null);
-        if (customers != null) {
-            return customers.stream().map(customerMapper::fromEntityToResponse).collect(Collectors.toList());
-        } else {
-            return new ArrayList<>();
+        if (customers != null){
+            response = customers.stream().map(notificationMapper::fromEntityToResponse).collect(Collectors.toList());
         }
+
+        return Optional.ofNullable(response);
     }
 }
