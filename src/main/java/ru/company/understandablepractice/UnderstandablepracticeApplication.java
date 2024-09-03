@@ -33,7 +33,11 @@ public class UnderstandablepracticeApplication {
 			user.setUserCredentials(userCredentials);
 			userCredentials.setUser(user);
 
+<<<<<<< HEAD
 			service.create(user);
+=======
+//			service.create(user);
+>>>>>>> a0d7bc7955b93fcb8127c68674b8b6dbee3bc15d
 		};
 	}
 

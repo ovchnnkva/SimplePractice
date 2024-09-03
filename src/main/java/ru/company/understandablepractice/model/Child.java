@@ -2,6 +2,7 @@ package ru.company.understandablepractice.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.company.understandablepractice.model.types.BringsClient;
 import ru.company.understandablepractice.model.types.ClientType;
@@ -11,6 +12,7 @@ import ru.company.understandablepractice.model.types.converters.BringsClientConv
 @Setter
 @Entity
 @Table(name = "child")
+@NoArgsConstructor
 public class Child extends Person{
     @Convert(converter = BringsClientConverter.class)
     @Column(name = "brings_client")

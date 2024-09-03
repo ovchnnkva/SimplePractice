@@ -11,6 +11,7 @@ import ru.company.understandablepractice.model.types.FamilyStatus;
 @Setter
 @Entity
 @Table(name = "pair")
+@NoArgsConstructor
 public class Pair extends Person{
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "second_customer_id")

@@ -3,6 +3,7 @@ package ru.company.understandablepractice.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.company.understandablepractice.dto.calendar.CalendarResponse;
+import ru.company.understandablepractice.security.JwtService;
+import ru.company.understandablepractice.security.JwtType;
 import ru.company.understandablepractice.service.CalendarService;
 
 import java.net.http.HttpResponse;
@@ -25,12 +28,15 @@ import java.net.http.HttpResponse;
 @RequestMapping("/api/v1/General/calendarData/")
 public class CalendarController {
     private final CalendarService calendarService;
+    private final HttpServletRequest request;
+    private final JwtService jwtService;
 
     @Operation(summary = "Встречи на текущий год", description = "Позволяет получить все встречи пользователя на текущий год")
-    @GetMapping("/get/{userId}/{year}")
-    public ResponseEntity<CalendarResponse> getCalendar(@PathVariable(name = "userId") @Parameter(description = "ID Пользователя") long userId,
-                                        @PathVariable(name = "year") @Parameter(description = "Год, в рамках которого находятся встречи") String year) {
+    @GetMapping("/get/{year}")
+    public ResponseEntity<CalendarResponse> getCalendar(@PathVariable(name = "year") @Parameter(description = "Год, в рамках которого находятся встречи") String year) {
 
+        Long userId = jwtService.extractUserId(request.getHeader("Authorization"), JwtType.ACCESS);
+        log.info("auth user {}", userId);
         return calendarService.getCalendar(userId, year)
                 .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND)); //

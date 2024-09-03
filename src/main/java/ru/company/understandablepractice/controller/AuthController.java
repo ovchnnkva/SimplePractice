@@ -39,7 +39,7 @@ public class AuthController {
     @PostMapping("/refresh")
     public ResponseEntity<JwtAuthenticationResponse> refresh(@RequestBody JwtRefreshRequest request) {
         String refreshToken = request.getRefreshToken();
-        long userId = Long.parseLong(jwtService.extractUserName(refreshToken, JwtType.REFRESH));
+        long userId = jwtService.extractUserId(refreshToken, JwtType.REFRESH);
         Optional<User> user = userService.getById(userId);
         ResponseEntity<JwtAuthenticationResponse> response;
         if (user.isEmpty() || !jwtService.isTokenValid(refreshToken, JwtType.REFRESH, user.get().getUserCredentials())) {
