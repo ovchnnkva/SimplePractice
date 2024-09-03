@@ -11,7 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -46,12 +45,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // Обрезаем префикс и получаем имя пользователя из токена
         var jwt = authHeader.substring(BEARER_PREFIX.length());
-        var userId = jwtService.extractUserName(jwt, JwtType.ACCESS);
+        var userId = jwtService.extractUserId(jwt, JwtType.ACCESS);
 
-        if (StringUtils.isNotEmpty(userId) && SecurityContextHolder.getContext().getAuthentication() == null) {
-            long id = Long.parseLong(userId);
-            log.info(String.valueOf(id));
-            UserCredentials userDetails = userCredentialsService.findByUserId(id).get();
+        if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            log.info("auth user with id {}", userId);
+            UserCredentials userDetails = userCredentialsService.findByUserId(userId).get();
 
 
             // Если токен валиден, то аутентифицируем пользователя

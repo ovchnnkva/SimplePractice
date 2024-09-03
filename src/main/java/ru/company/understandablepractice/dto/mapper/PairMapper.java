@@ -5,8 +5,10 @@ import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.company.understandablepractice.dto.CustomerResponse;
 import ru.company.understandablepractice.dto.PairResponse;
+import ru.company.understandablepractice.dto.UserResponse;
 import ru.company.understandablepractice.model.Customer;
 import ru.company.understandablepractice.model.Pair;
+import ru.company.understandablepractice.model.User;
 import ru.company.understandablepractice.model.types.*;
 
 import java.util.Arrays;
@@ -17,6 +19,10 @@ public abstract class PairMapper {
     @Autowired
     private CustomerMapper customerMapper;
 
+    @Autowired
+    private UserMapper userMapper;
+
+    @Mapping(target = "user", expression = "java(mapUser(response))")
     @Mapping(target = "clientType", expression = "java(mapClientType(response))")
     @Mapping(target = "familyStatus", expression = "java(mapFamilyStatus(response))")
     @Mapping(target = "secondCustomer", expression = "java(mapSecondCustomer(response))")
@@ -25,12 +31,21 @@ public abstract class PairMapper {
     @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormat(response))")
     public abstract Pair fromResponseToEntity(PairResponse response);
 
+    @Mapping(target = "user", expression = "java(mapUserResponse(entity))")
     @Mapping(target = "familyStatus", expression = "java(mapFamilyStatusString(entity))")
     @Mapping(target = "secondCustomer", expression = "java(mapSecondCustomerResponse(entity))")
     @Mapping(target = "gender", expression = "java(mapGenderString(entity))")
     @Mapping(target = "clientStatus", expression = "java(mapClientStatusString(entity))")
     @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormatString(entity))")
     public abstract PairResponse fromEntityToResponse(Pair entity);
+
+    User mapUser(PairResponse response) {
+        return userMapper.fromResponseToEntity(response.getUser());
+    }
+
+    UserResponse mapUserResponse(Pair customer) {
+        return userMapper.fromEntityToResponse(customer.getUser());
+    }
 
     Customer mapSecondCustomer(PairResponse response) {
         return customerMapper.fromResponseToEntity(response.getSecondCustomer());

@@ -33,7 +33,7 @@ public class UnderstandablepracticeApplication {
 			user.setUserCredentials(userCredentials);
 			userCredentials.setUser(user);
 
-			//service.create(user);
+//			service.create(user);
 		};
 	}
 

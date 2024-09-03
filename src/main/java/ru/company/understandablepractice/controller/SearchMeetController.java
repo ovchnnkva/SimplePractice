@@ -2,6 +2,7 @@ package ru.company.understandablepractice.controller;
 
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.company.understandablepractice.dto.SearchMeetResponse;
 import ru.company.understandablepractice.dto.mapper.SearchMeetMapper;
 import ru.company.understandablepractice.model.Meet;
+import ru.company.understandablepractice.security.JwtService;
+import ru.company.understandablepractice.security.JwtType;
 import ru.company.understandablepractice.service.MeetService;
 
 import java.util.List;
@@ -29,12 +32,13 @@ public class SearchMeetController {
 
     private final MeetService service;
     private final SearchMeetMapper mapper;
-
-    @GetMapping("{userId}/{personId}/{limit}/{offset}")
-    public ResponseEntity<List<SearchMeetResponse>> getMeetsByUserAndPerson(@PathVariable @Parameter(description = "ИД Пользователя") long userId,
-                                                                            @PathVariable @Parameter(description = "ИД Клиента") long personId,
+    private final HttpServletRequest request;
+    private final JwtService jwtService;
+    @GetMapping("{personId}/{limit}/{offset}")
+    public ResponseEntity<List<SearchMeetResponse>> getMeetsByUserAndPerson(@PathVariable @Parameter(description = "ИД Клиента") long personId,
                                                                             @PathVariable @Parameter(description = "offset") long offset,
                                                                             @PathVariable @Parameter(description = "limit") long limit) {
+        Long userId = jwtService.extractUserId(request.getHeader("Authorization"), JwtType.ACCESS);
         log.info("get meets by userId = {}, personId = {}", userId, personId);
         List<Meet> result = service.getByUserIdAndPersonId(userId, personId, offset, limit);
         return result.isEmpty()

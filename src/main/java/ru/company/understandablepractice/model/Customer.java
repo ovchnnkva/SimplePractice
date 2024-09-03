@@ -2,6 +2,7 @@ package ru.company.understandablepractice.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.company.understandablepractice.model.types.*;
 import ru.company.understandablepractice.model.types.converters.*;
@@ -12,11 +13,8 @@ import java.time.LocalDate;
 @Setter
 @Entity
 @Table(name = "customers")
+@NoArgsConstructor
 public class Customer extends Person{
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
     @Convert(converter = ContactMethodConverter.class)
     @Column(name = "contact_method")
     private ContactMethod contactMethod;

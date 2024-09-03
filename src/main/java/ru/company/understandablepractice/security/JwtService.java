@@ -6,11 +6,11 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import ru.company.understandablepractice.model.UserCredentials;
-import ru.company.understandablepractice.service.UserCredentialsService;
 
 import java.security.Key;
 import java.util.Date;
@@ -20,6 +20,7 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
+    public static final String BEARER_PREFIX = "Bearer ";
     @Value("${jwt.access.key}")
     private String accessKey;
 
@@ -34,15 +35,17 @@ public class JwtService {
 
 
     /**
-     * Извлечение имени пользователя из токена
+     * Извлечение id пользователя из токена
      *
      * @param token токен
      * @return имя пользователя
      */
-    public String extractUserName(String token, JwtType type) {
-        return extractClaim(token,type, Claims::getId);
+    public Long extractUserId(String token, JwtType type) {
+        if (StringUtils.startsWith(token, BEARER_PREFIX)) {
+            return Long.parseLong(extractClaim(token.substring(BEARER_PREFIX.length()), type, Claims::getId));
+        }
+        return Long.parseLong(extractClaim(token, type, Claims::getId));
     }
-
 
     /**
      * Проверка токена на валидность
@@ -52,7 +55,7 @@ public class JwtService {
      * @return true, если токен валиден
      */
     public boolean isTokenValid(String token,JwtType type, UserCredentials userDetails) {
-        final Long userId = Long.parseLong(extractUserName(token, type));
+        final Long userId = extractUserId(token, type);
 
         return (userId.equals(userDetails.getUser().getId())) && !isTokenExpired(token, type);
     }
@@ -132,8 +135,10 @@ public class JwtService {
      * @return данные
      */
     private Claims extractAllClaims(String token, JwtType type) {
-        String key = type.equals(JwtType.ACCESS)? accessKey: refreshKey;
-        return Jwts.parser().setSigningKey(getSigningKey(key)).parseClaimsJws(token)
+        String key = type.equals(JwtType.ACCESS) ? accessKey : refreshKey;
+        return Jwts.parser()
+                .setSigningKey(getSigningKey(key))
+                .parseClaimsJws(token)
                 .getBody();
     }
 

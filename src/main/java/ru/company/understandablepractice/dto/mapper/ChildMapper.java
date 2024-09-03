@@ -5,8 +5,10 @@ import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.company.understandablepractice.dto.ChildResponse;
 import ru.company.understandablepractice.dto.CustomerResponse;
+import ru.company.understandablepractice.dto.UserResponse;
 import ru.company.understandablepractice.model.Child;
 import ru.company.understandablepractice.model.Customer;
+import ru.company.understandablepractice.model.User;
 import ru.company.understandablepractice.model.types.*;
 
 import java.util.Arrays;
@@ -18,6 +20,10 @@ public abstract class ChildMapper {
     @Autowired
     private CustomerMapper customerMapper;
 
+    @Autowired
+    private UserMapper userMapper;
+
+    @Mapping(target = "user", expression = "java(mapUser(response))")
     @Mapping(target = "clientType", expression = "java(mapClientType(response))")
     @Mapping(target = "bringsClient", expression = "java(mapBringsClient(response))")
     @Mapping(target = "firstParent", expression = "java(mapFirstParent(response))")
@@ -27,6 +33,7 @@ public abstract class ChildMapper {
     @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormat(response))")
     public abstract Child fromResponseToEntity(ChildResponse response);
 
+    @Mapping(target = "user", expression = "java(mapUserResponse(child))")
     @Mapping(target = "bringsClient", expression = "java(mapBringsClientString(child))")
     @Mapping(target = "firstParent", expression = "java(mapFirstParentResponse(child))")
     @Mapping(target = "secondParent", expression = "java(mapSecondParentResponse(child))")
@@ -34,6 +41,14 @@ public abstract class ChildMapper {
     @Mapping(target = "clientStatus", expression = "java(mapClientStatusString(child))")
     @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormatString(child))")
     public abstract ChildResponse fromEntityToResponse(Child child);
+
+    User mapUser(ChildResponse response) {
+        return userMapper.fromResponseToEntity(response.getUser());
+    }
+
+    UserResponse mapUserResponse(Child customer) {
+        return userMapper.fromEntityToResponse(customer.getUser());
+    }
 
     ClientType mapClientType(ChildResponse response) {
         return Arrays.stream(ClientType.values())
