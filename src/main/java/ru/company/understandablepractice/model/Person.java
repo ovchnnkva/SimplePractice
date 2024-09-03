@@ -22,11 +22,14 @@ import java.time.LocalDate;
 @Table(name = "persons")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Person {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "person_id")
     protected long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    protected User user;
 
     @Convert(converter = ClientTypeConverter.class)
     @Column(name = "client_type")

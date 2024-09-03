@@ -44,6 +44,7 @@ public abstract class CustomerMapper {
     @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormatString(customer))")
     public abstract CustomerResponse fromEntityToResponse(Customer customer);
 
+
     ClientType mapClientType(CustomerResponse response) {
         return Arrays.stream(ClientType.values())
                 .filter(value -> value.getTittle().equals(response.getClientType()))

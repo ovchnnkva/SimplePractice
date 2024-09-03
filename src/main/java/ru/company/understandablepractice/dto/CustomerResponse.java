@@ -2,15 +2,15 @@ package ru.company.understandablepractice.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import ru.company.understandablepractice.model.types.ClientType;
 
 import java.time.LocalDate;
 
 @Getter
 @Setter
+@ToString
 public class CustomerResponse extends PersonResponse {
-
-    private UserResponse user;
 
     private String contactMethod;
 

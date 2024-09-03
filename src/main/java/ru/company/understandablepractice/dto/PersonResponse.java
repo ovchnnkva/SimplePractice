@@ -14,6 +14,8 @@ public class PersonResponse {
 
     protected long id;
 
+    private UserResponse user;
+
     protected String clientType;
 
     protected String fullName;
