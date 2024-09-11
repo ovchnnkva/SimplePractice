@@ -13,11 +13,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.company.understandablepractice.dto.calendar.CalendarResponse;
-import ru.company.understandablepractice.security.JwtService;
+import ru.company.understandablepractice.security.services.JwtService;
 import ru.company.understandablepractice.security.JwtType;
 import ru.company.understandablepractice.service.CalendarService;
-
-import java.net.http.HttpResponse;
 
 @Tag(
         name = "Calendar Functionality"

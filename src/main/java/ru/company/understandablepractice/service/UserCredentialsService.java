@@ -34,6 +34,10 @@ public class UserCredentialsService {
         return userCredentials.get();
     }
 
+    public boolean isUserCredentialsAlreadyExists(String username){
+        return userCredentialsRepository.findByUsername(username).isPresent();
+    }
+
     public UserDetailsService userDetailsService(){
         return this::findUserCredentialsByUsername;
     }

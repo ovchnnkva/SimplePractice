@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.company.understandablepractice.dto.SearchMeetResponse;
 import ru.company.understandablepractice.dto.mapper.SearchMeetMapper;
 import ru.company.understandablepractice.model.Meet;
-import ru.company.understandablepractice.security.JwtService;
+import ru.company.understandablepractice.security.services.JwtService;
 import ru.company.understandablepractice.security.JwtType;
 import ru.company.understandablepractice.service.MeetService;
 

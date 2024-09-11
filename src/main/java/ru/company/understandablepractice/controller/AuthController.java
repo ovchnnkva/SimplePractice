@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.company.understandablepractice.model.User;
 import ru.company.understandablepractice.model.UserCredentials;
 import ru.company.understandablepractice.security.*;
+import ru.company.understandablepractice.security.services.AuthenticationService;
+import ru.company.understandablepractice.security.services.JwtService;
 import ru.company.understandablepractice.service.UserCredentialsService;
 import ru.company.understandablepractice.service.UserService;
 
@@ -31,7 +33,7 @@ public class AuthController {
 
     @Operation(summary = "Авторизация пользователя")
     @PostMapping("/sign-in")
-    public ResponseEntity<JwtAuthenticationResponse> signIn(@RequestBody SignInRequest request) {
+    public ResponseEntity<JwtAuthenticationResponse> signIn(@RequestBody SignUpRequest request) {
         return new ResponseEntity<>(authenticationService.signIn(request), HttpStatus.OK);
     }
 

@@ -1,4 +1,4 @@
-package ru.company.understandablepractice.security;
+package ru.company.understandablepractice.security.services;
 
 import io.jsonwebtoken.Claims;
 
@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import ru.company.understandablepractice.model.UserCredentials;
+import ru.company.understandablepractice.security.JwtType;
 
 import java.security.Key;
 import java.util.Date;

@@ -1,5 +1,5 @@
 
-package ru.company.understandablepractice.security;
+package ru.company.understandablepractice.security.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -8,6 +8,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
+import ru.company.understandablepractice.security.JwtAuthenticationResponse;
+import ru.company.understandablepractice.security.JwtType;
+import ru.company.understandablepractice.security.SignUpRequest;
 import ru.company.understandablepractice.service.UserCredentialsService;
 
 /**
@@ -23,7 +26,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
-    public JwtAuthenticationResponse signIn(SignInRequest request) {
+    public JwtAuthenticationResponse signIn(SignUpRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 request.getUsername(),
                 request.getPassword()
