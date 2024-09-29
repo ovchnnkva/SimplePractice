@@ -4,10 +4,13 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.company.understandablepractice.dto.SearchPersonResponse;
 import ru.company.understandablepractice.model.Person;
+import ru.company.understandablepractice.model.types.ClientStatus;
+import ru.company.understandablepractice.model.types.MeetingFormat;
 
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
+import java.util.Optional;
 
 @Mapper(componentModel = "spring")
 public abstract class SearchPersonMapper {
@@ -33,7 +36,7 @@ public abstract class SearchPersonMapper {
     }
 
     int mapYears(Person person){
-        return Period.between(person.getBirth(), LocalDate.now()).getYears();
+        return Period.between(Optional.ofNullable(person.getBirth()).orElse(LocalDate.now()), LocalDate.now()).getYears();
     }
 
     String mapClientType(Person person){
@@ -57,10 +60,10 @@ public abstract class SearchPersonMapper {
     }
 
     String mapClientStatus(Person person){
-        return person.getClientStatus().getTittle();
+        return Optional.ofNullable(person.getClientStatus()).map(ClientStatus::getTittle).orElse(null);
     }
 
     String mapMeetingType(Person person){
-        return person.getMeetingFormat().getTittle();
+        return Optional.ofNullable(person.getMeetingFormat()).map(MeetingFormat::getTittle).orElse(null);
     }
 }
