@@ -18,9 +18,6 @@ public class SignInService {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private BCryptPasswordEncoder encoder;
-
     public void signIn(SignInRequest signInRequest) throws Exception {
         var username = signInRequest.getUsername();
         var password = signInRequest.getPassword();
@@ -35,6 +32,7 @@ public class SignInService {
     }
 
     private User createUser(String username, String password, String name){
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         var user = new User();
         user.setFullName(name);
         var userCredentials = new UserCredentials();
