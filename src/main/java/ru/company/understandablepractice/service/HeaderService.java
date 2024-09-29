@@ -17,10 +17,10 @@ public class HeaderService {
     private final PersonRepository personRepository;
     private final HeaderSearchPersonMapper searchPersonMapper;
 
-    public Optional<List<HeaderSearchPersonResponse>> findPersonsByName(String name){
+    public Optional<List<HeaderSearchPersonResponse>> findPersonsByName(long userId, String name){
         List<HeaderSearchPersonResponse> response = null;
 
-        List<Person> personList = personRepository.findPersonsByName(name).orElse(null);
+        List<Person> personList = personRepository.findPersonsByName(userId, name).orElse(null);
         if(personList != null) {
             response = personList.stream().map(searchPersonMapper::fromEntityToResponse).collect(Collectors.toList());
         }
