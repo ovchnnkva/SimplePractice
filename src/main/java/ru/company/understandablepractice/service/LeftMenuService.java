@@ -2,6 +2,7 @@ package ru.company.understandablepractice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.company.understandablepractice.dto.NotificationListResponse;
 import ru.company.understandablepractice.dto.NotificationResponse;
 import ru.company.understandablepractice.dto.leftmenu.LeftMenuResponse;
 import ru.company.understandablepractice.dto.mapper.LeftMenuUserDataMapper;
@@ -41,12 +42,14 @@ public class LeftMenuService {
         return Optional.ofNullable(response);
     }
 
-    public Optional<List<NotificationResponse>> getNotification(long userId) {
-        List<NotificationResponse> response = null;
+    public Optional<NotificationListResponse> getNotification(long userId) {
+        NotificationListResponse response = null;
 
         List<Customer> customers = customerRepository.findNewCustomerByUserAndStatus(userId, ClientStatus.REQUEST).orElse(null);
         if (customers != null){
-            response = customers.stream().map(notificationMapper::fromEntityToResponse).collect(Collectors.toList());
+            response = new NotificationListResponse();
+            response.setNotificationResponseList(customers.stream().map(notificationMapper::fromEntityToResponse).collect(Collectors.toList()));
+            response.setCount(response.getNotificationResponseList().size());
         }
 
         return Optional.ofNullable(response);

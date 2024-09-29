@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.company.understandablepractice.dto.NotificationListResponse;
 import ru.company.understandablepractice.dto.NotificationResponse;
 import ru.company.understandablepractice.dto.leftmenu.LeftMenuResponse;
 import ru.company.understandablepractice.security.services.JwtService;
@@ -43,7 +44,7 @@ public class LeftMenuController {
 
     @Operation(summary = "Оповещения", description = "Позволяет получить список новых клиентов")
     @GetMapping("/notification")
-    public ResponseEntity<List<NotificationResponse>> getNotification() {
+    public ResponseEntity<NotificationListResponse> getNotification() {
         Long userId = jwtService.extractUserId(request.getHeader("Authorization"), JwtType.ACCESS);
         log.info("auth user {}", userId);
         return leftMenuService.getNotification(userId)
