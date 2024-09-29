@@ -27,4 +27,14 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
                     "FETCH NEXT :limit ROWS ONLY")
     Optional<List<Person>> findPersonsByNamePagination (@Param("userId") long userId, @Param("name") String name,
                                                         @Param("offset") long offset, @Param("limit") long limit);
+
+    @Query(value =
+            "SELECT p" +
+                    "FROM Person p " +
+                    "WHERE p.user.id = :userId " +
+                    "ORDER BY p.id DESC " +
+                    "OFFSET :offset ROWS " +
+                    "FETCH NEXT :limit ROWS ONLY")
+    Optional<List<Person>> findAllPagination (@Param("userId") long userId, @Param("offset") long offset,
+                                              @Param("limit") long limit);
 }
