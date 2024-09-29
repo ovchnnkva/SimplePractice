@@ -14,9 +14,10 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
 
     @Query(value =
             "SELECT p " +
-            "FROM Person p " +
-            "WHERE LOWER(p.fullName) LIKE LOWER(CONCAT('%', :name,'%'))")
-    Optional<List<Person>> findPersonsByName (@Param("name") String name);
+                    "FROM Person p " +
+                    "WHERE LOWER(p.fullName) LIKE LOWER(CONCAT('%', :name,'%')) AND p.user.id = :userId " +
+                    "ORDER BY p.id DESC")
+    Optional<List<Person>> findPersonsByName (@Param("userId") long userId, @Param("name") String name);
 
     @Query(value =
             "SELECT p " +
@@ -29,7 +30,7 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
                                                         @Param("offset") long offset, @Param("limit") long limit);
 
     @Query(value =
-            "SELECT p" +
+            "SELECT p " +
                     "FROM Person p " +
                     "WHERE p.user.id = :userId " +
                     "ORDER BY p.id DESC " +
