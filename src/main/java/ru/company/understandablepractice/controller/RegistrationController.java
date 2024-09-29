@@ -1,5 +1,7 @@
 package ru.company.understandablepractice.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,16 +11,17 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.company.understandablepractice.security.SignInRequest;
 import ru.company.understandablepractice.security.UserAlreadyExists;
 import ru.company.understandablepractice.security.services.SignInService;
-import ru.company.understandablepractice.service.UserService;
 
 @RestController
-@RequestMapping("/signin")
-public class SignInController {
+@RequestMapping("/registration")
+@Tag(name = "Регистрация")
+public class RegistrationController {
     @Autowired
     private SignInService signInService;
 
-    @PutMapping
-    public ResponseEntity<String> signIn(SignInRequest signInRequest){
+    @PutMapping("/sign-up")
+    @Operation(summary = "Регистрация пользователя")
+    public ResponseEntity<String> signUp(SignInRequest signInRequest){
         ResponseEntity<String> response = null;
         try {
             signInService.signIn(signInRequest);
