@@ -4,16 +4,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import ru.company.understandablepractice.model.types.ClientStatus;
-import ru.company.understandablepractice.model.types.ClientType;
-import ru.company.understandablepractice.model.types.Gender;
-import ru.company.understandablepractice.model.types.MeetingFormat;
-import ru.company.understandablepractice.model.types.converters.ClientStatusConverter;
-import ru.company.understandablepractice.model.types.converters.ClientTypeConverter;
-import ru.company.understandablepractice.model.types.converters.GenderConverter;
-import ru.company.understandablepractice.model.types.converters.MeetingFormatConverter;
+import ru.company.understandablepractice.model.types.*;
+import ru.company.understandablepractice.model.types.converters.*;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @ToString
 @Getter
@@ -68,10 +63,43 @@ public class Person {
     @Column(name = "meeting_format")
     protected MeetingFormat meetingFormat;
 
+    @Column(name = "application_form_status")
+    @Convert(converter = ApplicationFormStatusConverter.class)
+    protected ApplicationFormStatus applicationFormStatus = ApplicationFormStatus.NOT_CREATED;
+
+    @Column(name = "application_form_token", columnDefinition = "TEXT")
+    protected String applicationFormToken;
+
+    @OneToOne(
+            mappedBy = "person",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    private PersonCredentials personCredentials;
+
     public Person(long id) {
         this.id = id;
     }
 
     public Person() {
+    }
+
+    public void setPersonCredentials(PersonCredentials personCredentials) {
+        personCredentials.setPerson(this);
+        this.personCredentials = personCredentials;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Person person = (Person) o;
+        return id == person.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

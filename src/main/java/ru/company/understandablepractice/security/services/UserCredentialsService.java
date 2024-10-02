@@ -1,8 +1,7 @@
-package ru.company.understandablepractice.service;
+package ru.company.understandablepractice.security.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import ru.company.understandablepractice.model.User;
@@ -30,7 +29,7 @@ public class UserCredentialsService {
     }
 
     public UserCredentials findUserCredentialsByUsername(String username){
-        Optional<UserCredentials > userCredentials = userCredentialsRepository.findByUsername(username);
+        Optional<UserCredentials> userCredentials = userCredentialsRepository.findByUsername(username);
         return userCredentials.get();
     }
 

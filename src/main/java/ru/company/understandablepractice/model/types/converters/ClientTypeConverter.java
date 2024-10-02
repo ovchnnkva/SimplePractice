@@ -18,7 +18,7 @@ public class ClientTypeConverter implements AttributeConverter<ClientType, Strin
                 return ClientType.PAIR;
             }
             case "Взрослый" -> {
-                return ClientType.ADULT;
+                return ClientType.CUSTOMER;
             }
             case "Ребенок" -> {
                 return ClientType.CHILD;

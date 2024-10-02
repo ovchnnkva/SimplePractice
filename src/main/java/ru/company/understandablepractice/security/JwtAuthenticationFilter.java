@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import ru.company.understandablepractice.model.UserCredentials;
 import ru.company.understandablepractice.security.services.JwtService;
-import ru.company.understandablepractice.service.UserCredentialsService;
+import ru.company.understandablepractice.security.services.UserCredentialsService;
 
 import java.io.IOException;
 

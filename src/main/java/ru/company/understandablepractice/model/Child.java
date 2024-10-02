@@ -4,15 +4,17 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.company.understandablepractice.model.types.ApplicationFormStatus;
 import ru.company.understandablepractice.model.types.BringsClient;
 import ru.company.understandablepractice.model.types.ClientType;
 import ru.company.understandablepractice.model.types.converters.BringsClientConverter;
+
+import java.util.Set;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "child")
-@NoArgsConstructor
 public class Child extends Person{
     @Convert(converter = BringsClientConverter.class)
     @Column(name = "brings_client")
@@ -42,6 +44,7 @@ public class Child extends Person{
     private String childDesiredChanges;
 
     public Child(Person person) {
+
         this.id = person.getId();
         this.clientType = ClientType.CHILD;
         this.fullName = person.getFullName();
@@ -54,5 +57,12 @@ public class Child extends Person{
         this.gender = person.getGender();
         this.clientStatus = person.getClientStatus();
         this.meetingFormat = person.getMeetingFormat();
+        this.setPersonCredentials(new PersonCredentials(Set.of(new Role(4, "ROLE_CHILD"))));
+        this.setApplicationFormStatus(person.getApplicationFormStatus());
+    }
+
+    public Child() {
+        this.setPersonCredentials(new PersonCredentials(Set.of(new Role(4, "ROLE_CHILD"))));
+        this.setApplicationFormStatus(ApplicationFormStatus.NOT_CREATED);
     }
 }

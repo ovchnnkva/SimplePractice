@@ -2,18 +2,17 @@ package ru.company.understandablepractice.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.company.understandablepractice.model.types.*;
 import ru.company.understandablepractice.model.types.converters.*;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "customers")
-@NoArgsConstructor
 public class Customer extends Person{
     @Convert(converter = ContactMethodConverter.class)
     @Column(name = "contact_method")
@@ -72,7 +71,7 @@ public class Customer extends Person{
 
     public Customer(Person person) {
         this.id = person.getId();
-        this.clientType = ClientType.ADULT;
+        this.clientType = ClientType.CUSTOMER;
         this.fullName = person.getFullName();
         this.firstName = person.getFirstName();
         this.secondName = person.getSecondName();
@@ -83,5 +82,12 @@ public class Customer extends Person{
         this.gender = person.getGender();
         this.clientStatus = person.getClientStatus();
         this.meetingFormat = person.getMeetingFormat();
+        this.setApplicationFormStatus(person.getApplicationFormStatus());
+        this.setPersonCredentials(new PersonCredentials(Set.of(new Role(3,"ROLE_CUSTOMER"))));
+    }
+
+    public Customer() {
+        this.setPersonCredentials(new PersonCredentials(Set.of(new Role(3,"ROLE_CUSTOMER"))));
+        this.setApplicationFormStatus(ApplicationFormStatus.NOT_CREATED);
     }
 }

@@ -29,6 +29,7 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
     Optional<List<Person>> findPersonsByNamePagination (@Param("userId") long userId, @Param("name") String name,
                                                         @Param("offset") long offset, @Param("limit") long limit);
 
+
     @Query(value =
             "SELECT p " +
                     "FROM Person p " +
@@ -38,4 +39,7 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
                     "FETCH NEXT :limit ROWS ONLY")
     Optional<List<Person>> findAllPagination (@Param("userId") long userId, @Param("offset") long offset,
                                               @Param("limit") long limit);
+
+    Optional<Person> findPersonById(long id);
+
 }
