@@ -5,10 +5,10 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum ClientType {
-    CUSTOMER("Взрослый"),
-    CHILD("Ребенок"),
-    PAIR("Пара");
+public enum ApplicationFormStatus {
+    NOT_CREATED(0),
+    CREATED(1),
+    PROCESSED(2);
 
-    private final String tittle;
+    private final int key;
 }

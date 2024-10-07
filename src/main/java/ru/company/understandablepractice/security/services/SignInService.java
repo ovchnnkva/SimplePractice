@@ -1,5 +1,6 @@
 package ru.company.understandablepractice.security.services;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -7,14 +8,12 @@ import ru.company.understandablepractice.model.User;
 import ru.company.understandablepractice.model.UserCredentials;
 import ru.company.understandablepractice.security.SignInRequest;
 import ru.company.understandablepractice.security.UserAlreadyExists;
-import ru.company.understandablepractice.service.UserCredentialsService;
 import ru.company.understandablepractice.service.UserService;
 
 @Service
 public class SignInService {
     @Autowired
     private UserCredentialsService userCredentialsService;
-
     @Autowired
     private UserService userService;
 

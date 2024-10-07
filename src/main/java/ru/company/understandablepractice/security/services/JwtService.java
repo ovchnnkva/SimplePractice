@@ -10,7 +10,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
+import ru.company.understandablepractice.model.PersonCredentials;
 import ru.company.understandablepractice.model.UserCredentials;
+import ru.company.understandablepractice.model.types.ApplicationFormStatus;
+import ru.company.understandablepractice.model.types.ClientType;
 import ru.company.understandablepractice.security.JwtType;
 
 import java.security.Key;
@@ -34,6 +38,8 @@ public class JwtService {
     @Value("${jwt.refresh.expiration}")
     private long refreshExpiration;
 
+    @Value("${jwt.person.expiration}")
+    private long personExpiration;
 
     /**
      * Извлечение id пользователя из токена
@@ -55,10 +61,16 @@ public class JwtService {
      * @param userDetails данные пользователя
      * @return true, если токен валиден
      */
-    public boolean isTokenValid(String token,JwtType type, UserCredentials userDetails) {
+    public boolean isTokenValid(String token, JwtType type, UserCredentials userDetails) {
         final Long userId = extractUserId(token, type);
 
         return (userId.equals(userDetails.getUser().getId())) && !isTokenExpired(token, type);
+    }
+
+    public boolean isTokenValid(String token, JwtType type, PersonCredentials userDetails) {
+        final Long userId = extractUserId(token, type);
+
+        return (userId.equals(userDetails.getPerson().getId())) && !isTokenExpired(token, type);
     }
 
     /**
@@ -84,16 +96,33 @@ public class JwtService {
         Map<String, Object> claims = new HashMap<>();
         if (userDetails instanceof UserCredentials customUserDetails) {
             claims.put("jti", customUserDetails.getUser().getId());
+        } else if (userDetails instanceof PersonCredentials personCredentials) {
+            claims.put("jti", personCredentials.getPerson().getId());
         }
+
         if (type.equals(JwtType.ACCESS)) {
             return generateToken(claims, userDetails, accessKey, accessExpiration);
         } else return generateToken(claims, userDetails, refreshKey, refreshExpiration);
+    }
+
+    public String generatePersonToken(UserDetails userDetails) {
+        Map<String, Object> claims = new HashMap<>();
+        if (userDetails instanceof PersonCredentials personCredentials) {
+            claims.put("jti", personCredentials.getPerson().getId());
+        }
+        return generateToken(claims, userDetails, accessKey, personExpiration);
 
     }
 
-
     private String generateToken(Map<String, Object> extraClaims, UserDetails userDetails, String key, long expiration) {
         return Jwts.builder().setClaims(extraClaims).setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(getSigningKey(key), SignatureAlgorithm.HS256).compact();
+    }
+
+    private String generateToken(Map<String, Object> extraClaims, String key, long expiration) {
+        return Jwts.builder().setClaims(extraClaims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSigningKey(key), SignatureAlgorithm.HS256).compact();
@@ -126,7 +155,7 @@ public class JwtService {
      * @return дата истечения
      */
     private Date extractExpiration(String token, JwtType type) {
-        return extractClaim(token,type, Claims::getExpiration);
+        return extractClaim(token, type, Claims::getExpiration);
     }
 
     /**

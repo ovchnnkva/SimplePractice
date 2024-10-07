@@ -15,6 +15,9 @@ import java.util.NoSuchElementException;
 @Mapper(componentModel = "spring")
 public abstract class PersonMapper {
 
+    @Mapping(target = "personCredentials", ignore = true)
+    @Mapping(target = "applicationFormToken", ignore = true)
+    @Mapping(target = "applicationFormStatus", ignore = true)
     @Mapping(target = "clientType", expression = "java(mapClientType(response))")
     @Mapping(target = "gender", expression = "java(mapGender(response))")
     @Mapping(target = "clientStatus", expression = "java(mapClientStatus(response))")
@@ -24,6 +27,7 @@ public abstract class PersonMapper {
     @Mapping(target = "clientStatus", expression = "java(mapClientStatusString(entity))")
     @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormatString(entity))")
     public abstract PersonResponse fromEntityToResponse(Person entity);
+
 
     ClientType mapClientType(PersonResponse response) {
         return Arrays.stream(ClientType.values())

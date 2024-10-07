@@ -58,10 +58,11 @@ public abstract class ChildMapper {
     }
 
     String mapCLientTypeString(Child entity) {
-        return entity.getClientType().getTittle();
+        return entity.getClientType() != null ? entity.getClientType().getTittle() : "";
     }
+
     String mapBringsClientString(Child child){
-        return child.getBringsClient().getTitle();
+        return child.getBringsClient() != null ? child.getBringsClient().getTitle() : "";
     }
 
     BringsClient mapBringsClient(ChildResponse response) throws NoSuchElementException{
@@ -95,11 +96,11 @@ public abstract class ChildMapper {
     }
 
     String mapGenderString(Child entity) {
-        return entity.getGender().getTittle();
+        return entity.getGender() != null ? entity.getGender().getTittle() : "";
     }
 
     String mapClientStatusString(Child child) {
-        return child.getClientStatus().getTittle();
+        return child.getClientStatus() != null ? child.getClientStatus().getTittle() : "";
     }
 
     ClientStatus mapClientStatus(ChildResponse response) throws NoSuchElementException {
@@ -110,7 +111,7 @@ public abstract class ChildMapper {
     }
 
     String mapMeetingFormatString(Child child) {
-        return child.getMeetingFormat().getTittle();
+        return child.getMeetingFormat() != null ? child.getMeetingFormat().getTittle() : "";
     }
 
     MeetingFormat mapMeetingFormat(ChildResponse response) {

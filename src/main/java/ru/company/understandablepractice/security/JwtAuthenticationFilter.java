@@ -1,5 +1,6 @@
 package ru.company.understandablepractice.security;
 
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,13 +13,17 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import ru.company.understandablepractice.model.PersonCredentials;
 import ru.company.understandablepractice.model.UserCredentials;
 import ru.company.understandablepractice.security.services.JwtService;
-import ru.company.understandablepractice.service.UserCredentialsService;
+import ru.company.understandablepractice.security.services.PersonCredentialsService;
+import ru.company.understandablepractice.security.services.UserCredentialsService;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -28,6 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     public static final String HEADER_NAME = "Authorization";
     private final JwtService jwtService;
     private final UserCredentialsService userCredentialsService;
+    private final PersonCredentialsService personCredentialsService;
 
     @Override
     protected void doFilterInternal(
@@ -35,7 +41,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-
         // Получаем токен из заголовка
         var authHeader = request.getHeader(HEADER_NAME);
         log.info(authHeader);
@@ -46,28 +51,50 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // Обрезаем префикс и получаем имя пользователя из токена
         var jwt = authHeader.substring(BEARER_PREFIX.length());
-        var userId = jwtService.extractUserId(jwt, JwtType.ACCESS);
+        long userId;
 
-        if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        userId = jwtService.extractUserId(jwt, JwtType.ACCESS);
+
+
+        if (userId != 0 && SecurityContextHolder.getContext().getAuthentication() == null) {
             log.info("auth user with id {}", userId);
-            UserCredentials userDetails = userCredentialsService.findByUserId(userId).get();
 
+            Optional<UserCredentials> userDetails = Optional.empty();
+            Optional<PersonCredentials> personCredentials = personCredentialsService.findPersonCredentialsByToken(jwt);
+            if(personCredentials.isEmpty()) {
+                userDetails = userCredentialsService.findByUserId(userId);
+            }
 
             // Если токен валиден, то аутентифицируем пользователя
-            if (jwtService.isTokenValid(jwt,JwtType.ACCESS, userDetails)) {
+            if (userDetails.isPresent() && jwtService.isTokenValid(jwt,JwtType.ACCESS, userDetails.get())) {
                 SecurityContext context = SecurityContextHolder.createEmptyContext();
 
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,
+                        userDetails.get().getUsername(),
                         null,
-                        userDetails.getAuthorities()
+                        userDetails.get().getAuthorities()
                 );
 
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 context.setAuthentication(authToken);
                 SecurityContextHolder.setContext(context);
+            } else if (personCredentials.isPresent() && jwtService.isTokenValid(jwt,JwtType.ACCESS, personCredentials.get())) {
+
+                SecurityContext context = SecurityContextHolder.createEmptyContext();
+
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                        personCredentials.get().getUsername(),
+                        null,
+                        personCredentials.get().getAuthorities()
+                );
+                log.info("personCredentials.get().getAuthorities() {}", personCredentials.get().getAuthorities());
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                context.setAuthentication(authToken);
+                SecurityContextHolder.setContext(context);
+
             }
         }
+        var check  = SecurityContextHolder.getContextHolderStrategy().getContext().getAuthentication();
         filterChain.doFilter(request, response);
     }
 }

@@ -4,14 +4,16 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.company.understandablepractice.model.types.ApplicationFormStatus;
 import ru.company.understandablepractice.model.types.ClientType;
 import ru.company.understandablepractice.model.types.FamilyStatus;
+
+import java.util.Set;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "pair")
-@NoArgsConstructor
 public class Pair extends Person{
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "second_customer_id")
@@ -45,6 +47,7 @@ public class Pair extends Person{
     private String financialTermsCotherapists;
 
     public Pair(Person person) {
+
         this.id = person.getId();
         this.clientType = ClientType.PAIR;
         this.fullName = person.getFullName();
@@ -57,5 +60,12 @@ public class Pair extends Person{
         this.gender = person.getGender();
         this.clientStatus = person.getClientStatus();
         this.meetingFormat = person.getMeetingFormat();
+        this.setPersonCredentials(new PersonCredentials(Set.of(new Role(5, "ROLE_PAIR"))));
+        this.setApplicationFormStatus(person.getApplicationFormStatus());
+    }
+
+    public Pair() {
+        this.setPersonCredentials(new PersonCredentials(Set.of(new Role(5, "ROLE_PAIR"))));
+        this.setApplicationFormStatus(ApplicationFormStatus.NOT_CREATED);
     }
 }
