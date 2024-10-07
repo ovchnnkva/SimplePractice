@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.company.understandablepractice.dto.ChildResponse;
 import ru.company.understandablepractice.dto.mapper.ChildMapper;
+import ru.company.understandablepractice.model.User;
 import ru.company.understandablepractice.model.types.ClientType;
 import ru.company.understandablepractice.service.ChildService;
 
@@ -26,6 +27,8 @@ public class ChildController {
 
     private final ChildMapper mapper;
 
+    private final HttpServletRequestService requestService;
+
     @Operation(summary = "Получение по ID", description = "Позволяет получить информацию о ребенке по ключу")
     @GetMapping("/get/{id}")
     public ResponseEntity<ChildResponse> getById(@PathVariable(name = "id") @Parameter(description = "ID ребенка") long id){
@@ -41,7 +44,10 @@ public class ChildController {
     public ResponseEntity<?> update(@RequestBody @Parameter(description = "Ребенок") ChildResponse response){
         ResponseEntity<Long> responseEntity;
         try {
-            responseEntity = service.create(mapper.fromResponseToEntity(response))
+            var entity = mapper.fromResponseToEntity(response);
+            var user = new User(requestService.getIdFromRequestToken());
+            entity.setUser(user);
+            responseEntity = service.create(entity)
                     .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
         } catch (Exception e) {
@@ -56,7 +62,10 @@ public class ChildController {
     public ResponseEntity<Long> create(@RequestBody @Parameter(description = "Ребенок") ChildResponse response){
         ResponseEntity<Long> responseEntity;
         try {
-            responseEntity = service.create(mapper.fromResponseToEntity(response))
+            var entity = mapper.fromResponseToEntity(response);
+            var user = new User(requestService.getIdFromRequestToken());
+            entity.setUser(user);
+            responseEntity = service.create(entity)
                     .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
         } catch (Exception e) {

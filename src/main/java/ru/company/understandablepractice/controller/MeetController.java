@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.company.understandablepractice.dto.MeetResponse;
 import ru.company.understandablepractice.dto.mapper.MeetMapper;
+import ru.company.understandablepractice.model.User;
 import ru.company.understandablepractice.service.MeetService;
 
 @Tag(
@@ -24,6 +25,8 @@ public class MeetController {
     private final MeetService service;
 
     private final MeetMapper mapper;
+
+    private final HttpServletRequestService requestService;
 
     @Operation(summary = "Получение по ID", description = "Позволяет получить встречу по ключу")
     @GetMapping("/get/{id}")
@@ -40,7 +43,10 @@ public class MeetController {
         log.info("update meet {}", response);
         ResponseEntity<Long> responseEntity;
         try {
-            responseEntity = service.create(mapper.fromResponseToEntity(response))
+            var entity = mapper.fromResponseToEntity(response);
+            var user = new User(requestService.getIdFromRequestToken());
+            entity.setUser(user);
+            responseEntity = service.create(entity)
                     .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
         } catch (Exception e) {
@@ -57,7 +63,10 @@ public class MeetController {
 
         ResponseEntity<Long> responseEntity;
         try {
-            responseEntity = service.create(mapper.fromResponseToEntity(response))
+            var entity = mapper.fromResponseToEntity(response);
+            var user = new User(requestService.getIdFromRequestToken());
+            entity.setUser(user);
+            responseEntity = service.create(entity)
                     .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
         } catch (Exception e) {

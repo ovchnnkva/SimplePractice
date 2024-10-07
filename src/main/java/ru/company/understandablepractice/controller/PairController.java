@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.company.understandablepractice.dto.PairResponse;
 import ru.company.understandablepractice.dto.mapper.PairMapper;
+import ru.company.understandablepractice.model.User;
 import ru.company.understandablepractice.model.types.ClientType;
 import ru.company.understandablepractice.service.PairService;
 
@@ -26,6 +27,8 @@ public class PairController {
 
     private final PairMapper mapper;
 
+    private final HttpServletRequestService requestService;
+
     @Operation(summary = "Получение по ID", description = "Позволяет получить пару по ключу")
     @GetMapping("/get/{id}")
     public ResponseEntity<PairResponse> getById(@PathVariable(name = "id") @Parameter(description = "ID пары") long id) {
@@ -41,7 +44,10 @@ public class PairController {
         log.info("update pair {}", response);
         ResponseEntity<Long> responseEntity;
         try {
-            responseEntity = service.create(mapper.fromResponseToEntity(response))
+            var entity = mapper.fromResponseToEntity(response);
+            var user = new User(requestService.getIdFromRequestToken());
+            entity.setUser(user);
+            responseEntity = service.create(entity)
                     .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
         } catch (Exception e) {
@@ -57,7 +63,10 @@ public class PairController {
         log.info("create pair {}", response);
         ResponseEntity<Long> responseEntity;
         try {
-            responseEntity = service.create(mapper.fromResponseToEntity(response))
+            var entity = mapper.fromResponseToEntity(response);
+            var user = new User(requestService.getIdFromRequestToken());
+            entity.setUser(user);
+            responseEntity = service.create(entity)
                     .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
         } catch (Exception e) {

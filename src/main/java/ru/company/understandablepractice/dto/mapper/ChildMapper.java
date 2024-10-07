@@ -23,7 +23,7 @@ public abstract class ChildMapper {
     @Autowired
     private UserMapper userMapper;
 
-    @Mapping(target = "user", expression = "java(mapUser(response))")
+
     @Mapping(target = "clientType", expression = "java(mapClientType(response))")
     @Mapping(target = "bringsClient", expression = "java(mapBringsClient(response))")
     @Mapping(target = "firstParent", expression = "java(mapFirstParent(response))")
@@ -33,7 +33,7 @@ public abstract class ChildMapper {
     @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormat(response))")
     public abstract Child fromResponseToEntity(ChildResponse response);
 
-    @Mapping(target = "user", expression = "java(mapUserResponse(child))")
+
     @Mapping(target = "bringsClient", expression = "java(mapBringsClientString(child))")
     @Mapping(target = "firstParent", expression = "java(mapFirstParentResponse(child))")
     @Mapping(target = "secondParent", expression = "java(mapSecondParentResponse(child))")
@@ -42,13 +42,6 @@ public abstract class ChildMapper {
     @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormatString(child))")
     public abstract ChildResponse fromEntityToResponse(Child child);
 
-    User mapUser(ChildResponse response) {
-        return userMapper.fromResponseToEntity(response.getUser());
-    }
-
-    UserResponse mapUserResponse(Child customer) {
-        return userMapper.fromEntityToResponse(customer.getUser());
-    }
 
     ClientType mapClientType(ChildResponse response) {
         return Arrays.stream(ClientType.values())

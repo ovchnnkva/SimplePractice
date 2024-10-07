@@ -22,7 +22,6 @@ public abstract class CustomerMapper {
     UserMapper userMapper;
 
     @Mapping(target = "clientType", expression = "java(mapClientType(response))")
-    @Mapping(target = "user", expression = "java(mapUser(response))")
     @Mapping(target = "contactMethod", expression = "java(mapContactMethod(response))")
     @Mapping(target = "onlinePlatform", expression = "java(mapOnlinePlatform(response))")
     @Mapping(target = "familyStatus", expression = "java(mapFamilyStatus(response))")
@@ -33,7 +32,6 @@ public abstract class CustomerMapper {
     @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormat(response))")
     public abstract Customer fromResponseToEntity(CustomerResponse response);
 
-    @Mapping(target = "user", expression = "java(mapUserResponse(customer))")
     @Mapping(target = "contactMethod", expression = "java(mapContactMethodString(customer))")
     @Mapping(target = "onlinePlatform", expression = "java(mapOnlinePlatformString(customer))")
     @Mapping(target = "familyStatus", expression = "java(mapFamilyStatusString(customer))")
@@ -65,14 +63,6 @@ public abstract class CustomerMapper {
 
     String mapCLientTypeString(Customer entity) {
         return entity.getClientType().getTittle();
-    }
-
-    UserResponse mapUserResponse(Customer customer) {
-        return userMapper.fromEntityToResponse(customer.getUser());
-    }
-
-    User mapUser(CustomerResponse response) {
-        return userMapper.fromResponseToEntity(response.getUser());
     }
 
     String mapContactMethodString(Customer customer) {

@@ -3,13 +3,16 @@ package ru.company.understandablepractice.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.DispatcherServlet;
 import ru.company.understandablepractice.dto.CustomerResponse;
 import ru.company.understandablepractice.dto.mapper.CustomerMapper;
+import ru.company.understandablepractice.model.User;
 import ru.company.understandablepractice.model.types.ClientType;
 import ru.company.understandablepractice.service.CustomerService;
 
@@ -27,6 +30,8 @@ public class CustomerController {
 
     private final CustomerMapper mapper;
 
+    private final  HttpServletRequestService requestService;
+
     @Operation(summary = "Получение по ID", description = "Позволяет получить клиента по ключу")
     @GetMapping("/get/{id}")
     public ResponseEntity<CustomerResponse> getById(@PathVariable(name = "id") @Parameter(description = "ID клиента") long id) {
@@ -42,7 +47,10 @@ public class CustomerController {
         log.info("update customer {}", response);
         ResponseEntity<Long> responseEntity;
         try {
-            responseEntity = service.create(mapper.fromResponseToEntity(response))
+            var entity = mapper.fromResponseToEntity(response);
+            var user = new User(requestService.getIdFromRequestToken());
+            entity.setUser(user);
+            responseEntity = service.create(entity)
                     .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
         } catch (Exception e) {
@@ -58,7 +66,10 @@ public class CustomerController {
         log.info("create customer {}", response);
         ResponseEntity<Long> responseEntity;
         try {
-            responseEntity = service.create(mapper.fromResponseToEntity(response))
+            var entity = mapper.fromResponseToEntity(response);
+            var user = new User(requestService.getIdFromRequestToken());
+            entity.setUser(user);
+            responseEntity = service.create(entity)
                     .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
         } catch (Exception e) {
