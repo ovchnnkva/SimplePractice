@@ -32,7 +32,7 @@ public class PersonCredentials implements UserDetails {
     @OneToOne
     private Person person;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "persons_roles",
             joinColumns = @JoinColumn(
                     name = "person_id", referencedColumnName = "id"),

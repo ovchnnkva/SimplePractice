@@ -50,12 +50,13 @@ public class WebSecurityConfig {
                 // Настройка доступа к конечным точкам
                 .authorizeHttpRequests(request -> request
                         // Можно указать конкретный путь, * - 1 уровень вложенности, ** - любое количество уровней вложенности
-                        .requestMatchers("/auth/**", "/signin").permitAll()
+                        .requestMatchers("/auth/**", "/signin","/error").permitAll()
                         .requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/endpoint", "/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/customer/get/*", "/api/customer").hasRole("CUSTOMER")
-                        .requestMatchers("/api/pair/get/*", "/api/pair").hasRole("PAIR")
-                        .requestMatchers("/api/applicationForm/get/CHILD/*", "/api/child").hasRole("CHILD")
+                        .requestMatchers("/api/applicationForm/get/CUSTOMER", "/api/applicationForm/update/CUSTOMER").hasRole("CUSTOMER")
+                        .requestMatchers("/api/applicationForm/get/PAIR", "/api/applicationForm/update/PAIR").hasRole("PAIR")
+                        .requestMatchers("/api/applicationForm/get/CHILD", "/api/applicationForm/update/CHILD").hasRole("CHILD")
+                        .requestMatchers("/api/**").hasRole("USER")
                         .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider())

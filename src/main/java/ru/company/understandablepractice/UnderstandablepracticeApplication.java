@@ -31,8 +31,8 @@ public class UnderstandablepracticeApplication {
 	@Bean
 	public ApplicationRunner CommandLineRunnerBean() {
 		return (args) -> {
-			roleService.saveRole(new Role(1,"ROLE_USER"));
-			Role admin = roleService.saveRole(new Role(2, "ROLE_ADMIN"));
+			Role userRole = roleService.saveRole(new Role(1,"ROLE_USER"));
+			roleService.saveRole(new Role(2, "ROLE_ADMIN"));
 			roleService.saveRole(new Role(3, "ROLE_CUSTOMER"));
 			roleService.saveRole(new Role(4, "ROLE_CHILD"));
 			roleService.saveRole(new Role(5, "ROLE_PAIR"));
@@ -43,7 +43,7 @@ public class UnderstandablepracticeApplication {
 			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 			userCredentials.setPassword(encoder.encode("pass"));
 			userCredentials.setUsername("anna");
-			userCredentials.setRoles(Set.of(admin));
+			userCredentials.setRoles(Set.of(userRole));
 			user.setUserCredentials(userCredentials);
 			userCredentials.setUser(user);
 

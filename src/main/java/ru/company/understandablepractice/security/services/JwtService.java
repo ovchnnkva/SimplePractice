@@ -38,9 +38,6 @@ public class JwtService {
     @Value("${jwt.refresh.expiration}")
     private long refreshExpiration;
 
-    @Value("${jwt.person.key}")
-    private String personKey;
-
     @Value("${jwt.person.expiration}")
     private long personExpiration;
 
@@ -68,6 +65,12 @@ public class JwtService {
         final Long userId = extractUserId(token, type);
 
         return (userId.equals(userDetails.getUser().getId())) && !isTokenExpired(token, type);
+    }
+
+    public boolean isTokenValid(String token, JwtType type, PersonCredentials userDetails) {
+        final Long userId = extractUserId(token, type);
+
+        return (userId.equals(userDetails.getPerson().getId())) && !isTokenExpired(token, type);
     }
 
     /**
@@ -99,9 +102,16 @@ public class JwtService {
 
         if (type.equals(JwtType.ACCESS)) {
             return generateToken(claims, userDetails, accessKey, accessExpiration);
-        } else if(type.equals(JwtType.PERSON)) {
-            return generateToken(claims, userDetails, personKey, personExpiration);
         } else return generateToken(claims, userDetails, refreshKey, refreshExpiration);
+    }
+
+    public String generatePersonToken(UserDetails userDetails) {
+        Map<String, Object> claims = new HashMap<>();
+        if (userDetails instanceof PersonCredentials personCredentials) {
+            claims.put("jti", personCredentials.getPerson().getId());
+        }
+        return generateToken(claims, userDetails, accessKey, personExpiration);
+
     }
 
     private String generateToken(Map<String, Object> extraClaims, UserDetails userDetails, String key, long expiration) {

@@ -63,7 +63,7 @@ public abstract class PairMapper {
     }
 
     String mapCLientTypeString(Pair entity) {
-        return entity.getClientType().getTittle();
+        return entity.getClientType() != null ? entity.getClientType().getTittle() : "";
     }
 
     Gender mapGender(PairResponse response) {
@@ -74,11 +74,11 @@ public abstract class PairMapper {
     }
 
     String mapGenderString(Pair entity) {
-        return entity.getGender().getTittle();
+        return entity.getGender() != null ? entity.getGender().getTittle() : "";
     }
 
     String mapFamilyStatusString(Pair entity) {
-        return entity.getClientType().getTittle();
+        return entity.getClientType() != null ? entity.getClientType().getTittle() : "";
     }
 
     FamilyStatus mapFamilyStatus(PairResponse response) {
@@ -89,7 +89,7 @@ public abstract class PairMapper {
     }
 
     String mapClientStatusString(Pair entity) {
-        return entity.getClientStatus().getTittle();
+        return entity.getClientStatus() != null ? entity.getClientStatus().getTittle() : "";
     }
 
     ClientStatus mapClientStatus(PairResponse response) throws NoSuchElementException {
@@ -100,7 +100,7 @@ public abstract class PairMapper {
     }
 
     String mapMeetingFormatString(Pair entity) {
-        return entity.getMeetingFormat().getTittle();
+        return entity.getMeetingFormat() != null ? entity.getMeetingFormat().getTittle() : "";
     }
 
     MeetingFormat mapMeetingFormat(PairResponse response) {
