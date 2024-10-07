@@ -32,6 +32,10 @@ public class PersonCredentialsService {
         return personCredentials.get();
     }
 
+    public Optional<PersonCredentials> findPersonCredentialsByToken(String token) {
+        Optional<Person> person = personRepository.findByApplicationFormToken(token);
+        return person.map(Person::getPersonCredentials);
+    }
     public boolean isUserCredentialsAlreadyExists(String username){
         return personCredentialsRepository.findByUsername(username).isPresent();
     }

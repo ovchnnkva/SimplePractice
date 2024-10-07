@@ -58,10 +58,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (userId != 0 && SecurityContextHolder.getContext().getAuthentication() == null) {
             log.info("auth user with id {}", userId);
-            Optional<UserCredentials> userDetails = userCredentialsService.findByUserId(userId);
-            Optional<PersonCredentials> personCredentials = Optional.empty();
-            if(userDetails.isEmpty()) {
-                personCredentials = personCredentialsService.findByPersonId(userId);
+
+            Optional<UserCredentials> userDetails = Optional.empty();
+            Optional<PersonCredentials> personCredentials = personCredentialsService.findPersonCredentialsByToken(jwt);
+            if(personCredentials.isEmpty()) {
+                userDetails = userCredentialsService.findByUserId(userId);
             }
 
             // Если токен валиден, то аутентифицируем пользователя
@@ -78,7 +79,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 context.setAuthentication(authToken);
                 SecurityContextHolder.setContext(context);
             } else if (personCredentials.isPresent() && jwtService.isTokenValid(jwt,JwtType.ACCESS, personCredentials.get())) {
-                var check  = SecurityContextHolder.getContextHolderStrategy().getContext().getAuthentication();
+
                 SecurityContext context = SecurityContextHolder.createEmptyContext();
 
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
@@ -90,9 +91,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 context.setAuthentication(authToken);
                 SecurityContextHolder.setContext(context);
+
             }
         }
-
+        var check  = SecurityContextHolder.getContextHolderStrategy().getContext().getAuthentication();
         filterChain.doFilter(request, response);
     }
 }

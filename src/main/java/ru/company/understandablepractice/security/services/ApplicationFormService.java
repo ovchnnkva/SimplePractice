@@ -31,7 +31,6 @@ public class ApplicationFormService {
     private final PersonRepository personRepository;
     private final JwtService jwtService;
     private final HttpServletRequest request;
-    private final AuthenticationManager authenticationManager;
 
     private final ChildService childService;
     private final PairService pairService;
@@ -80,14 +79,7 @@ public class ApplicationFormService {
     }
 
     public long getPersonId() {
-        long id = jwtService.extractUserId(request.getHeader("Authorization"), JwtType.ACCESS);
-        Person person = personRepository.findPersonById(id).get();
-
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                person.getPersonCredentials().getUsername(),
-                person.getPersonCredentials().getPassword()
-        ));
-        return id;
+        return jwtService.extractUserId(request.getHeader("Authorization"), JwtType.ACCESS);
     }
 
     private void setCredentials(Person person) {

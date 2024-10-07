@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.company.understandablepractice.model.Person;
-import ru.company.understandablepractice.model.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -45,4 +44,5 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
 
     public Optional<Person> findByPersonCredentials_id(Long id);
 
+    public Optional<Person> findByApplicationFormToken(String token);
 }
