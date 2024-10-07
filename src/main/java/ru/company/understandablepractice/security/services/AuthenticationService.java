@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import ru.company.understandablepractice.security.JwtAuthenticationResponse;
 import ru.company.understandablepractice.security.JwtType;
 import ru.company.understandablepractice.security.SignUpRequest;
-import ru.company.understandablepractice.service.UserCredentialsService;
 
 /**
  *

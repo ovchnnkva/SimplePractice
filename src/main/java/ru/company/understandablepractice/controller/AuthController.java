@@ -15,7 +15,7 @@ import ru.company.understandablepractice.model.UserCredentials;
 import ru.company.understandablepractice.security.*;
 import ru.company.understandablepractice.security.services.AuthenticationService;
 import ru.company.understandablepractice.security.services.JwtService;
-import ru.company.understandablepractice.service.UserCredentialsService;
+import ru.company.understandablepractice.security.services.UserCredentialsService;
 import ru.company.understandablepractice.service.UserService;
 
 import java.util.Optional;

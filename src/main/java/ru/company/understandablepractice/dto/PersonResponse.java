@@ -1,6 +1,5 @@
 package ru.company.understandablepractice.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import ru.company.understandablepractice.model.types.ClientType;
@@ -41,7 +40,7 @@ public class PersonResponse {
     }
 
     public PersonResponse() {
-        this.clientType = ClientType.ADULT.getTittle();
+        this.clientType = ClientType.CUSTOMER.getTittle();
     }
 
     @Override

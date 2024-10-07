@@ -58,15 +58,15 @@ public abstract class CustomerMapper {
     }
 
     String mapGenderString(Customer entity) {
-        return entity.getGender().getTittle();
+        return entity.getGender() != null ? entity.getGender().getTittle() : "";
     }
 
     String mapCLientTypeString(Customer entity) {
-        return entity.getClientType().getTittle();
+        return entity.getClientType() != null ? entity.getClientType().getTittle() : "";
     }
 
     String mapContactMethodString(Customer customer) {
-        return customer.getContactMethod().getTittle();
+        return customer.getContactMethod() != null ? customer.getContactMethod().getTittle() : "";
     }
 
     ContactMethod mapContactMethod(CustomerResponse response) {
@@ -77,7 +77,7 @@ public abstract class CustomerMapper {
     }
 
     String mapOnlinePlatformString(Customer customer) {
-        return customer.getOnlinePlatform().getTittle();
+        return customer.getOnlinePlatform() != null ? customer.getOnlinePlatform().getTittle() : "";
     }
 
     OnlinePlatform mapOnlinePlatform(CustomerResponse response) {
@@ -88,7 +88,7 @@ public abstract class CustomerMapper {
     }
 
     String mapFamilyStatusString(Customer customer) {
-        return customer.getFamilyStatus().getTittle();
+        return customer.getFamilyStatus() != null ? customer.getFamilyStatus().getTittle() : "";
     }
 
     FamilyStatus mapFamilyStatus(CustomerResponse response) {
@@ -99,7 +99,7 @@ public abstract class CustomerMapper {
     }
 
     String mapPriorityCommunicationChannelString(Customer customer) {
-        return customer.getPriorityCommunicationChannel().getTittle();
+        return customer.getPriorityCommunicationChannel() != null ? customer.getPriorityCommunicationChannel().getTittle() : "";
     }
 
     PriorityCommunicationChannel mapPriorityCommunicationChannel(CustomerResponse response) {
@@ -110,7 +110,7 @@ public abstract class CustomerMapper {
     }
 
     String mapClientStatusString(Customer customer) {
-        return customer.getClientStatus().getTittle();
+        return customer.getClientStatus() != null ? customer.getClientStatus().getTittle() : "";
     }
 
     ClientStatus mapClientStatus(CustomerResponse response) throws NoSuchElementException {
@@ -121,7 +121,7 @@ public abstract class CustomerMapper {
     }
 
     String mapMeetingFormatString(Customer customer) {
-        return customer.getMeetingFormat().getTittle();
+        return customer.getMeetingFormat() != null ? customer.getMeetingFormat().getTittle() : "";
     }
 
     MeetingFormat mapMeetingFormat(CustomerResponse response) {

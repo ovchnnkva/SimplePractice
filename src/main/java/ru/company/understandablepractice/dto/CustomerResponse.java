@@ -47,6 +47,6 @@ public class CustomerResponse extends PersonResponse {
     private String notes;
 
     public CustomerResponse() {
-        super(ClientType.ADULT.getTittle());
+        super(ClientType.CUSTOMER.getTittle());
     }
 }
