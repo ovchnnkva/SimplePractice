@@ -71,6 +71,7 @@ public class MeetController {
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
         } catch (Exception e) {
             responseEntity = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error(e.getLocalizedMessage());
         }
 
         return responseEntity;

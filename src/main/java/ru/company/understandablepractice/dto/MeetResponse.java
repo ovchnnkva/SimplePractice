@@ -12,8 +12,6 @@ public class MeetResponse {
 
     private PersonResponse person;
 
-    private UserResponse user;
-
     private String nameMeet;
 
     private LocalDate dateMeet;

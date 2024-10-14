@@ -23,13 +23,11 @@ public abstract class MeetMapper {
     private PersonMapper personMapper;
 
     @Mapping(target = "person", expression = "java(mapPerson(response))")
-    @Mapping(target = "user", expression = "java(mapUser(response))")
     @Mapping(target = "formatMeet", expression = "java(mapMeetingFormat(response))")
     @Mapping(target = "paymentType", expression = "java(mapPaymentType(response))")
     public abstract Meet fromResponseToEntity(MeetResponse response);
 
     @Mapping(target = "person", expression = "java(mapPersonResponse(entity))")
-    @Mapping(target = "user", expression = "java(mapUserResponse(entity))")
     @Mapping(target = "formatMeet", expression = "java(mapMeetingFormatString(entity))")
     @Mapping(target = "paymentType", expression = "java(mapPaymentTypeString(entity))")
     public abstract MeetResponse fromEntityToResponse(Meet entity);
@@ -40,10 +38,6 @@ public abstract class MeetMapper {
 
     PersonResponse mapPersonResponse(Meet entity) {
         return personMapper.fromEntityToResponse(entity.getPerson());
-    }
-
-    User mapUser(MeetResponse response) {
-        return new User(response.getUser().getId());
     }
 
     UserResponse mapUserResponse(Meet entity) {
