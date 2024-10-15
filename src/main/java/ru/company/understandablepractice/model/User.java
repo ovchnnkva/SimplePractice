@@ -1,5 +1,6 @@
 package ru.company.understandablepractice.model;
 
+import java.util.Base64;
 import java.util.Objects;
 
 import jakarta.persistence.*;
@@ -42,6 +43,9 @@ public class User {
 
     @Column(name = "diplomas", columnDefinition = "TEXT")
     private String diplomas;
+
+    @Column(name = "user_image")
+    private String userImage;
 
     @OneToOne(
             mappedBy = "user",

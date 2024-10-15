@@ -11,13 +11,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.company.understandablepractice.dto.NotificationListResponse;
-import ru.company.understandablepractice.dto.NotificationResponse;
-import ru.company.understandablepractice.dto.leftmenu.LeftMenuResponse;
+import ru.company.understandablepractice.dto.leftmenu.LeftMenuUserDataResponse;
 import ru.company.understandablepractice.security.services.JwtService;
 import ru.company.understandablepractice.security.JwtType;
 import ru.company.understandablepractice.service.LeftMenuService;
-
-import java.util.List;
 
 @Tag(
         name = "Left Menu Bar"
@@ -32,12 +29,12 @@ public class LeftMenuController {
     private final HttpServletRequest request;
     private final JwtService jwtService;
 
-    @Operation(summary = "Левое меню", description = "Позволяет получить левое меню текущего пользователя")
-    @GetMapping("/get")
-    public ResponseEntity<LeftMenuResponse> getLeftMenu(){
+    @Operation(summary = "Информация о пользователе", description = "Позволяет получить ФИО, почту и аватарку пользователя")
+    @GetMapping("/userInfo")
+    public ResponseEntity<LeftMenuUserDataResponse> getLeftMenuUser() {
         Long userId = jwtService.extractUserId(request.getHeader("Authorization"), JwtType.ACCESS);
         log.info("auth user {}", userId);
-        return leftMenuService.getLeftMenu(userId)
+        return leftMenuService.getLeftMenuUserData(userId)
                 .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }

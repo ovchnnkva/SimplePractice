@@ -7,6 +7,9 @@ import ru.company.understandablepractice.dto.UserResponse;
 import ru.company.understandablepractice.dto.converter.YesNoConverter;
 import ru.company.understandablepractice.model.User;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+
 
 @Mapper(componentModel = "spring")
 public abstract class UserMapper {
@@ -15,10 +18,19 @@ public abstract class UserMapper {
 
     @Mapping(target = "subscriptionActive",
             expression = "java(yesNoConverter.stringToBoolean(response.getSubscriptionActive()))")
+    @Mapping(target = "userImage", expression = "java(mapUserImageToBase64String(response))")
     public abstract User fromResponseToEntity(UserResponse response);
 
     @Mapping(target = "subscriptionActive",
             expression = "java(yesNoConverter.booleanToString(user.isSubscriptionActive()))")
+    @Mapping(target = "userImage", expression = "java(mapUserImageToString(user))")
     public abstract UserResponse fromEntityToResponse(User user);
 
+    String mapUserImageToString(User entity){
+        return new String(Base64.getDecoder().decode(entity.getUserImage()));
+    }
+
+    String mapUserImageToBase64String(UserResponse response){
+        return Base64.getEncoder().encodeToString(response.getUserImage().getBytes(StandardCharsets.UTF_8));
+    }
 }

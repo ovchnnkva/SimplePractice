@@ -26,4 +26,6 @@ public class UserResponse {
     private String education;
 
     private String diplomas;
+
+    private String userImage;
 }
