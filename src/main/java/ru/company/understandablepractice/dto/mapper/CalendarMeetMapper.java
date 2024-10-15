@@ -28,6 +28,6 @@ public abstract class CalendarMeetMapper {
     }
 
     String mapFormatMeet(Meet entity) {
-        return entity.getFormatMeet().getTittle();
+        return entity.getFormatMeet() != null ? entity.getFormatMeet().getTittle() : "";
     }
 }
