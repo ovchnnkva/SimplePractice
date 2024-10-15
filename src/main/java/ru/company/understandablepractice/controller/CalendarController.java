@@ -35,8 +35,13 @@ public class CalendarController {
 
         Long userId = jwtService.extractUserId(request.getHeader("Authorization"), JwtType.ACCESS);
         log.info("auth user {}", userId);
-        return calendarService.getCalendar(userId, year)
-                .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND)); //
+        try{
+            return calendarService.getCalendar(userId, year)
+                    .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                    .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND)); //
+        } catch (Exception e) {
+            log.error(e.getLocalizedMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
