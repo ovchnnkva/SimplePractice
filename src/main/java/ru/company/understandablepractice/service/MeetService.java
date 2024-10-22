@@ -24,7 +24,7 @@ public class MeetService extends CRUDService<Meet>{
 
     @Override
     public Optional<Meet> create(Meet entity) throws Exception {
-        if(entity.getPerson().getId() == 0) {
+        if(entity.getPerson() != null && entity.getPerson().getId() == 0) {
             entity.getPerson().setId(personService.savePerson(entity.getPerson()));
         }
         return super.create(entity);
