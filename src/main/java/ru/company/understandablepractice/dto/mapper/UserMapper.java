@@ -9,6 +9,7 @@ import ru.company.understandablepractice.model.User;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.Optional;
 
 
 @Mapper(componentModel = "spring")
@@ -27,10 +28,14 @@ public abstract class UserMapper {
     public abstract UserResponse fromEntityToResponse(User user);
 
     String mapUserImageToString(User entity){
-        return new String(Base64.getDecoder().decode(entity.getUserImage()));
+        return new String(Base64.getDecoder().decode(Optional.ofNullable(entity.getUserImage()).orElse("")));
     }
 
     String mapUserImageToBase64String(UserResponse response){
-        return Base64.getEncoder().encodeToString(response.getUserImage().getBytes(StandardCharsets.UTF_8));
+        if (response.getUserImage() != null){
+            return Base64.getEncoder().encodeToString(response.getUserImage().getBytes(StandardCharsets.UTF_8));
+        } else {
+            return "";
+        }
     }
 }

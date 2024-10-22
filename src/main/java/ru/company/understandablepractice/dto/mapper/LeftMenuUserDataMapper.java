@@ -6,6 +6,7 @@ import ru.company.understandablepractice.dto.leftmenu.LeftMenuUserDataResponse;
 import ru.company.understandablepractice.model.User;
 
 import java.util.Base64;
+import java.util.Optional;
 
 @Mapper(componentModel = "spring")
 public abstract class LeftMenuUserDataMapper {
@@ -17,7 +18,7 @@ public abstract class LeftMenuUserDataMapper {
 
     //TODO Добавить пользователю картинку и реализовать ее маппинг
     String mapUserPicture(User user) {
-        return new String(Base64.getDecoder().decode(user.getUserImage()));
+        return new String(Base64.getDecoder().decode(Optional.ofNullable(user.getUserImage()).orElse("")));
     }
 
     String mapUserName(User user){
