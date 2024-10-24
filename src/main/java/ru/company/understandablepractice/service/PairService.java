@@ -23,9 +23,10 @@ public class PairService extends CRUDService<Pair> {
     @Override
     public Optional<Pair> create(Pair entity) throws Exception {
 
-        if(entity.getSecondCustomer().getId() == 0) {
+        if(entity.getSecondCustomer() != null && entity.getSecondCustomer().getId() == 0) {
             log.info("create customer for pair");
-            entity.getSecondCustomer().setId(customerRepository.save(entity.getSecondCustomer()).getId());
+            entity.getSecondCustomer().setUser(entity.getUser());
+            entity.setSecondCustomer(customerRepository.save(entity.getSecondCustomer()));
         }
 
         return super.create(entity);
