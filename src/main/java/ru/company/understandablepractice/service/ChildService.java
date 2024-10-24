@@ -20,14 +20,16 @@ public class ChildService extends CRUDService<Child>{
 
     @Override
     public Optional<Child> create(Child entity) throws Exception {
-        if (entity.getFirstParent().getId() == 0) {
+        if (entity.getFirstParent() != null && entity.getFirstParent().getId() == 0) {
             log.info("save first parent");
-            entity.getFirstParent().setId(customerRepository.save(entity.getFirstParent()).getId());
+            entity.getFirstParent().setUser(entity.getUser());
+            entity.setFirstParent(customerRepository.save(entity.getFirstParent()));
         }
 
-        if (entity.getSecondParent().getId() == 0) {
+        if (entity.getSecondParent() != null && entity.getSecondParent().getId() == 0) {
             log.info("save second parent");
-            entity.getSecondParent().setId(customerRepository.save(entity.getSecondParent()).getId());
+            entity.getSecondParent().setUser(entity.getUser());
+            entity.setSecondParent(customerRepository.save(entity.getSecondParent()));
         }
 
         return super.create(entity);
