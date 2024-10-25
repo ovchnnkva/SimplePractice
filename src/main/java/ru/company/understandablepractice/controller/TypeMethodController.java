@@ -1,5 +1,7 @@
 package ru.company.understandablepractice.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +16,9 @@ import ru.company.understandablepractice.service.TypeMethodService;
 
 import java.util.List;
 
+@Tag(
+        name = "Типы методик CRUD"
+)
 @RequiredArgsConstructor
 @RestController
 @Slf4j
@@ -25,6 +30,7 @@ public class TypeMethodController {
     private final HttpServletRequest request;
     private final JwtService jwtService;
 
+    @Operation(summary = "Получение по ID", description = "Позволяет получить тип по ключу")
     @GetMapping("/get/{id}")
     public ResponseEntity<TypeMethodResponse> getById(@PathVariable(name = "id") long id) {
         log.info("get Type Method by id {}", id);
@@ -33,6 +39,7 @@ public class TypeMethodController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @Operation(summary = "Обновление", description = "Позволяет обновить данные типа")
     @PutMapping
     public ResponseEntity<?> update(@RequestBody TypeMethodResponse response) {
         log.info("update Type Method {}", response);
@@ -49,6 +56,7 @@ public class TypeMethodController {
         return responseEntity;
     }
 
+    @Operation(summary = "Создать", description = "Создать тип")
     @PostMapping
     public ResponseEntity<?> create(@RequestBody TypeMethodResponse response) {
         log.info("create Type Method {}", response);
@@ -66,6 +74,7 @@ public class TypeMethodController {
         return responseEntity;
     }
 
+    @Operation(summary = "Удалить", description = "Удаление типа")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id") long id) {
         log.info("delete Type Method by id {}", id);
@@ -73,6 +82,7 @@ public class TypeMethodController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Operation(summary = "Получить все", description = "Получение всех типов, доступных пользователю")
     @GetMapping("/getAllTypes")
     public ResponseEntity<List<TypeMethodResponse>> getAll() {
         Long userId = jwtService.extractUserId(request.getHeader("Authorization"), JwtType.ACCESS);

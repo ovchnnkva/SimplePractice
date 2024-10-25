@@ -1,5 +1,7 @@
 package ru.company.understandablepractice.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -9,6 +11,9 @@ import ru.company.understandablepractice.dto.mapper.PhotoProjectiveMethodMapper;
 import ru.company.understandablepractice.dto.projectivemethod.PhotoProjectiveMethodResponse;
 import ru.company.understandablepractice.service.PhotoProjectiveMethodService;
 
+@Tag(
+        name = "Фото методик CRUD"
+)
 @RequiredArgsConstructor
 @RestController
 @Slf4j
@@ -19,8 +24,7 @@ public class PhotoProjectiveMethodController {
 
     private final PhotoProjectiveMethodMapper mapper;
 
-    private final HttpServletRequestService requestService;
-
+    @Operation(summary = "Получение по ID", description = "Позволяет получить фото по ключу")
     @GetMapping("/get/{id}")
     public ResponseEntity<PhotoProjectiveMethodResponse> getById(@PathVariable(name = "id") long id) {
         log.info("get Photo Projective Method by id {}", id);
@@ -29,6 +33,7 @@ public class PhotoProjectiveMethodController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @Operation(summary = "Обновление", description = "Позволяет обновить данные фото")
     @PutMapping
     public ResponseEntity<?> update(@RequestBody PhotoProjectiveMethodResponse response) {
         log.info("update Photo Projective Method {}", response);
@@ -45,6 +50,7 @@ public class PhotoProjectiveMethodController {
         return responseEntity;
     }
 
+    @Operation(summary = "Создать", description = "Создать фото")
     @PostMapping
     public ResponseEntity<?> create(@RequestBody PhotoProjectiveMethodResponse response) {
         log.info("create Photo Projective Method {}", response);
@@ -62,6 +68,7 @@ public class PhotoProjectiveMethodController {
         return responseEntity;
     }
 
+    @Operation(summary = "Удалить", description = "Удаление фото")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id") long id) {
         log.info("delete Photo Projective Method by id {}", id);
