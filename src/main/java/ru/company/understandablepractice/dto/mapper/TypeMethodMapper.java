@@ -14,26 +14,13 @@ import ru.company.understandablepractice.model.User;
 public abstract class TypeMethodMapper {
 
     @Autowired
-    private ProjectiveMethodMapper projectiveMethodMapper;
-
-    @Autowired
     private UserMapper userMapper;
 
-    @Mapping(target = "projectiveMethod", expression = "java(mapProjectiveMethod(response))")
     @Mapping(target = "user", expression = "java(mapUser(response))")
     public abstract TypeMethod fromResponseToEntity(TypeMethodResponse response);
 
-    @Mapping(target = "projectiveMethod", expression = "java(mapProjectiveMethodResponse(entity))")
     @Mapping(target = "user", expression = "java(mapUserResponse(entity))")
     public abstract TypeMethodResponse fromEntityToResponse(TypeMethod entity);
-
-    ProjectiveMethod mapProjectiveMethod(TypeMethodResponse response) {
-        return projectiveMethodMapper.fromResponseToEntity(response.getProjectiveMethod());
-    }
-
-    ProjectiveMethodResponse mapProjectiveMethodResponse(TypeMethod entity) {
-        return projectiveMethodMapper.fromEntityToResponse(entity.getProjectiveMethod());
-    }
 
     User mapUser(TypeMethodResponse response) {
         return userMapper.fromResponseToEntity(response.getUser());

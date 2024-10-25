@@ -29,10 +29,9 @@ public abstract class ProjectiveMethodDetailsMapper {
 
     @Mapping(target = "meet", expression = "java(mapMeet(entity))")
     @Mapping(target = "dateCreateMethod", expression = "java(mapDateCreateMethod(entity))")
-    @Mapping(target = "typeMethod", expression = "java(mapTypeMethod(typeMethodList))")
+    @Mapping(target = "typeMethod", expression = "java(mapTypeMethod(entity))")
     @Mapping(target = "photoProjectiveMethod", expression = "java(mapPhotoProjectiveMethod(photoProjectiveMethodList))")
     public abstract ProjectiveMethodDetailsResponse fromEntityToResponse(ProjectiveMethod entity,
-                                                                         List<TypeMethod> typeMethodList,
                                                                          List<PhotoProjectiveMethod> photoProjectiveMethodList);
 
     MeetResponse mapMeet(ProjectiveMethod entity) {
@@ -43,8 +42,8 @@ public abstract class ProjectiveMethodDetailsMapper {
         return entity.getDateCreateMethod();
     }
 
-    List<TypeMethodResponse> mapTypeMethod(List<TypeMethod> typeMethodList) {
-        return typeMethodList.stream().map(e -> typeMethodMapper.fromEntityToResponse(e)).collect(Collectors.toList());
+    TypeMethodResponse mapTypeMethod(ProjectiveMethod entity) {
+        return typeMethodMapper.fromEntityToResponse(entity.getTypeMethod());
     }
 
     List<PhotoProjectiveMethodResponse> mapPhotoProjectiveMethod(List<PhotoProjectiveMethod> photoProjectiveMethodList) {

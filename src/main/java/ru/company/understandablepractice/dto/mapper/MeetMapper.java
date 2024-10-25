@@ -33,11 +33,11 @@ public abstract class MeetMapper {
     public abstract MeetResponse fromEntityToResponse(Meet entity);
 
     Person mapPerson(MeetResponse response) {
-        return personMapper.fromResponseToEntity(response.getPerson());
+        return response.getPerson() != null ? personMapper.fromResponseToEntity(response.getPerson()) : null;
     }
 
     PersonResponse mapPersonResponse(Meet entity) {
-        return personMapper.fromEntityToResponse(entity.getPerson());
+        return entity.getPerson() != null ? personMapper.fromEntityToResponse(entity.getPerson()) : null;
     }
 
     UserResponse mapUserResponse(Meet entity) {

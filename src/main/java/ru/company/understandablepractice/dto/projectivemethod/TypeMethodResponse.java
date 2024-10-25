@@ -8,8 +8,6 @@ public class TypeMethodResponse {
 
     private long id;
 
-    private ProjectiveMethodResponse projectiveMethod;
-
     private String nameMethod;
 
     private UserResponse user;
