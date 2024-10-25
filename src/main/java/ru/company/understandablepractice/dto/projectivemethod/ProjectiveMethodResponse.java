@@ -13,4 +13,6 @@ public class ProjectiveMethodResponse {
     private MeetResponse meet;
 
     private LocalDate dateCreateMethod;
+
+    private TypeMethodResponse typeMethod;
 }

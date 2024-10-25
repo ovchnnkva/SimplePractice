@@ -1,5 +1,6 @@
 package ru.company.understandablepractice.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -7,7 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.company.understandablepractice.dto.mapper.TypeMethodMapper;
 import ru.company.understandablepractice.dto.projectivemethod.TypeMethodResponse;
+import ru.company.understandablepractice.security.JwtType;
+import ru.company.understandablepractice.security.services.JwtService;
 import ru.company.understandablepractice.service.TypeMethodService;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -16,10 +21,9 @@ import ru.company.understandablepractice.service.TypeMethodService;
 public class TypeMethodController {
 
     private final TypeMethodService service;
-
     private final TypeMethodMapper mapper;
-
-    private final HttpServletRequestService requestService;
+    private final HttpServletRequest request;
+    private final JwtService jwtService;
 
     @GetMapping("/get/{id}")
     public ResponseEntity<TypeMethodResponse> getById(@PathVariable(name = "id") long id) {
@@ -67,5 +71,19 @@ public class TypeMethodController {
         log.info("delete Type Method by id {}", id);
         service.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/getAllTypes")
+    public ResponseEntity<List<TypeMethodResponse>> getAll() {
+        Long userId = jwtService.extractUserId(request.getHeader("Authorization"), JwtType.ACCESS);
+        log.info("auth user {}", userId);
+        try {
+            return service.findAllByUserId(userId)
+                    .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                    .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            log.error(e.getLocalizedMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

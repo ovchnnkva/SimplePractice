@@ -13,7 +13,7 @@ public interface TypeMethodRepository extends JpaRepository<TypeMethod, Long> {
     @Query(value =
         "SELECT tm " +
                 "FROM TypeMethod tm " +
-                "WHERE tm.projectiveMethod.id = :projectiveMethodId"
+                "WHERE tm.user.id = :userId"
     )
-    Optional<List<TypeMethod>> findByProjectiveMethodId(@Param("projectiveMethodId") long projectiveMethodId);
+    Optional<List<TypeMethod>> findByUserId(@Param("userId") long userId);
 }

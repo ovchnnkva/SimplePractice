@@ -40,10 +40,9 @@ public class ProjectiveMethodService extends CRUDService<ProjectiveMethod>{
         List<ProjectiveMethod> projectiveMethods = repository.findByMeetId(meetId).orElse(null);
         if (projectiveMethods != null) {
             responseList = projectiveMethods.stream().map(response -> {
-                List<TypeMethod> typeMethodResponseList = typeMethodRepository.findByProjectiveMethodId(response.getId()).orElse(null);
                 List< PhotoProjectiveMethod> photoProjectiveMethodList = photoProjectiveMethodRepository.findByProjectiveMethodId(response.getId()).orElse(null);
 
-                return projectiveMethodDetailsMapper.fromEntityToResponse(response, typeMethodResponseList, photoProjectiveMethodList);
+                return projectiveMethodDetailsMapper.fromEntityToResponse(response, photoProjectiveMethodList);
             }).collect(Collectors.toList());
         }
 

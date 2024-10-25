@@ -21,8 +21,6 @@ public class ProjectiveMethodController {
 
     private final ProjectiveMethodMapper mapper;
 
-    private final HttpServletRequestService requestService;
-
     @GetMapping("/get/{id}")
     public ResponseEntity<ProjectiveMethodResponse> getById(@PathVariable(name = "id") long id) {
         log.info("get Projective Method by id {}", id);

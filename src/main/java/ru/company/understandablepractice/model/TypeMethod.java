@@ -15,10 +15,6 @@ public class TypeMethod {
     @Column(name = "type_method_id")
     private long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "projective_method_id")
-    private ProjectiveMethod projectiveMethod;
-
     @Column(name = "name_method")
     private String nameMethod;
 
