@@ -44,7 +44,7 @@ public class User {
     @Column(name = "diplomas", columnDefinition = "TEXT")
     private String diplomas;
 
-    @Column(name = "user_image")
+    @Column(name = "user_image", columnDefinition = "TEXT")
     private String userImage;
 
     @OneToOne(
