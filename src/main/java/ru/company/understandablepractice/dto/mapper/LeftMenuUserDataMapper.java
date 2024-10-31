@@ -18,7 +18,7 @@ public abstract class LeftMenuUserDataMapper {
 
     //TODO Добавить пользователю картинку и реализовать ее маппинг
     String mapUserPicture(User user) {
-        return new String(Base64.getDecoder().decode(Optional.ofNullable(user.getUserImage()).orElse("")));
+        return user.getUserImage() != null ? user.getUserImage() : "";
     }
 
     String mapUserName(User user){
