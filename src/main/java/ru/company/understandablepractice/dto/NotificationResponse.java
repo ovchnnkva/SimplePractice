@@ -12,4 +12,6 @@ public class NotificationResponse {
     private LocalDate dateFirstRequest;
 
     private String customerFullName;
+
+    private String clientType;
 }

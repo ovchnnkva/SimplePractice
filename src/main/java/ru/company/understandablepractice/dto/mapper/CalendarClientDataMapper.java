@@ -7,6 +7,7 @@ import ru.company.understandablepractice.dto.calendar.CalendarMeetResponse;
 import ru.company.understandablepractice.model.Person;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mapper(componentModel = "spring")
 public abstract class CalendarClientDataMapper {
@@ -16,6 +17,6 @@ public abstract class CalendarClientDataMapper {
     public abstract CalendarClientDataResponse toResponse(Person person, List<CalendarMeetResponse> meetings);
 
     String mapClientType(Person person) {
-        return person.getClientType().getTittle();
+        return person != null ? person.getClientType().getTittle() : "";
     }
 }

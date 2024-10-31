@@ -11,4 +11,6 @@ public class CalendarMeetResponse {
     private LocalDateTime endTime;
 
     private String formatMeet;
+
+    private String title;
 }
