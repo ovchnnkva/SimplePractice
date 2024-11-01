@@ -63,6 +63,6 @@ public abstract class MeetMapper {
     }
 
     String mapPaymentTypeString(Meet entity) {
-        return entity.getPaymentType().getTitle();
+        return entity.getPaymentType() != null ? entity.getPaymentType().getTitle() : "";
     }
 }
