@@ -4,10 +4,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.company.understandablepractice.dto.CustomerResponse;
-import ru.company.understandablepractice.dto.UserResponse;
 import ru.company.understandablepractice.dto.converter.YesNoConverter;
 import ru.company.understandablepractice.model.Customer;
-import ru.company.understandablepractice.model.User;
 import ru.company.understandablepractice.model.types.*;
 
 import java.util.Arrays;
@@ -32,6 +30,7 @@ public abstract class CustomerMapper {
     @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormat(response))")
     public abstract Customer fromResponseToEntity(CustomerResponse response);
 
+    @Mapping(target = "clientType", expression = "java(mapClientTypeString(customer))")
     @Mapping(target = "contactMethod", expression = "java(mapContactMethodString(customer))")
     @Mapping(target = "onlinePlatform", expression = "java(mapOnlinePlatformString(customer))")
     @Mapping(target = "familyStatus", expression = "java(mapFamilyStatusString(customer))")
@@ -48,6 +47,10 @@ public abstract class CustomerMapper {
                 .filter(value -> value.getTittle().equals(response.getClientType()))
                 .findFirst()
                 .orElse(null);
+    }
+
+    String mapClientTypeString(Customer entity) {
+        return entity.getClientType().getTittle();
     }
 
     Gender mapGender(CustomerResponse response) {
