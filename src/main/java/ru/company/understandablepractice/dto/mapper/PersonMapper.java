@@ -22,10 +22,12 @@ public abstract class PersonMapper {
     @Mapping(target = "gender", expression = "java(mapGender(response))")
     @Mapping(target = "clientStatus", expression = "java(mapClientStatus(response))")
     @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormat(response))")
+    @Mapping(target = "fullName", expression = "java(mapFullName(response))")
     public abstract Person fromResponseToEntity(PersonResponse response);
 
     @Mapping(target = "clientStatus", expression = "java(mapClientStatusString(entity))")
     @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormatString(entity))")
+    @Mapping(target = "clientType", expression = "java(mapClientTypeString(entity))")
     public abstract PersonResponse fromEntityToResponse(Person entity);
 
 
@@ -34,6 +36,10 @@ public abstract class PersonMapper {
                 .filter(value -> value.getTittle().equals(response.getClientType()))
                 .findFirst()
                 .orElse(null);
+    }
+
+    String mapClientTypeString(Person entity) {
+        return entity.getClientType().getTittle();
     }
 
     Gender mapGender(PersonResponse response) {
@@ -67,5 +73,9 @@ public abstract class PersonMapper {
                 .filter(status -> status.getTittle().equals(response.getMeetingFormat()))
                 .findFirst()
                 .orElse(null);
+    }
+
+    String mapFullName(PersonResponse response) {
+        return response.getLastName() + response.getFirstName() + response.getSecondName();
     }
 }

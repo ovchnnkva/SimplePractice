@@ -28,7 +28,9 @@ public class CalendarService {
 
         Map<Person, List<Meet>> meetings = meetRepository.findByUserIdAndYear(userId, year)
                 .stream()
-                .collect(Collectors.groupingBy(Meet::getPerson));
+                .collect(Collectors.groupingBy(meet -> {
+                    return meet.getPerson() != null ? meet.getPerson() : new Person(0);
+                }));
 
         if (!meetings.isEmpty()) {
             response = new CalendarResponse();

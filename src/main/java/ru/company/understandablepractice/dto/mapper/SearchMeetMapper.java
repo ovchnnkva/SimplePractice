@@ -10,5 +10,10 @@ import ru.company.understandablepractice.model.Person;
 @Mapper(componentModel = "spring")
 public abstract class SearchMeetMapper {
 
+    @Mapping(target = "formatMeet", expression = "java(mapMeetingFormatString(entity))")
     public abstract SearchMeetResponse fromEntityToResponse(Meet entity);
+
+    String mapMeetingFormatString(Meet entity) {
+        return entity.getFormatMeet().getTittle();
+    }
 }

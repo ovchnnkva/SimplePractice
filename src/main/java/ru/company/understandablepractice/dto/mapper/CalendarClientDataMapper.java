@@ -17,6 +17,6 @@ public abstract class CalendarClientDataMapper {
     public abstract CalendarClientDataResponse toResponse(Person person, List<CalendarMeetResponse> meetings);
 
     String mapClientType(Person person) {
-        return person != null ? person.getClientType().getTittle() : "";
+        return person.getId() != 0 ? person.getClientType().getTittle() : "";
     }
 }
