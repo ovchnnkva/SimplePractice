@@ -70,7 +70,7 @@ public abstract class PersonMapper {
                 .orElse(null);
     }
 
-    String mapFullName(Person entity) {
-        return entity.getLastName() + entity.getFirstName() + entity.getSecondName();
+    String mapFullName(PersonResponse response) {
+        return response.getLastName() + response.getFirstName() + response.getSecondName();
     }
 }
