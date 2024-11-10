@@ -20,7 +20,7 @@ public class SignInService {
     public void signIn(SignInRequest signInRequest) throws Exception {
         var username = signInRequest.getUsername();
         var password = signInRequest.getPassword();
-        var name = signInRequest.getName();
+        var name = String.format("%s %s %s", signInRequest.getLastName(), signInRequest.getFirstName(), signInRequest.getSecondName());
 
         if(userCredentialsService.isUserCredentialsAlreadyExists(username)){
             throw new UserAlreadyExists("User with such username already exists ");
