@@ -101,7 +101,7 @@ public abstract class PairMapper {
                 .orElse(null);
     }
 
-    String mapFullName(CustomerResponse response) {
+    String mapFullName(PairResponse response) {
         return String.format("%s %s %s", response.getLastName(), response.getFirstName(), response.getSecondName());
     }
 }
