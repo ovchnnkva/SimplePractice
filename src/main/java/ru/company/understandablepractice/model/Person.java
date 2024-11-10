@@ -55,6 +55,9 @@ public class Person {
     @Column(name = "gender")
     protected Gender gender;
 
+    @Column(name = "date_of_first_request")
+    protected LocalDate dateFirstRequest;
+
     @Convert(converter = ClientStatusConverter.class)
     @Column(name = "client_status")
     protected ClientStatus clientStatus;

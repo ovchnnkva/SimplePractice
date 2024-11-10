@@ -18,9 +18,6 @@ public class Customer extends Person{
     @Column(name = "contact_method")
     private ContactMethod contactMethod;
 
-    @Column(name = "date_of_first_request")
-    private LocalDate dateFirstRequest;
-
     @Column(name = "date_of_first_consultation")
     private LocalDate dateFirstConsultation;
 
@@ -65,6 +62,12 @@ public class Customer extends Person{
 
     @Column(name = "supervision_material", columnDefinition = "TEXT")
     private String supervisionMaterial;
+
+    @Column(name = "taking_medic", columnDefinition = "TEXT")
+    private String takingMedic;
+
+    @Column(name = "prev_experience", columnDefinition = "TEXT")
+    private String prevExperience;
 
     @Column(name = "notes", columnDefinition = "TEXT")
     private String notes;

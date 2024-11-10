@@ -31,6 +31,8 @@ public class PersonResponse {
 
     protected String gender;
 
+    protected LocalDate dateFirstRequest;
+
     private String clientStatus;
 
     private String meetingFormat;
