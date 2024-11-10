@@ -7,8 +7,10 @@ import ru.company.understandablepractice.dto.leftmenu.LeftMenuUserDataResponse;
 import ru.company.understandablepractice.dto.mapper.LeftMenuUserDataMapper;
 import ru.company.understandablepractice.dto.mapper.NotificationMapper;
 import ru.company.understandablepractice.model.Customer;
+import ru.company.understandablepractice.model.Person;
 import ru.company.understandablepractice.model.types.ClientStatus;
 import ru.company.understandablepractice.repository.CustomerRepository;
+import ru.company.understandablepractice.repository.PersonRepository;
 import ru.company.understandablepractice.repository.UserRepository;
 
 import java.util.List;
@@ -20,7 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class LeftMenuService {
     private final UserRepository userRepository;
-    private final CustomerRepository customerRepository;
+    private final PersonRepository personRepository;
 
     private final LeftMenuUserDataMapper userDataMapper;
     private final NotificationMapper notificationMapper;
@@ -39,10 +41,10 @@ public class LeftMenuService {
     public Optional<NotificationListResponse> getNotification(long userId) {
         NotificationListResponse response = null;
 
-        List<Customer> customers = customerRepository.findNewCustomerByUserAndStatus(userId, ClientStatus.REQUEST).orElse(null);
-        if (customers != null){
+        List<Person> persons = personRepository.findNewPersonByUserAndStatus(userId, ClientStatus.REQUEST).orElse(null);
+        if (persons != null){
             response = new NotificationListResponse();
-            response.setNotificationResponseList(customers.stream().map(notificationMapper::fromEntityToResponse).collect(Collectors.toList()));
+            response.setNotificationResponseList(persons.stream().map(notificationMapper::fromEntityToResponse).collect(Collectors.toList()));
             response.setCount(response.getNotificationResponseList().size());
         }
 

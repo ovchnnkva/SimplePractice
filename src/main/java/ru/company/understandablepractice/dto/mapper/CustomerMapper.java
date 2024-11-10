@@ -136,6 +136,6 @@ public abstract class CustomerMapper {
     }
 
     String mapFullName(CustomerResponse response) {
-        return response.getLastName() + response.getFirstName() + response.getSecondName();
+        return String.format("%s %s %s", response.getLastName(), response.getFirstName(), response.getSecondName());
     }
 }

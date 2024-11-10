@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.company.understandablepractice.dto.NotificationResponse;
 import ru.company.understandablepractice.model.Customer;
+import ru.company.understandablepractice.model.Person;
 
 import java.time.LocalDate;
 
@@ -14,21 +15,21 @@ public abstract class NotificationMapper {
     @Mapping(target = "dateFirstRequest", expression = "java(mapDateFirstRequest(entity))")
     @Mapping(target = "customerFullName", expression = "java(mapCustomerFullName(entity))")
     @Mapping(target = "clientType", expression = "java(mapClientType(entity))")
-    public abstract NotificationResponse fromEntityToResponse(Customer entity);
+    public abstract NotificationResponse fromEntityToResponse(Person entity);
 
-    long mapCustomerId(Customer entity) {
+    long mapCustomerId(Person entity) {
         return entity.getId();
     }
 
-    LocalDate mapDateFirstRequest(Customer entity) {
+    LocalDate mapDateFirstRequest(Person entity) {
         return entity.getDateFirstRequest();
     }
 
-    String mapCustomerFullName(Customer entity) {
+    String mapCustomerFullName(Person entity) {
         return entity.getFullName();
     }
 
-    String mapClientType(Customer entity) {
+    String mapClientType(Person entity) {
         return entity.getClientType().getTittle();
     }
 }

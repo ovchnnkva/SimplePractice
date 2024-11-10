@@ -14,8 +14,6 @@ public class CustomerResponse extends PersonResponse {
 
     private String contactMethod;
 
-    private LocalDate dateFirstRequest;
-
     private LocalDate dateFirstConsultation;
 
     private String onlinePlatform;
@@ -43,6 +41,10 @@ public class CustomerResponse extends PersonResponse {
     private String contactSupervisor;
 
     private String supervisionMaterial;
+
+    private String takingMedic;
+
+    private String prevExperience;
 
     private String notes;
 
