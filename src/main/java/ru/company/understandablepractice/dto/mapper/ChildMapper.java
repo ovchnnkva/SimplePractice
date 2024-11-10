@@ -115,7 +115,7 @@ public abstract class ChildMapper {
                 .orElse(null);
     }
 
-    String mapFullName(CustomerResponse response) {
+    String mapFullName(ChildResponse response) {
         return String.format("%s %s %s", response.getLastName(), response.getFirstName(), response.getSecondName());
     }
 }
