@@ -54,7 +54,7 @@ public abstract class PersonMapper {
     }
 
     String mapClientStatusString(Person entity) {
-        return entity.getClientStatus().getTittle();
+        return entity.getClientStatus() != null ? entity.getClientStatus().getTittle() : null;
     }
 
     ClientStatus mapClientStatus(PersonResponse response) throws NoSuchElementException {
@@ -65,7 +65,7 @@ public abstract class PersonMapper {
     }
 
     String mapMeetingFormatString(Person entity) {
-        return entity.getMeetingFormat().getTittle();
+        return entity.getMeetingFormat() != null ? entity.getMeetingFormat().getTittle() : null;
     }
 
     MeetingFormat mapMeetingFormat(PersonResponse response) {
