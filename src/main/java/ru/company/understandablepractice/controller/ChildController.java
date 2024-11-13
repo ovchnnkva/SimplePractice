@@ -8,10 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.company.understandablepractice.dto.ChildResponse;
+import ru.company.understandablepractice.dto.customers.ChildResponse;
 import ru.company.understandablepractice.dto.mapper.ChildMapper;
 import ru.company.understandablepractice.model.User;
-import ru.company.understandablepractice.model.types.ClientType;
 import ru.company.understandablepractice.service.ChildService;
 
 @Tag(

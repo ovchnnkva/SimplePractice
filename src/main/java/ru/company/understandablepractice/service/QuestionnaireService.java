@@ -18,12 +18,9 @@ import ru.company.understandablepractice.repository.questionnaire.ClientResultRe
 import ru.company.understandablepractice.repository.questionnaire.QuestionnaireRepository;
 import ru.company.understandablepractice.security.services.JwtService;
 
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import static ru.company.understandablepractice.model.types.ApplicationFormStatus.NOT_CREATED;
 
 @Service
 @Slf4j
@@ -96,13 +93,15 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
         Customer customer = customerRepository.findCustomerById(customerId).orElseThrow();
 
         setCredentials(customer);
+
         String link = String.format(
                 "%s/%s",
                 questionnaireId,
                 jwtService.generatePersonToken(customer.getCustomerCredentials())
         );
+        customer.setApplicationFormToken(link);
         log.info("create person link {}", link);
-
+        customerRepository.save(customer);
 
         return Optional.of(link);
     }

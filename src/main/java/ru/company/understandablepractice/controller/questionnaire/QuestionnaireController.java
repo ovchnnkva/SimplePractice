@@ -3,6 +3,7 @@ package ru.company.understandablepractice.controller.questionnaire;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,8 @@ import ru.company.understandablepractice.dto.questionnaire.*;
 import ru.company.understandablepractice.model.User;
 import ru.company.understandablepractice.model.questionnaire.ClientResult;
 import ru.company.understandablepractice.model.questionnaire.Questionnaire;
+import ru.company.understandablepractice.security.JwtType;
+import ru.company.understandablepractice.security.services.JwtService;
 import ru.company.understandablepractice.service.QuestionnaireService;
 
 import java.util.Set;
@@ -30,7 +33,8 @@ public class QuestionnaireController {
     private final QuestionnaireService service;
     private final QuestionnaireMapper questionnaireMapper;
     private final ClientResultMapper clientResultMapper;
-
+    private final JwtService jwtService;
+    private final HttpServletRequest request;
     @Operation(summary = "Создание опросника",
             description = """
                     questions - список вопросов. каждый вопрос содержит answerOptions - список вариантов ответов.
@@ -57,6 +61,8 @@ public class QuestionnaireController {
     @Operation(summary = "Получить опросник/тест")
     @GetMapping("/get/{id}")
     public ResponseEntity<QuestionnaireDto> getById(@PathVariable("id") @Parameter(description = "id опросника/теста") long id) {
+        long customerId = jwtService.extractUserId(request.getHeader("Authorization"), JwtType.ACCESS);
+        log.info("get customer by id {}", customerId);
         log.info("get questionnaire {}", id);
         return service.getById(id)
                 .map(result -> new ResponseEntity<>(questionnaireMapper.fromEntityToDto(result), HttpStatus.OK))

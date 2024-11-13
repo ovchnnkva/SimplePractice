@@ -139,7 +139,7 @@ public class Customer {
             orphanRemoval = true,
             fetch = FetchType.LAZY
     )
-    private CustomerCredentials customerCredentials = new CustomerCredentials(Set.of(new Role(3, "ROLE_CUSTOMER")));
+    private CustomerCredentials customerCredentials = new CustomerCredentials(this, Set.of(new Role(3, "ROLE_CUSTOMER")));
 
     public Customer(long id) {
         this.id = id;

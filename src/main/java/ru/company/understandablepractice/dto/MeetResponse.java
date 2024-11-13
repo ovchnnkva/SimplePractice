@@ -1,6 +1,7 @@
 package ru.company.understandablepractice.dto;
 
 import lombok.Data;
+import ru.company.understandablepractice.dto.customers.CustomerResponse;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

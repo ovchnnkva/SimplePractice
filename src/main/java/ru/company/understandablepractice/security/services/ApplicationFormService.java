@@ -48,13 +48,14 @@ public class ApplicationFormService {
 
         if(customer.getApplicationFormStatus().equals(NOT_CREATED)) {
             setCredentials(customer);
+            String token = jwtService.generatePersonToken(customer.getCustomerCredentials());
             link = String.format(
                     "%s/%s",
                     customer.getClientType().toString(),
-                    jwtService.generatePersonToken(customer.getCustomerCredentials())
+                    token
             );
             log.info("create person link {}", link);
-            updateApplicationFormData(customer, link);
+            updateApplicationFormData(customer, token);
         }
 
         return Optional.ofNullable(link);
@@ -70,9 +71,10 @@ public class ApplicationFormService {
         }
 
         if(customer.getApplicationFormStatus().equals(CREATED)) {
-            token = customer.getApplicationFormToken();
+            token = customer.getClientType() + "/" + customer.getApplicationFormToken();
             log.info("get person link {}", token);
         }
+
 
         return Optional.ofNullable(token);
     }

@@ -60,12 +60,12 @@ public class Pair extends Customer {
         this.gender = customer.getGender();
         this.clientStatus = customer.getClientStatus();
         this.meetingFormat = customer.getMeetingFormat();
-        this.setCustomerCredentials(new CustomerCredentials(Set.of(new Role(5, "ROLE_PAIR"))));
+        this.setCustomerCredentials(new CustomerCredentials(this, Set.of(new Role(5, "ROLE_PAIR"))));
         this.setApplicationFormStatus(customer.getApplicationFormStatus());
     }
 
     public Pair() {
-        this.setCustomerCredentials(new CustomerCredentials(Set.of(new Role(5, "ROLE_PAIR"))));
+        this.setCustomerCredentials(new CustomerCredentials(this, Set.of(new Role(5, "ROLE_PAIR"))));
         this.setApplicationFormStatus(ApplicationFormStatus.NOT_CREATED);
     }
 }

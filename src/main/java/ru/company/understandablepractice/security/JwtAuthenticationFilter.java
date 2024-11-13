@@ -49,12 +49,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        // Обрезаем префикс и получаем имя пользователя из токена
         var jwt = authHeader.substring(BEARER_PREFIX.length());
-        long userId;
-
-        userId = jwtService.extractUserId(jwt, JwtType.ACCESS);
-
+        long userId = jwtService.extractUserId(jwt, JwtType.ACCESS);
 
         if (userId != 0 && SecurityContextHolder.getContext().getAuthentication() == null) {
             log.info("auth user with id {}", userId);
