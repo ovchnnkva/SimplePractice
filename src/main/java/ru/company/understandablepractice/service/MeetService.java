@@ -40,7 +40,7 @@ public class MeetService extends CRUDService<Meet>{
         CustomerMeetInfoResponse response = null;
         List<Meet> meets = repository.findMeetByCustomerId(customerId).orElse(null);
         if (meets != null) {
-            response = customerMeetInfoMapper.fromEntityToResponse(meets);
+            response = customerMeetInfoMapper.fromEntityToResponse(customerId, meets);
         }
 
         return Optional.ofNullable(response);

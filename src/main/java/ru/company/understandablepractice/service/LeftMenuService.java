@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 public class LeftMenuService {
     private final UserRepository userRepository;
     private final PersonRepository personRepository;
+    private final CustomerRepository customerRepository;
 
     private final LeftMenuUserDataMapper userDataMapper;
     private final NotificationMapper notificationMapper;
@@ -41,10 +42,10 @@ public class LeftMenuService {
     public Optional<NotificationListResponse> getNotification(long userId) {
         NotificationListResponse response = null;
 
-        List<Person> persons = personRepository.findNewPersonByUserAndStatus(userId, ClientStatus.REQUEST).orElse(null);
-        if (persons != null){
+        List<Customer> customers = customerRepository.findNewCustomerByUserAndStatus(userId, ClientStatus.REQUEST).orElse(null);
+        if (customers != null){
             response = new NotificationListResponse();
-            response.setNotificationResponseList(persons.stream().map(notificationMapper::fromEntityToResponse).collect(Collectors.toList()));
+            response.setNotificationResponseList(customers.stream().map(notificationMapper::fromEntityToResponse).collect(Collectors.toList()));
             response.setCount(response.getNotificationResponseList().size());
         }
 
