@@ -53,4 +53,6 @@ public class MeetResponse {
     private String planNextSession;
 
     private String supervisionThemAndProblem;
+
+    private String note;
 }
