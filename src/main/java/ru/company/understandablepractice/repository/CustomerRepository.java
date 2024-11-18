@@ -16,4 +16,10 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             "WHERE c.user.id = :userId AND c.clientStatus = :status"
     )
     Optional<List<Customer>> findNewCustomerByUserAndStatus(long userId, ClientStatus status);
+
+    Optional<Customer> findCustomerById(long id);
+
+    public Optional<Customer> findByCustomerCredentials_id(Long id);
+
+    public Optional<Customer> findByApplicationFormToken(String token);
 }

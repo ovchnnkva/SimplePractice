@@ -6,9 +6,9 @@ import ru.company.understandablepractice.model.types.ClientType;
 
 @Getter
 @Setter
-public class PairResponse extends PersonResponse{
+public class PairResponse extends CustomerResponse {
 
-    private CustomerResponse secondCustomer;
+    private PersonResponse secondPerson;
 
     private String clientFirstRequestTherapyReason;
 

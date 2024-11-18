@@ -29,7 +29,7 @@ public class ProjectiveMethodsDetailsController {
     private final HttpServletRequest request;
 
     @Operation(summary = "Проективные методики для встречи", description = "Позволяет получить все проективные методики по id встречи")
-    @GetMapping("/{offset}/{limit}")
+    @GetMapping("/{meetId}")
     public ResponseEntity<List<ProjectiveMethodDetailsResponse>> getProjectiveMethods(@PathVariable @Parameter(description = "meetId") long meetId) {
         return service.findProjectiveMethodByMeetId(meetId)
                 .map(value -> new ResponseEntity<>(value, HttpStatus.OK))

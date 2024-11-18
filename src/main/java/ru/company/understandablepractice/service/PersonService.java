@@ -19,7 +19,7 @@ public class PersonService {
     private final ChildRepository childRepository;
     private final PairRepository pairRepository;
 
-    public long  savePerson(Person person) throws Exception {
+    /*public long  savePerson(Person person) throws Exception {
         long id;
         log.info("save {} {}", person.getClientType().getTittle(), person);
         switch (person.getClientType()) {
@@ -30,5 +30,5 @@ public class PersonService {
         }
 
         return id;
-    }
+    }*/
 }

@@ -16,10 +16,10 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import ru.company.understandablepractice.model.PersonCredentials;
+import ru.company.understandablepractice.model.CustomerCredentials;
 import ru.company.understandablepractice.model.UserCredentials;
+import ru.company.understandablepractice.security.services.CustomerCredentialsService;
 import ru.company.understandablepractice.security.services.JwtService;
-import ru.company.understandablepractice.security.services.PersonCredentialsService;
 import ru.company.understandablepractice.security.services.UserCredentialsService;
 
 import java.io.IOException;
@@ -33,7 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     public static final String HEADER_NAME = "Authorization";
     private final JwtService jwtService;
     private final UserCredentialsService userCredentialsService;
-    private final PersonCredentialsService personCredentialsService;
+    private final CustomerCredentialsService customerCredentialsService;
 
     @Override
     protected void doFilterInternal(
@@ -60,8 +60,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             log.info("auth user with id {}", userId);
 
             Optional<UserCredentials> userDetails = Optional.empty();
-            Optional<PersonCredentials> personCredentials = personCredentialsService.findPersonCredentialsByToken(jwt);
-            if(personCredentials.isEmpty()) {
+            Optional<CustomerCredentials> customerCredentials = customerCredentialsService.findCustomerCredentialsByToken(jwt);
+            if(customerCredentials.isEmpty()) {
                 userDetails = userCredentialsService.findByUserId(userId);
             }
 
@@ -78,16 +78,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 context.setAuthentication(authToken);
                 SecurityContextHolder.setContext(context);
-            } else if (personCredentials.isPresent() && jwtService.isTokenValid(jwt,JwtType.ACCESS, personCredentials.get())) {
+            } else if (customerCredentials.isPresent() && jwtService.isTokenValid(jwt,JwtType.ACCESS, customerCredentials.get())) {
 
                 SecurityContext context = SecurityContextHolder.createEmptyContext();
 
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        personCredentials.get().getUsername(),
+                        customerCredentials.get().getUsername(),
                         null,
-                        personCredentials.get().getAuthorities()
+                        customerCredentials.get().getAuthorities()
                 );
-                log.info("personCredentials.get().getAuthorities() {}", personCredentials.get().getAuthorities());
+                log.info("customerCredentials.get().getAuthorities() {}", customerCredentials.get().getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 context.setAuthentication(authToken);
                 SecurityContextHolder.setContext(context);

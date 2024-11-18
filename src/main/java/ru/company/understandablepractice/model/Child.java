@@ -15,18 +15,18 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "child")
-public class Child extends Person{
+public class Child extends Customer{
     @Convert(converter = BringsClientConverter.class)
     @Column(name = "brings_client")
     private BringsClient bringsClient;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "first_parent_id")
-    private Customer firstParent;
+    private Person firstParent;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "second_parent_id")
-    private Customer secondParent;
+    private Person secondParent;
 
     @Column(name = "payer_full_name")
     private String payerFullName;
@@ -43,26 +43,26 @@ public class Child extends Person{
     @Column(name = "child_desired_changes")
     private String childDesiredChanges;
 
-    public Child(Person person) {
+    public Child(Customer customer) {
 
-        this.id = person.getId();
+        this.id = customer.getId();
         this.clientType = ClientType.CHILD;
-        this.fullName = person.getFullName();
-        this.firstName = person.getFirstName();
-        this.secondName = person.getSecondName();
-        this.lastName = person.getLastName();
-        this.birth = person.getBirth();
-        this.phoneNumber = person.getPhoneNumber();
-        this.mail = person.getMail();
-        this.gender = person.getGender();
-        this.clientStatus = person.getClientStatus();
-        this.meetingFormat = person.getMeetingFormat();
-        this.setPersonCredentials(new PersonCredentials(Set.of(new Role(4, "ROLE_CHILD"))));
-        this.setApplicationFormStatus(person.getApplicationFormStatus());
+        this.fullName = customer.getFullName();
+        this.firstName = customer.getFirstName();
+        this.secondName = customer.getSecondName();
+        this.lastName = customer.getLastName();
+        this.birth = customer.getBirth();
+        this.phoneNumber = customer.getPhoneNumber();
+        this.mail = customer.getMail();
+        this.gender = customer.getGender();
+        this.clientStatus = customer.getClientStatus();
+        this.meetingFormat = customer.getMeetingFormat();
+        this.setCustomerCredentials(new CustomerCredentials(Set.of(new Role(4, "ROLE_CHILD"))));
+        this.setApplicationFormStatus(customer.getApplicationFormStatus());
     }
 
     public Child() {
-        this.setPersonCredentials(new PersonCredentials(Set.of(new Role(4, "ROLE_CHILD"))));
+        this.setCustomerCredentials(new CustomerCredentials(Set.of(new Role(4, "ROLE_CHILD"))));
         this.setApplicationFormStatus(ApplicationFormStatus.NOT_CREATED);
     }
 }

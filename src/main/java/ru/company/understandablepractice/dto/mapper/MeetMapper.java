@@ -3,9 +3,11 @@ package ru.company.understandablepractice.dto.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
+import ru.company.understandablepractice.dto.CustomerResponse;
 import ru.company.understandablepractice.dto.MeetResponse;
 import ru.company.understandablepractice.dto.PersonResponse;
 import ru.company.understandablepractice.dto.UserResponse;
+import ru.company.understandablepractice.model.Customer;
 import ru.company.understandablepractice.model.Meet;
 import ru.company.understandablepractice.model.Person;
 import ru.company.understandablepractice.model.User;
@@ -19,25 +21,26 @@ public abstract class MeetMapper {
 
     @Autowired
     private UserMapper userMapper;
-    @Autowired
-    private PersonMapper personMapper;
 
-    @Mapping(target = "person", expression = "java(mapPerson(response))")
+    @Autowired
+    private CustomerMapper customerMapper;
+
+    @Mapping(target = "customer", expression = "java(mapCustomer(response))")
     @Mapping(target = "formatMeet", expression = "java(mapMeetingFormat(response))")
     @Mapping(target = "paymentType", expression = "java(mapPaymentType(response))")
     public abstract Meet fromResponseToEntity(MeetResponse response);
 
-    @Mapping(target = "person", expression = "java(mapPersonResponse(entity))")
+    @Mapping(target = "customer", expression = "java(mapCustomerResponse(entity))")
     @Mapping(target = "formatMeet", expression = "java(mapMeetingFormatString(entity))")
     @Mapping(target = "paymentType", expression = "java(mapPaymentTypeString(entity))")
     public abstract MeetResponse fromEntityToResponse(Meet entity);
 
-    Person mapPerson(MeetResponse response) {
-        return personMapper.fromResponseToEntity(response.getPerson());
+    Customer mapCustomer(MeetResponse response) {
+        return customerMapper.fromResponseToEntity(response.getCustomer());
     }
 
-    PersonResponse mapPersonResponse(Meet entity) {
-        return personMapper.fromEntityToResponse(entity.getPerson());
+    CustomerResponse mapCustomerResponse(Meet entity) {
+        return customerMapper.fromEntityToResponse(entity.getCustomer());
     }
 
     UserResponse mapUserResponse(Meet entity) {

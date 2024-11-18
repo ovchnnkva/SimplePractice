@@ -6,47 +6,89 @@ import lombok.ToString;
 import ru.company.understandablepractice.model.types.ClientType;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Getter
 @Setter
 @ToString
-public class CustomerResponse extends PersonResponse {
+public class CustomerResponse {
 
-    private String contactMethod;
+    protected long id;
 
-    private LocalDate dateFirstRequest;
+    protected String clientType;
 
-    private LocalDate dateFirstConsultation;
+    protected String fullName;
 
-    private String onlinePlatform;
+    protected String firstName;
 
-    private String offlineAddress;
+    protected String secondName;
 
-    private String clientTherapyRequest;
+    protected String lastName;
 
-    private String meetingTimeDay;
+    protected LocalDate birth;
 
-    private Integer financialCondition;
+    protected String phoneNumber;
 
-    private String residenceAddress;
+    protected String mail;
 
-    private String peerRecommendation;
+    protected String gender;
 
-    private String specialTermsContact;
+    protected String clientStatus;
 
-    private String familyStatus;
+    protected String meetingFormat;
 
-    private String priorityCommunicationChannel;
+    protected String contactMethod;
 
-    private String supervisionStatusThisClient;
+    protected LocalDate dateFirstRequest;
 
-    private String contactSupervisor;
+    protected LocalDate dateFirstConsultation;
 
-    private String supervisionMaterial;
+    protected String onlinePlatform;
 
-    private String notes;
+    protected String offlineAddress;
+
+    protected String clientTherapyRequest;
+
+    protected String meetingTimeDay;
+
+    protected Integer financialCondition;
+
+    protected String residenceAddress;
+
+    protected String peerRecommendation;
+
+    protected String specialTermsContact;
+
+    protected String familyStatus;
+
+    protected String priorityCommunicationChannel;
+
+    protected String supervisionStatusThisClient;
+
+    protected String contactSupervisor;
+
+    protected String supervisionMaterial;
+
+    protected String notes;
 
     public CustomerResponse() {
-        super(ClientType.CUSTOMER.getTittle());
+        this.clientType = ClientType.CUSTOMER.getTittle();
+    }
+
+    public CustomerResponse(String clientType) {
+        this.clientType = clientType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CustomerResponse that = (CustomerResponse) o;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

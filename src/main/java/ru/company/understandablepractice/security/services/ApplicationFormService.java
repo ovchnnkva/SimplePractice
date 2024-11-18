@@ -10,9 +10,8 @@ import org.springframework.stereotype.Service;
 import ru.company.understandablepractice.model.Child;
 import ru.company.understandablepractice.model.Customer;
 import ru.company.understandablepractice.model.Pair;
-import ru.company.understandablepractice.model.Person;
 import ru.company.understandablepractice.model.types.ApplicationFormStatus;
-import ru.company.understandablepractice.repository.PersonRepository;
+import ru.company.understandablepractice.repository.CustomerRepository;
 import ru.company.understandablepractice.security.JwtType;
 import ru.company.understandablepractice.service.ChildService;
 import ru.company.understandablepractice.service.CustomerService;
@@ -28,7 +27,7 @@ import static ru.company.understandablepractice.model.types.ApplicationFormStatu
 @Service
 @RequiredArgsConstructor
 public class ApplicationFormService {
-    private final PersonRepository personRepository;
+    private final CustomerRepository customerRepository;
     private final JwtService jwtService;
     private final HttpServletRequest request;
 
@@ -39,39 +38,39 @@ public class ApplicationFormService {
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     public Optional<String> createLink(long id) {
-        Person person;
+        Customer customer;
         String link = null;
         try {
-            person = personRepository.findPersonById(id).orElseThrow();
+            customer = customerRepository.findCustomerById(id).orElseThrow();
         } catch (NoSuchElementException exception) {
             throw new NoSuchElementException();
         }
 
-        if(person.getApplicationFormStatus().equals(NOT_CREATED)) {
-            setCredentials(person);
+        if(customer.getApplicationFormStatus().equals(NOT_CREATED)) {
+            setCredentials(customer);
             link = String.format(
                     "%s/%s",
-                    person.getClientType().toString(),
-                    jwtService.generatePersonToken(person.getPersonCredentials())
+                    customer.getClientType().toString(),
+                    jwtService.generatePersonToken(customer.getCustomerCredentials())
             );
             log.info("create person link {}", link);
-            updateApplicationFormData(person, link);
+            updateApplicationFormData(customer, link);
         }
 
         return Optional.ofNullable(link);
     }
 
     public Optional<String> getLink(long id) {
-        Person person;
+        Customer customer;
         String token = null;
         try {
-            person = personRepository.findPersonById(id).orElseThrow();
+            customer = customerRepository.findCustomerById(id).orElseThrow();
         } catch (NoSuchElementException exception) {
             throw new NoSuchElementException();
         }
 
-        if(person.getApplicationFormStatus().equals(CREATED)) {
-            token = person.getApplicationFormToken();
+        if(customer.getApplicationFormStatus().equals(CREATED)) {
+            token = customer.getApplicationFormToken();
             log.info("get person link {}", token);
         }
 
@@ -82,15 +81,15 @@ public class ApplicationFormService {
         return jwtService.extractUserId(request.getHeader("Authorization"), JwtType.ACCESS);
     }
 
-    private void setCredentials(Person person) {
-        person.getPersonCredentials().setUsername(person.getMail());
-        person.getPersonCredentials().setPassword(encoder.encode(String.valueOf(person.hashCode())));
+    private void setCredentials(Customer customer) {
+        customer.getCustomerCredentials().setUsername(customer.getMail());
+        customer.getCustomerCredentials().setPassword(encoder.encode(String.valueOf(customer.hashCode())));
     }
 
-    private void updateApplicationFormData(Person person, String token) {
-        person.setApplicationFormToken(token);
-        person.setApplicationFormStatus(CREATED);
-        personRepository.save(person);
+    private void updateApplicationFormData(Customer customer, String token) {
+        customer.setApplicationFormToken(token);
+        customer.setApplicationFormStatus(CREATED);
+        customerRepository.save(customer);
     }
 
     public Optional<Child> updateChild(Child child, long id) {

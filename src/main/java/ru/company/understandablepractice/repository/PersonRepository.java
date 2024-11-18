@@ -40,9 +40,4 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
     Optional<List<Person>> findAllPagination (@Param("userId") long userId, @Param("offset") long offset,
                                               @Param("limit") long limit);
 
-    Optional<Person> findPersonById(long id);
-
-    public Optional<Person> findByPersonCredentials_id(Long id);
-
-    public Optional<Person> findByApplicationFormToken(String token);
 }

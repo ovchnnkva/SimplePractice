@@ -14,18 +14,18 @@ import java.util.Optional;
 @Service
 public class MeetService extends CRUDService<Meet>{
     private final MeetRepository repository;
-    private final PersonService personService;
+    private final CustomerService customerService;
 
-    MeetService(MeetRepository repository, PersonService personService) {
+    MeetService(MeetRepository repository, CustomerService customerService) {
         super(repository);
         this.repository = repository;
-        this.personService = personService;
+        this.customerService = customerService;
     }
 
     @Override
     public Optional<Meet> create(Meet entity) throws Exception {
-        if(entity.getPerson() != null && entity.getPerson().getId() == 0) {
-            entity.getPerson().setId(personService.savePerson(entity.getPerson()));
+        if(entity.getCustomer() != null && entity.getCustomer().getId() == 0) {
+            entity.getCustomer().setId(customerService.saveCustomer(entity.getCustomer()));
         }
         return super.create(entity);
     }

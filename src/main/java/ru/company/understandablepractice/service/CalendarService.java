@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.company.understandablepractice.dto.calendar.CalendarResponse;
 import ru.company.understandablepractice.dto.mapper.CalendarClientDataMapper;
 import ru.company.understandablepractice.dto.mapper.CalendarMeetMapper;
+import ru.company.understandablepractice.model.Customer;
 import ru.company.understandablepractice.model.Meet;
 import ru.company.understandablepractice.model.Person;
 import ru.company.understandablepractice.repository.MeetRepository;
@@ -26,9 +27,9 @@ public class CalendarService {
     public Optional<CalendarResponse> getCalendar(long userId, String year) {
         CalendarResponse response = null;
 
-        Map<Person, List<Meet>> meetings = meetRepository.findByUserIdAndYear(userId, year)
+        Map<Customer, List<Meet>> meetings = meetRepository.findByUserIdAndYear(userId, year)
                 .stream()
-                .collect(Collectors.groupingBy(Meet::getPerson));
+                .collect(Collectors.groupingBy(Meet::getCustomer));
 
         if (!meetings.isEmpty()) {
             response = new CalendarResponse();

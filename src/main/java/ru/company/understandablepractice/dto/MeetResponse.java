@@ -10,7 +10,7 @@ public class MeetResponse {
 
     private long id;
 
-    private PersonResponse person;
+    private CustomerResponse customer;
 
     private String nameMeet;
 

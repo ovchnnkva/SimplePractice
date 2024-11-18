@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
-import ru.company.understandablepractice.model.PersonCredentials;
+import ru.company.understandablepractice.model.CustomerCredentials;
 import ru.company.understandablepractice.model.UserCredentials;
 import ru.company.understandablepractice.model.types.ApplicationFormStatus;
 import ru.company.understandablepractice.model.types.ClientType;
@@ -67,10 +67,10 @@ public class JwtService {
         return (userId.equals(userDetails.getUser().getId())) && !isTokenExpired(token, type);
     }
 
-    public boolean isTokenValid(String token, JwtType type, PersonCredentials userDetails) {
+    public boolean isTokenValid(String token, JwtType type, CustomerCredentials userDetails) {
         final Long userId = extractUserId(token, type);
 
-        return (userId.equals(userDetails.getPerson().getId())) && !isTokenExpired(token, type);
+        return (userId.equals(userDetails.getCustomer().getId())) && !isTokenExpired(token, type);
     }
 
     /**
@@ -96,8 +96,8 @@ public class JwtService {
         Map<String, Object> claims = new HashMap<>();
         if (userDetails instanceof UserCredentials customUserDetails) {
             claims.put("jti", customUserDetails.getUser().getId());
-        } else if (userDetails instanceof PersonCredentials personCredentials) {
-            claims.put("jti", personCredentials.getPerson().getId());
+        } else if (userDetails instanceof CustomerCredentials customerCredentials) {
+            claims.put("jti", customerCredentials.getCustomer().getId());
         }
 
         if (type.equals(JwtType.ACCESS)) {
@@ -107,8 +107,8 @@ public class JwtService {
 
     public String generatePersonToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        if (userDetails instanceof PersonCredentials personCredentials) {
-            claims.put("jti", personCredentials.getPerson().getId());
+        if (userDetails instanceof CustomerCredentials customerCredentials) {
+            claims.put("jti", customerCredentials.getCustomer().getId());
         }
         return generateToken(claims, userDetails, accessKey, personExpiration);
 

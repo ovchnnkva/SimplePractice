@@ -11,36 +11,26 @@ import java.util.Objects;
 @Getter
 public class PersonResponse {
 
-    protected long id;
+    private long id;
 
-    protected String clientType;
+    private String fullName;
 
-    protected String fullName;
+    private String firstName;
 
-    protected String firstName;
+    private String secondName;
 
-    protected String secondName;
+    private String lastName;
 
-    protected String lastName;
+    private LocalDate birth;
 
-    protected LocalDate birth;
+    private String phoneNumber;
 
-    protected String phoneNumber;
+    private String mail;
 
-    protected String mail;
-
-    protected String gender;
-
-    private String clientStatus;
-
-    private String meetingFormat;
-
-    public PersonResponse(String clientType) {
-        this.clientType = clientType;
-    }
+    private String gender;
 
     public PersonResponse() {
-        this.clientType = ClientType.CUSTOMER.getTittle();
+
     }
 
     @Override

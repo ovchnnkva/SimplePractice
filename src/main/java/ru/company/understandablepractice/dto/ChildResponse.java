@@ -6,12 +6,12 @@ import ru.company.understandablepractice.model.types.ClientType;
 
 @Getter
 @Setter
-public class ChildResponse extends PersonResponse {
+public class ChildResponse extends CustomerResponse {
     private String bringsClient;
 
-    private CustomerResponse firstParent;
+    private PersonResponse firstParent;
 
-    private CustomerResponse secondParent;
+    private PersonResponse secondParent;
 
     private String payerFullName;
 

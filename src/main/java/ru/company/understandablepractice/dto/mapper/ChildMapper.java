@@ -5,9 +5,11 @@ import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.company.understandablepractice.dto.ChildResponse;
 import ru.company.understandablepractice.dto.CustomerResponse;
+import ru.company.understandablepractice.dto.PersonResponse;
 import ru.company.understandablepractice.dto.UserResponse;
 import ru.company.understandablepractice.model.Child;
 import ru.company.understandablepractice.model.Customer;
+import ru.company.understandablepractice.model.Person;
 import ru.company.understandablepractice.model.User;
 import ru.company.understandablepractice.model.types.*;
 
@@ -19,6 +21,9 @@ public abstract class ChildMapper {
 
     @Autowired
     private CustomerMapper customerMapper;
+
+    @Autowired
+    private PersonMapper personMapper;
 
     @Autowired
     private UserMapper userMapper;
@@ -65,20 +70,20 @@ public abstract class ChildMapper {
                 .orElse(null);
     }
 
-    CustomerResponse mapFirstParentResponse(Child child){
-        return customerMapper.fromEntityToResponse(child.getFirstParent());
+    PersonResponse mapFirstParentResponse(Child child){
+        return personMapper.fromEntityToResponse(child.getFirstParent());
     }
 
-    Customer mapFirstParent(ChildResponse response){
-        return customerMapper.fromResponseToEntity(response.getFirstParent());
+    Person mapFirstParent(ChildResponse response){
+        return personMapper.fromResponseToEntity(response.getFirstParent());
     }
 
-    CustomerResponse mapSecondParentResponse(Child child){
-        return customerMapper.fromEntityToResponse(child.getSecondParent());
+    PersonResponse mapSecondParentResponse(Child child){
+        return personMapper.fromEntityToResponse(child.getSecondParent());
     }
 
-    Customer mapSecondParent(ChildResponse response){
-        return customerMapper.fromResponseToEntity(response.getSecondParent());
+    Person mapSecondParent(ChildResponse response){
+        return personMapper.fromResponseToEntity(response.getSecondParent());
     }
 
     Gender mapGender(ChildResponse response) {

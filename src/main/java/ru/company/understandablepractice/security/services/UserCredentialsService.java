@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
-import ru.company.understandablepractice.model.PersonCredentials;
+import ru.company.understandablepractice.model.CustomerCredentials;
 import ru.company.understandablepractice.model.User;
 import ru.company.understandablepractice.model.UserCredentials;
 import ru.company.understandablepractice.repository.UserCredentialsRepository;
@@ -23,7 +23,7 @@ public class UserCredentialsService {
 
     private final UserCredentialsRepository userCredentialsRepository;
 
-    private final PersonCredentialsService personCredentialsService;
+    private final CustomerCredentialsService customerCredentialsService;
 
     public Optional<User> findUserByUserCredentialsId(Long id){
         return userRepository.findByUserCredentials_id(id);
@@ -39,11 +39,11 @@ public class UserCredentialsService {
             return userCredentials.get();
         }
         UserCredentials proxy = new UserCredentials();
-        Optional<PersonCredentials> personCredentials = Optional.ofNullable(personCredentialsService.findUserCredentialsByUsername(username));
-        if(personCredentials.isPresent()){
-            proxy.setUsername(personCredentials.get().getUsername());
-            proxy.setPassword(personCredentials.get().getPassword());
-            proxy.setRoles(personCredentials.get().getRoles());
+        Optional<CustomerCredentials> customerCredentials = Optional.ofNullable(customerCredentialsService.findUserCredentialsByUsername(username));
+        if(customerCredentials.isPresent()){
+            proxy.setUsername(customerCredentials.get().getUsername());
+            proxy.setPassword(customerCredentials.get().getPassword());
+            proxy.setRoles(customerCredentials.get().getRoles());
         }
 
         return proxy;
