@@ -13,7 +13,7 @@ public class ProjectiveMethodDetailsResponse {
 
     private LocalDate dateCreateMethod;
 
-    private List<TypeMethodResponse> typeMethod;
+    private TypeMethodResponse typeMethod;
 
     private List<PhotoProjectiveMethodResponse> photoProjectiveMethod;
 }
@@ -24,11 +24,11 @@ public class ProjectiveMethodDetailsResponse {
             "meetId": "integer",
             "projectiveMethodId": "integer",
             "dateCreateMethod": "integer",
-            "typeMethod": [{
+            "typeMethod": {
                 "typeMethodId": "integer",
                 "nameMethod": "string",
                 "user_id": "integer"
-            }],
+            },
             "photoProjectiveMethod"[{
                 "photoProjectiveMethodId": "integer",
                 "photoMethod": "string",

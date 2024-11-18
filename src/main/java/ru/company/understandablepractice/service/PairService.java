@@ -22,7 +22,7 @@ public class PairService extends CRUDService<Pair> {
     @Override
     public Optional<Pair> create(Pair entity) throws Exception {
 
-        if(entity.getSecondPerson().getId() == 0) {
+        if(entity.getSecondPerson() != null && entity.getSecondPerson().getId() == 0) {
             log.info("create person for pair");
             entity.getSecondPerson().setId(personRepository.save(entity.getSecondPerson()).getId());
         }

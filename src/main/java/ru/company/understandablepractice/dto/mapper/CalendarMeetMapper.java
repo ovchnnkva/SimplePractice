@@ -17,6 +17,7 @@ public abstract class CalendarMeetMapper {
     @Mapping(target = "startTime", expression = "java(mapStartTime(entity))")
     @Mapping(target = "endTime", expression = "java(mapEndTime(entity))")
     @Mapping(target = "formatMeet", expression = "java(mapFormatMeet(entity))")
+    @Mapping(target = "title", expression = "java(mapTitleMeet(entity))")
     public abstract CalendarMeetResponse fromEntityToResponse(Meet entity);
 
     LocalDateTime mapStartTime(Meet entity) {
@@ -29,5 +30,9 @@ public abstract class CalendarMeetMapper {
 
     String mapFormatMeet(Meet entity) {
         return entity.getFormatMeet() != null ? entity.getFormatMeet().getTittle() : "";
+    }
+
+    String mapTitleMeet(Meet entity) {
+        return entity.getNameMeet();
     }
 }

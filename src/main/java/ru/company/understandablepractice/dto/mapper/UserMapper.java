@@ -32,10 +32,6 @@ public abstract class UserMapper {
     }
 
     String mapUserImageToBase64String(UserResponse response){
-        if (response.getUserImage() != null){
-            return Base64.getEncoder().encodeToString(response.getUserImage().getBytes(StandardCharsets.UTF_8));
-        } else {
-            return "";
-        }
+        return response.getUserImage() != null ? response.getUserImage() : "";
     }
 }

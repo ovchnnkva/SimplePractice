@@ -31,8 +31,10 @@ public abstract class CustomerMapper {
     @Mapping(target = "gender", expression = "java(mapGender(response))")
     @Mapping(target = "clientStatus", expression = "java(mapClientStatus(response))")
     @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormat(response))")
+    @Mapping(target = "fullName", expression = "java(mapFullName(response))")
     public abstract Customer fromResponseToEntity(CustomerResponse response);
 
+    @Mapping(target = "clientType", expression = "java(mapClientTypeString(customer))")
     @Mapping(target = "contactMethod", expression = "java(mapContactMethodString(customer))")
     @Mapping(target = "onlinePlatform", expression = "java(mapOnlinePlatformString(customer))")
     @Mapping(target = "familyStatus", expression = "java(mapFamilyStatusString(customer))")
@@ -49,6 +51,10 @@ public abstract class CustomerMapper {
                 .filter(value -> value.getTittle().equals(response.getClientType()))
                 .findFirst()
                 .orElse(null);
+    }
+
+    String mapClientTypeString(Customer entity) {
+        return entity.getClientType().getTittle();
     }
 
     Gender mapGender(CustomerResponse response) {
@@ -130,5 +136,9 @@ public abstract class CustomerMapper {
                 .filter(status -> status.getTittle().equals(response.getMeetingFormat()))
                 .findFirst()
                 .orElse(null);
+    }
+
+    String mapFullName(CustomerResponse response) {
+        return String.format("%s %s %s", response.getLastName(), response.getFirstName(), response.getSecondName());
     }
 }

@@ -13,8 +13,11 @@ import org.springframework.web.servlet.DispatcherServlet;
 import ru.company.understandablepractice.dto.CustomerResponse;
 import ru.company.understandablepractice.dto.mapper.CustomerMapper;
 import ru.company.understandablepractice.model.User;
+import ru.company.understandablepractice.model.types.ClientStatus;
 import ru.company.understandablepractice.model.types.ClientType;
 import ru.company.understandablepractice.service.CustomerService;
+
+import java.time.LocalDate;
 
 @Tag(
         name = "Клиенты",
@@ -69,6 +72,8 @@ public class CustomerController {
             var entity = mapper.fromResponseToEntity(response);
             var user = new User(requestService.getIdFromRequestToken());
             entity.setUser(user);
+            entity.setClientStatus(ClientStatus.REQUEST);
+            entity.setDateFirstRequest(LocalDate.now());
             responseEntity = service.create(entity)
                     .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));

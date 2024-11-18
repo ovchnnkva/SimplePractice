@@ -24,4 +24,8 @@ public class ProjectiveMethod {
 
     @Column(name = "date_create_method")
     private LocalDate dateCreateMethod;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "type_method_id")
+    private TypeMethod typeMethod;
 }

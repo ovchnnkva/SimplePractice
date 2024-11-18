@@ -69,7 +69,11 @@ public class CustomerResponse {
 
     protected String supervisionMaterial;
 
-    protected String notes;
+    private String takingMedic;
+
+    private String prevExperience;
+
+    private String notes;
 
     public CustomerResponse() {
         this.clientType = ClientType.CUSTOMER.getTittle();

@@ -32,6 +32,7 @@ public abstract class ChildMapper {
     @Mapping(target = "gender", expression = "java(mapGender(response))")
     @Mapping(target = "clientStatus", expression = "java(mapClientStatus(response))")
     @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormat(response))")
+    @Mapping(target = "fullName", expression = "java(mapFullName(response))")
     public abstract Child fromResponseToEntity(ChildResponse response);
 
 
@@ -113,5 +114,9 @@ public abstract class ChildMapper {
                 .filter(status -> status.getTittle().equals(response.getMeetingFormat()))
                 .findFirst()
                 .orElse(null);
+    }
+
+    String mapFullName(ChildResponse response) {
+        return String.format("%s %s %s", response.getLastName(), response.getFirstName(), response.getSecondName());
     }
 }

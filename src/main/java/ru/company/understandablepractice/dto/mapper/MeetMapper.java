@@ -33,11 +33,11 @@ public abstract class MeetMapper {
     public abstract MeetResponse fromEntityToResponse(Meet entity);
 
     Customer mapCustomer(MeetResponse response) {
-        return customerMapper.fromResponseToEntity(response.getCustomer());
+        return response.getCustomer() != null ? customerMapper.fromResponseToEntity(response.getCustomer()) : null;
     }
 
     CustomerResponse mapCustomerResponse(Meet entity) {
-        return customerMapper.fromEntityToResponse(entity.getCustomer());
+        return entity.getCustomer() != null ? customerMapper.fromEntityToResponse(entity.getCustomer()) : null;
     }
 
     UserResponse mapUserResponse(Meet entity) {
@@ -63,6 +63,6 @@ public abstract class MeetMapper {
     }
 
     String mapPaymentTypeString(Meet entity) {
-        return entity.getPaymentType().getTitle();
+        return entity.getPaymentType() != null ? entity.getPaymentType().getTitle() : "";
     }
 }

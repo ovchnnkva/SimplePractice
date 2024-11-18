@@ -124,6 +124,12 @@ public class Customer {
     @Column(name = "supervision_material", columnDefinition = "TEXT")
     protected String supervisionMaterial;
 
+    @Column(name = "taking_medic", columnDefinition = "TEXT")
+    private String takingMedic;
+
+    @Column(name = "prev_experience", columnDefinition = "TEXT")
+    private String prevExperience;
+
     @Column(name = "notes", columnDefinition = "TEXT")
     protected String notes;
 
