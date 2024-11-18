@@ -1,6 +1,7 @@
 package ru.company.understandablepractice.dto.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import ru.company.understandablepractice.dto.CustomerMeetInfoResponse;
 import ru.company.understandablepractice.model.Meet;
 
@@ -10,17 +11,20 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public abstract class CustomerMeetInfoMapper {
 
-    public abstract CustomerMeetInfoResponse fromEntityToResponse(List<Meet> meets);
+    @Mapping(target = "countMeet", expression = "java(mapMeetCount(meets))")
+    @Mapping(target = "lastMeetDate", expression = "java(mapLastMeet(meets))")
+    @Mapping(target = "nextMeetDate", expression = "java(mapNextMeet(meets))")
+    public abstract CustomerMeetInfoResponse fromEntityToResponse(Long customerId, List<Meet> meets);
 
     int mapMeetCount(List<Meet> meets) {
         return meets.size();
     }
 
     LocalDate mapLastMeet(List<Meet> meets) {
-        return meets.getLast().getDateMeet();
+        return meets != null ? meets.get(meets.size() - 1).getDateMeet() : null;
     }
 
     LocalDate mapNextMeet(List<Meet> meets) {
-        return meets.getLast().getNextDayMeet();
+        return meets != null ? meets.get(meets.size() - 1).getNextDayMeet() : null;
     }
 }
