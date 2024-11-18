@@ -26,8 +26,6 @@ public class ProjectiveMethodsDetailsController {
 
     private final ProjectiveMethodService service;
 
-    private final HttpServletRequest request;
-
     @Operation(summary = "Проективные методики для встречи", description = "Позволяет получить все проективные методики по id встречи")
     @GetMapping("/{meetId}")
     public ResponseEntity<List<ProjectiveMethodDetailsResponse>> getProjectiveMethods(@PathVariable @Parameter(description = "meetId") long meetId) {

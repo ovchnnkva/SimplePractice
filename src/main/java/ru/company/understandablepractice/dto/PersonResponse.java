@@ -2,7 +2,6 @@ package ru.company.understandablepractice.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import ru.company.understandablepractice.model.types.ClientType;
 
 import java.time.LocalDate;
 import java.util.Objects;

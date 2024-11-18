@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import ru.company.understandablepractice.dto.HeaderSearchPersonResponse;
 import ru.company.understandablepractice.dto.mapper.HeaderSearchPersonMapper;
 import ru.company.understandablepractice.model.Customer;
-import ru.company.understandablepractice.model.Person;
 import ru.company.understandablepractice.repository.CustomerRepository;
 import ru.company.understandablepractice.repository.PersonRepository;
 

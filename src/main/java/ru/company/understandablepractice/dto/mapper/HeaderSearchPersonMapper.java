@@ -4,7 +4,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.company.understandablepractice.dto.HeaderSearchPersonResponse;
 import ru.company.understandablepractice.model.Customer;
-import ru.company.understandablepractice.model.Person;
 
 @Mapper(componentModel = "spring")
 public abstract class HeaderSearchPersonMapper {

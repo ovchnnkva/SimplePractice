@@ -7,7 +7,6 @@ import ru.company.understandablepractice.dto.mapper.CalendarClientDataMapper;
 import ru.company.understandablepractice.dto.mapper.CalendarMeetMapper;
 import ru.company.understandablepractice.model.Customer;
 import ru.company.understandablepractice.model.Meet;
-import ru.company.understandablepractice.model.Person;
 import ru.company.understandablepractice.repository.MeetRepository;
 
 import java.time.LocalDate;

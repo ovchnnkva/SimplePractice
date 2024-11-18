@@ -5,12 +5,9 @@ import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.company.understandablepractice.dto.CustomerResponse;
 import ru.company.understandablepractice.dto.MeetResponse;
-import ru.company.understandablepractice.dto.PersonResponse;
 import ru.company.understandablepractice.dto.UserResponse;
 import ru.company.understandablepractice.model.Customer;
 import ru.company.understandablepractice.model.Meet;
-import ru.company.understandablepractice.model.Person;
-import ru.company.understandablepractice.model.User;
 import ru.company.understandablepractice.model.types.MeetingFormat;
 import ru.company.understandablepractice.model.types.PaymentType;
 

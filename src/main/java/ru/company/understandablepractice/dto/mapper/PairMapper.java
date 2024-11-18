@@ -3,14 +3,10 @@ package ru.company.understandablepractice.dto.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.company.understandablepractice.dto.CustomerResponse;
 import ru.company.understandablepractice.dto.PairResponse;
 import ru.company.understandablepractice.dto.PersonResponse;
-import ru.company.understandablepractice.dto.UserResponse;
-import ru.company.understandablepractice.model.Customer;
 import ru.company.understandablepractice.model.Pair;
 import ru.company.understandablepractice.model.Person;
-import ru.company.understandablepractice.model.User;
 import ru.company.understandablepractice.model.types.*;
 
 import java.util.Arrays;

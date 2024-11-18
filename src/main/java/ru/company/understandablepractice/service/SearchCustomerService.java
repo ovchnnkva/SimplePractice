@@ -7,7 +7,6 @@ import ru.company.understandablepractice.dto.mapper.SearchCustomerMapper;
 import ru.company.understandablepractice.model.Customer;
 import ru.company.understandablepractice.repository.CustomerRepository;
 import ru.company.understandablepractice.repository.MeetRepository;
-import ru.company.understandablepractice.repository.PersonRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +16,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class SearchCustomerService {
-    private final PersonRepository personRepository;
     private final CustomerRepository customerRepository;
     private final MeetRepository meetRepository;
     private final SearchCustomerMapper searchCustomerMapper;

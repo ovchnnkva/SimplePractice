@@ -5,7 +5,6 @@ import org.mapstruct.Mapping;
 import ru.company.understandablepractice.dto.calendar.CalendarClientDataResponse;
 import ru.company.understandablepractice.dto.calendar.CalendarMeetResponse;
 import ru.company.understandablepractice.model.Customer;
-import ru.company.understandablepractice.model.Person;
 
 import java.util.List;
 

@@ -3,7 +3,6 @@ package ru.company.understandablepractice.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.company.understandablepractice.model.Pair;
-import ru.company.understandablepractice.repository.CustomerRepository;
 import ru.company.understandablepractice.repository.PairRepository;
 import ru.company.understandablepractice.repository.PersonRepository;
 
