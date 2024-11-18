@@ -23,16 +23,16 @@ public interface MeetRepository extends JpaRepository<Meet, Long> {
     @Query(value =
             "SELECT m.dateMeet " +
             "FROM Meet m " +
-            "WHERE m.person.id = :personId " +
+            "WHERE m.customer.id = :customerId " +
             "ORDER BY m.dateMeet DESC")
-    Optional<List<LocalDate>> findClientDateMeet(@Param("personId") long personId);
+    Optional<List<LocalDate>> findClientDateMeet(@Param("customerId") long customerId);
 
     @Query(value =
             "SELECT m " +
                     "FROM Meet m " +
-                    "WHERE m.person.id =:personId AND m.user.id =:userId " +
+                    "WHERE m.customer.id =:customerId AND m.user.id =:userId " +
                     "ORDER BY m.dateMeet DESC " +
                     "OFFSET :offset ROWS " +
                     "FETCH NEXT :limit ROWS ONLY")
-    List<Meet> findByUserIdAndPersonId(@Param("userId") long userId, @Param("personId") long personId, @Param("offset") long offset, @Param("limit") long limit);
+    List<Meet> findByUserIdAndCustomerId(@Param("userId") long userId, @Param("customerId") long customerId, @Param("offset") long offset, @Param("limit") long limit);
 }

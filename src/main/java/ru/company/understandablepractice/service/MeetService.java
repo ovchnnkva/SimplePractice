@@ -3,10 +3,8 @@ package ru.company.understandablepractice.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.company.understandablepractice.model.Meet;
-import ru.company.understandablepractice.repository.CustomerRepository;
 import ru.company.understandablepractice.repository.MeetRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +28,7 @@ public class MeetService extends CRUDService<Meet>{
         return super.create(entity);
     }
 
-    public List<Meet> getByUserIdAndPersonId(long userId, long personId, long offset, long limit) {
-        return repository.findByUserIdAndPersonId(userId, personId, offset, limit);
+    public List<Meet> getByUserIdAndCustomerId(long userId, long customerId, long offset, long limit) {
+        return repository.findByUserIdAndCustomerId(userId, customerId, offset, limit);
     }
 }
