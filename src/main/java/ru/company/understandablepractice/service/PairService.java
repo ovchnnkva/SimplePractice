@@ -24,6 +24,7 @@ public class PairService extends CRUDService<Pair> {
 
         if(entity.getSecondPerson() != null && entity.getSecondPerson().getId() == 0) {
             log.info("create person for pair");
+            entity.getSecondPerson().setUser(entity.getUser());
             entity.getSecondPerson().setId(personRepository.save(entity.getSecondPerson()).getId());
         }
 
