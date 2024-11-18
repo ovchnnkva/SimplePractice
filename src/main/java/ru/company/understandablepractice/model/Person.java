@@ -24,73 +24,38 @@ public class Person {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    protected User user;
-
-    @Convert(converter = ClientTypeConverter.class)
-    @Column(name = "client_type")
-    protected ClientType clientType;
+    private User user;
 
     @Column(name = "full_name")
-    protected String fullName;
+    private String fullName;
 
     @Column(name = "first_name")
-    protected String firstName;
+    private String firstName;
 
     @Column(name = "second_name")
-    protected String secondName;
+    private String secondName;
 
     @Column(name = "last_name")
-    protected String lastName;
+    private String lastName;
 
     @Column(name = "date_of_birth")
-    protected LocalDate birth;
+    private LocalDate birth;
 
     @Column(name = "phone_number", length = 20)
-    protected String phoneNumber;
+    private String phoneNumber;
 
     @Column(name = "mail")
-    protected String mail;
+    private String mail;
 
     @Convert(converter = GenderConverter.class)
     @Column(name = "gender")
-    protected Gender gender;
-
-    @Column(name = "date_of_first_request")
-    protected LocalDate dateFirstRequest;
-
-    @Convert(converter = ClientStatusConverter.class)
-    @Column(name = "client_status")
-    protected ClientStatus clientStatus;
-
-    @Convert(converter = MeetingFormatConverter.class)
-    @Column(name = "meeting_format")
-    protected MeetingFormat meetingFormat;
-
-    @Column(name = "application_form_status")
-    @Convert(converter = ApplicationFormStatusConverter.class)
-    protected ApplicationFormStatus applicationFormStatus = ApplicationFormStatus.NOT_CREATED;
-
-    @Column(name = "application_form_token", columnDefinition = "TEXT")
-    protected String applicationFormToken;
-
-    @OneToOne(
-            mappedBy = "person",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.LAZY
-    )
-    private PersonCredentials personCredentials;
+    private Gender gender;
 
     public Person(long id) {
         this.id = id;
     }
 
     public Person() {
-    }
-
-    public void setPersonCredentials(PersonCredentials personCredentials) {
-        personCredentials.setPerson(this);
-        this.personCredentials = personCredentials;
     }
 
     @Override

@@ -6,41 +6,68 @@ import lombok.ToString;
 import ru.company.understandablepractice.model.types.ClientType;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Getter
 @Setter
 @ToString
-public class CustomerResponse extends PersonResponse {
+public class CustomerResponse {
 
-    private String contactMethod;
+    protected long id;
 
-    private LocalDate dateFirstConsultation;
+    protected String clientType;
 
-    private String onlinePlatform;
+    protected String fullName;
 
-    private String offlineAddress;
+    protected String firstName;
 
-    private String clientTherapyRequest;
+    protected String secondName;
 
-    private String meetingTimeDay;
+    protected String lastName;
 
-    private Integer financialCondition;
+    protected LocalDate birth;
 
-    private String residenceAddress;
+    protected String phoneNumber;
 
-    private String peerRecommendation;
+    protected String mail;
 
-    private String specialTermsContact;
+    protected String gender;
 
-    private String familyStatus;
+    protected String clientStatus;
 
-    private String priorityCommunicationChannel;
+    protected String meetingFormat;
 
-    private String supervisionStatusThisClient;
+    protected String contactMethod;
 
-    private String contactSupervisor;
+    protected LocalDate dateFirstRequest;
 
-    private String supervisionMaterial;
+    protected LocalDate dateFirstConsultation;
+
+    protected String onlinePlatform;
+
+    protected String offlineAddress;
+
+    protected String clientTherapyRequest;
+
+    protected String meetingTimeDay;
+
+    protected Integer financialCondition;
+
+    protected String residenceAddress;
+
+    protected String peerRecommendation;
+
+    protected String specialTermsContact;
+
+    protected String familyStatus;
+
+    protected String priorityCommunicationChannel;
+
+    protected String supervisionStatusThisClient;
+
+    protected String contactSupervisor;
+
+    protected String supervisionMaterial;
 
     private String takingMedic;
 
@@ -49,6 +76,23 @@ public class CustomerResponse extends PersonResponse {
     private String notes;
 
     public CustomerResponse() {
-        super(ClientType.CUSTOMER.getTittle());
+        this.clientType = ClientType.CUSTOMER.getTittle();
+    }
+
+    public CustomerResponse(String clientType) {
+        this.clientType = clientType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CustomerResponse that = (CustomerResponse) o;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

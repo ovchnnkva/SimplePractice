@@ -2,11 +2,11 @@ package ru.company.understandablepractice.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.company.understandablepractice.dto.CustomerMeetInfoResponse;
+import ru.company.understandablepractice.dto.mapper.CustomerMeetInfoMapper;
 import ru.company.understandablepractice.model.Meet;
-import ru.company.understandablepractice.repository.CustomerRepository;
 import ru.company.understandablepractice.repository.MeetRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,23 +14,35 @@ import java.util.Optional;
 @Service
 public class MeetService extends CRUDService<Meet>{
     private final MeetRepository repository;
-    private final PersonService personService;
+    private final CustomerMeetInfoMapper customerMeetInfoMapper;
+    private final CustomerService customerService;
 
-    MeetService(MeetRepository repository, PersonService personService) {
+    MeetService(MeetRepository repository, CustomerMeetInfoMapper customerMeetInfoMapper, CustomerService customerService) {
         super(repository);
         this.repository = repository;
-        this.personService = personService;
+        this.customerMeetInfoMapper = customerMeetInfoMapper;
+        this.customerService = customerService;
     }
 
     @Override
     public Optional<Meet> create(Meet entity) throws Exception {
-        if(entity.getPerson() != null && entity.getPerson().getId() == 0) {
-            entity.getPerson().setId(personService.savePerson(entity.getPerson()));
+        if(entity.getCustomer() != null && entity.getCustomer().getId() == 0) {
+            entity.getCustomer().setId(customerService.saveCustomer(entity.getCustomer()));
         }
         return super.create(entity);
     }
 
-    public List<Meet> getByUserIdAndPersonId(long userId, long personId, long offset, long limit) {
-        return repository.findByUserIdAndPersonId(userId, personId, offset, limit);
+    public List<Meet> getByUserIdAndCustomerId(long userId, long customerId, long offset, long limit) {
+        return repository.findByUserIdAndCustomerId(userId, customerId, offset, limit);
+    }
+
+    public Optional<CustomerMeetInfoResponse> getCustomerMeetInfo(long customerId) {
+        CustomerMeetInfoResponse response = null;
+        List<Meet> meets = repository.findMeetByCustomerId(customerId).orElse(null);
+        if (meets != null) {
+            response = customerMeetInfoMapper.fromEntityToResponse(meets);
+        }
+
+        return Optional.ofNullable(response);
     }
 }

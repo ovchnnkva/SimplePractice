@@ -2,7 +2,6 @@ package ru.company.understandablepractice.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.company.understandablepractice.model.types.ApplicationFormStatus;
 import ru.company.understandablepractice.model.types.ClientType;
@@ -14,10 +13,11 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "pair")
-public class Pair extends Person{
+public class Pair extends Customer {
+
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "second_customer_id")
-    private Customer secondCustomer;
+    @JoinColumn(name = "second_person_id")
+    private Person secondPerson;
 
     @Column(name = "client_request_for_therapy_reason", columnDefinition = "TEXT")
     private String clientFirstRequestTherapyReason;
@@ -46,26 +46,26 @@ public class Pair extends Person{
     @Column(name = "financial_terms_between_cotherapists")
     private String financialTermsCotherapists;
 
-    public Pair(Person person) {
+    public Pair(Customer customer) {
 
-        this.id = person.getId();
+        this.id = customer.getId();
         this.clientType = ClientType.PAIR;
-        this.fullName = person.getFullName();
-        this.firstName = person.getFirstName();
-        this.secondName = person.getSecondName();
-        this.lastName = person.getLastName();
-        this.birth = person.getBirth();
-        this.phoneNumber = person.getPhoneNumber();
-        this.mail = person.getMail();
-        this.gender = person.getGender();
-        this.clientStatus = person.getClientStatus();
-        this.meetingFormat = person.getMeetingFormat();
-        this.setPersonCredentials(new PersonCredentials(Set.of(new Role(5, "ROLE_PAIR"))));
-        this.setApplicationFormStatus(person.getApplicationFormStatus());
+        this.fullName = customer.getFullName();
+        this.firstName = customer.getFirstName();
+        this.secondName = customer.getSecondName();
+        this.lastName = customer.getLastName();
+        this.birth = customer.getBirth();
+        this.phoneNumber = customer.getPhoneNumber();
+        this.mail = customer.getMail();
+        this.gender = customer.getGender();
+        this.clientStatus = customer.getClientStatus();
+        this.meetingFormat = customer.getMeetingFormat();
+        this.setCustomerCredentials(new CustomerCredentials(Set.of(new Role(5, "ROLE_PAIR"))));
+        this.setApplicationFormStatus(customer.getApplicationFormStatus());
     }
 
     public Pair() {
-        this.setPersonCredentials(new PersonCredentials(Set.of(new Role(5, "ROLE_PAIR"))));
+        this.setCustomerCredentials(new CustomerCredentials(Set.of(new Role(5, "ROLE_PAIR"))));
         this.setApplicationFormStatus(ApplicationFormStatus.NOT_CREATED);
     }
 }

@@ -34,13 +34,13 @@ public class SearchMeetController {
     private final SearchMeetMapper mapper;
     private final HttpServletRequest request;
     private final JwtService jwtService;
-    @GetMapping("{personId}/{limit}/{offset}")
-    public ResponseEntity<List<SearchMeetResponse>> getMeetsByUserAndPerson(@PathVariable @Parameter(description = "ИД Клиента") long personId,
+    @GetMapping("{customerId}/{limit}/{offset}")
+    public ResponseEntity<List<SearchMeetResponse>> getMeetsByUserAndPerson(@PathVariable @Parameter(description = "ИД Клиента") long customerId,
                                                                             @PathVariable @Parameter(description = "offset") long offset,
                                                                             @PathVariable @Parameter(description = "limit") long limit) {
         Long userId = jwtService.extractUserId(request.getHeader("Authorization"), JwtType.ACCESS);
-        log.info("get meets by userId = {}, personId = {}", userId, personId);
-        List<Meet> result = service.getByUserIdAndPersonId(userId, personId, offset, limit);
+        log.info("get meets by userId = {}, personId = {}", userId, customerId);
+        List<Meet> result = service.getByUserIdAndCustomerId(userId, customerId, offset, limit);
         return result.isEmpty()
                 ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
                 : new ResponseEntity<>(result.stream()

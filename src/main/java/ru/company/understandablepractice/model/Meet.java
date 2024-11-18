@@ -23,7 +23,7 @@ public class Meet {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "person_id")
-    private Person person;
+    private Customer customer;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -95,4 +95,7 @@ public class Meet {
 
     @Column(name = "supervision_them_and_problem", columnDefinition = "TEXT")
     private String supervisionThemAndProblem;
+
+    @Column(name = "note", columnDefinition = "TEXT")
+    private String note;
 }
