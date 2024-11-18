@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.company.understandablepractice.dto.CustomerMeetInfoResponse;
 import ru.company.understandablepractice.dto.MeetResponse;
 import ru.company.understandablepractice.dto.mapper.MeetMapper;
 import ru.company.understandablepractice.model.User;
@@ -83,5 +84,13 @@ public class MeetController {
         log.info("delete meet by id {}", id);
         service.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Operation(summary = "Инормация по встречам клиента", description = "Позволяет получить инфу о кол-ве/последней/следующей встречах")
+    @GetMapping("/customerInfo/{customerId}")
+    public ResponseEntity<CustomerMeetInfoResponse> getCustomerMeetInfo(@PathVariable(name = "customerId") @Parameter(description = "ID клиента") long customerId) {
+        return service.getCustomerMeetInfo(customerId)
+                .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }

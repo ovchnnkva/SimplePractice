@@ -2,6 +2,8 @@ package ru.company.understandablepractice.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.company.understandablepractice.dto.CustomerMeetInfoResponse;
+import ru.company.understandablepractice.dto.mapper.CustomerMeetInfoMapper;
 import ru.company.understandablepractice.model.Meet;
 import ru.company.understandablepractice.repository.MeetRepository;
 
@@ -12,11 +14,13 @@ import java.util.Optional;
 @Service
 public class MeetService extends CRUDService<Meet>{
     private final MeetRepository repository;
+    private final CustomerMeetInfoMapper customerMeetInfoMapper;
     private final CustomerService customerService;
 
-    MeetService(MeetRepository repository, CustomerService customerService) {
+    MeetService(MeetRepository repository, CustomerMeetInfoMapper customerMeetInfoMapper, CustomerService customerService) {
         super(repository);
         this.repository = repository;
+        this.customerMeetInfoMapper = customerMeetInfoMapper;
         this.customerService = customerService;
     }
 
@@ -30,5 +34,15 @@ public class MeetService extends CRUDService<Meet>{
 
     public List<Meet> getByUserIdAndCustomerId(long userId, long customerId, long offset, long limit) {
         return repository.findByUserIdAndCustomerId(userId, customerId, offset, limit);
+    }
+
+    public Optional<CustomerMeetInfoResponse> getCustomerMeetInfo(long customerId) {
+        CustomerMeetInfoResponse response = null;
+        List<Meet> meets = repository.findMeetByCustomerId(customerId).orElse(null);
+        if (meets != null) {
+            response = customerMeetInfoMapper.fromEntityToResponse(meets);
+        }
+
+        return Optional.ofNullable(response);
     }
 }

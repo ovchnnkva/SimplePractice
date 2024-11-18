@@ -30,6 +30,12 @@ public interface MeetRepository extends JpaRepository<Meet, Long> {
     @Query(value =
             "SELECT m " +
                     "FROM Meet m " +
+                    "WHERE m.customer.id = :customerId")
+    Optional<List<Meet>> findMeetByCustomerId(@Param("customerId") long customerId);
+
+    @Query(value =
+            "SELECT m " +
+                    "FROM Meet m " +
                     "WHERE m.customer.id =:customerId AND m.user.id =:userId " +
                     "ORDER BY m.dateMeet DESC " +
                     "OFFSET :offset ROWS " +
