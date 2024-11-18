@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ru.company.understandablepractice.model.Customer;
+import ru.company.understandablepractice.model.Person;
 import ru.company.understandablepractice.model.types.ClientStatus;
 
 import java.util.List;
@@ -37,6 +38,13 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
                     "FETCH NEXT :limit ROWS ONLY")
     Optional<List<Customer>> findAllPagination (@Param("userId") long userId, @Param("offset") long offset,
                                               @Param("limit") long limit);
+
+    @Query(value =
+            "SELECT c " +
+                    "FROM Customer c " +
+                    "WHERE LOWER(c.fullName) LIKE LOWER(CONCAT('%', :name,'%')) AND c.user.id = :userId " +
+                    "ORDER BY c.id DESC")
+    Optional<List<Person>> findCustomersByName (@Param("userId") long userId, @Param("name") String name);
 
     Optional<Customer> findCustomerById(long id);
 
