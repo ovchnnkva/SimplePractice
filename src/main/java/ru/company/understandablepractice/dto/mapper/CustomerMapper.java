@@ -19,6 +19,9 @@ public abstract class CustomerMapper {
     @Autowired
     UserMapper userMapper;
 
+    @Mapping(target = "customerCredentials", ignore = true)
+    @Mapping(target = "applicationFormToken", ignore = true)
+    @Mapping(target = "applicationFormStatus", ignore = true)
     @Mapping(target = "clientType", expression = "java(mapClientType(response))")
     @Mapping(target = "contactMethod", expression = "java(mapContactMethod(response))")
     @Mapping(target = "onlinePlatform", expression = "java(mapOnlinePlatform(response))")

@@ -17,7 +17,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PersonCredentials implements UserDetails {
+public class CustomerCredentials implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,12 +30,12 @@ public class PersonCredentials implements UserDetails {
     private String password;
 
     @OneToOne
-    private Person person;
+    private Customer customer;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "persons_roles",
+    @JoinTable(name = "customers_roles",
             joinColumns = @JoinColumn(
-                    name = "person_id", referencedColumnName = "id"),
+                    name = "customer_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(
                     name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles;
@@ -47,7 +47,7 @@ public class PersonCredentials implements UserDetails {
         return authorities;
     }
 
-    public PersonCredentials(Set<Role> roles) {
+    public CustomerCredentials(Set<Role> roles) {
         this.roles = roles;
     }
 }

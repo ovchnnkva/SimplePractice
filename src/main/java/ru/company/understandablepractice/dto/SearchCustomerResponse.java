@@ -5,9 +5,9 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class SearchPersonResponse {
+public class SearchCustomerResponse {
 
-    private long personId;
+    private long customerId;
 
     private String fullName;
 

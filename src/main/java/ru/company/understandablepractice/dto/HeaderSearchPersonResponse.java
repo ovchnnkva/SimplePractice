@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class HeaderSearchPersonResponse {
 
-    private long personId;
+    private long customerId;
 
     private String fullName;
 }

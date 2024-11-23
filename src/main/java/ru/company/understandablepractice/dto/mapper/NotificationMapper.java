@@ -15,21 +15,21 @@ public abstract class NotificationMapper {
     @Mapping(target = "dateFirstRequest", expression = "java(mapDateFirstRequest(entity))")
     @Mapping(target = "customerFullName", expression = "java(mapCustomerFullName(entity))")
     @Mapping(target = "clientType", expression = "java(mapClientType(entity))")
-    public abstract NotificationResponse fromEntityToResponse(Person entity);
+    public abstract NotificationResponse fromEntityToResponse(Customer entity);
 
-    long mapCustomerId(Person entity) {
+    long mapCustomerId(Customer entity) {
         return entity.getId();
     }
 
-    LocalDate mapDateFirstRequest(Person entity) {
+    LocalDate mapDateFirstRequest(Customer entity) {
         return entity.getDateFirstRequest();
     }
 
-    String mapCustomerFullName(Person entity) {
+    String mapCustomerFullName(Customer entity) {
         return entity.getFullName();
     }
 
-    String mapClientType(Person entity) {
+    String mapClientType(Customer entity) {
         return entity.getClientType().getTittle();
     }
 }
