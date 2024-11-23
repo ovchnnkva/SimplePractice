@@ -13,8 +13,8 @@ public interface ClientResultRepository extends JpaRepository<ClientResult, Long
     @Query("SELECT r.id, r.questionnaire.title, r.dateResult, r.questionnaire.isTest " +
             "FROM ClientResult r " +
             "WHERE r.customer.id = :customerId " +
-            "AND r.user.id = :userId" +
-            "ORDER BY r.dateResult DESC" +
+            "AND r.questionnaire.user.id = :userId " +
+            "ORDER BY r.dateResult DESC " +
             "OFFSET :offset ROWS " +
             "FETCH NEXT :limit ROWS ONLY")
     Set<ClientResult> findAllByCustomerId(@Param("customerId") long customerId,
