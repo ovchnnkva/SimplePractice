@@ -5,7 +5,7 @@ import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.company.understandablepractice.dto.questionnaire.QuestionDto;
 import ru.company.understandablepractice.dto.questionnaire.QuestionnaireDto;
-import ru.company.understandablepractice.dto.questionnaire.QuestionnaireResponse;
+import ru.company.understandablepractice.dto.questionnaire.QuestionnaireMinResponse;
 import ru.company.understandablepractice.model.questionnaire.Question;
 import ru.company.understandablepractice.model.questionnaire.Questionnaire;
 
@@ -25,12 +25,12 @@ public abstract class QuestionnaireMapper {
     public abstract QuestionnaireDto fromEntityToDto(Questionnaire entity);
 
 
-    public abstract QuestionnaireResponse fromEntityToRequest(Questionnaire entity);
+    public abstract QuestionnaireMinResponse fromEntityToResponse(Questionnaire entity);
 
     Set<Question> mapQuestions(QuestionnaireDto dto) {
         return dto.getQuestions()
                 .stream()
-                .map(questionDto -> questionMapper.fromDtoToEntity(questionDto, dto.getId()))
+                .map(questionDto -> questionMapper.fromDtoToEntity(questionDto))
                 .collect(Collectors.toSet());
     }
 

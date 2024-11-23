@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import ru.company.understandablepractice.controller.HttpServletRequestService;
 import ru.company.understandablepractice.dto.mapper.questionnaire.ClientResultMapper;
 import ru.company.understandablepractice.dto.mapper.questionnaire.QuestionnaireMapper;
-import ru.company.understandablepractice.dto.questionnaire.ClientResultResponse;
+import ru.company.understandablepractice.dto.questionnaire.ClientResultMinResponse;
 import ru.company.understandablepractice.dto.questionnaire.QuestionnaireDto;
-import ru.company.understandablepractice.dto.questionnaire.QuestionnaireResponse;
+import ru.company.understandablepractice.dto.questionnaire.QuestionnaireMinResponse;
 import ru.company.understandablepractice.model.User;
 import ru.company.understandablepractice.model.questionnaire.ClientResult;
 import ru.company.understandablepractice.model.questionnaire.Questionnaire;
@@ -77,20 +77,20 @@ public class QuestionnaireController {
     @Operation(summary = "Список тестов и опросников терапевта",
             description = "получить все встречи, созданные терапевтом. +пагинация")
     @GetMapping("/get/byUser/{offset}/{limit}")
-    public ResponseEntity<Set<QuestionnaireResponse>> getAllByUser(@PathVariable("offset") long offset, @PathVariable("limit") long limit) {
+    public ResponseEntity<Set<QuestionnaireMinResponse>> getAllByUser(@PathVariable("offset") long offset, @PathVariable("limit") long limit) {
         log.info("get all questionnaire by user id");
         Set<Questionnaire> result = service.getAllByUser(offset, limit);
         return result.isEmpty()
                 ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
                 : new ResponseEntity<>(result.stream()
-                .map(questionnaireMapper::fromEntityToRequest)
+                .map(questionnaireMapper::fromEntityToResponse)
                 .collect(Collectors.toSet()), HttpStatus.OK);
     }
 
     @Operation(summary = "Список всех пройденных тестов клиента",
         description = "получить все тесты, которые прошел клиент. +пагинация")
     @GetMapping("get/byCustomer/{id}/{offset}/{limit}")
-    public ResponseEntity<Set<ClientResultResponse>> getAllByCustomer(@PathVariable("id") long customerId, @PathVariable("offset") long offset, @PathVariable("limit") long limit) {
+    public ResponseEntity<Set<ClientResultMinResponse>> getAllByCustomer(@PathVariable("id") long customerId, @PathVariable("offset") long offset, @PathVariable("limit") long limit) {
         log.info("get all by customer id {}", customerId);
         Set<ClientResult> result = service.getAllByCustomer(customerId, offset, limit);
         return result.isEmpty()

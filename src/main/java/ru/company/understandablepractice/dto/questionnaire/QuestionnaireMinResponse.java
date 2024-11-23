@@ -7,9 +7,9 @@ import java.time.LocalDate;
 
 @Data
 @Setter
-public class ClientResultResponse {
+public class QuestionnaireMinResponse {
     private long id;
-    private String questionnaireTitle;
-    private LocalDate dateResult;
+    private String title;
     private boolean isTest;
+    private LocalDate dateCreated;
 }

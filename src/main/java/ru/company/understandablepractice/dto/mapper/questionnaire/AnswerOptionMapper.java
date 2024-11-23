@@ -10,12 +10,7 @@ import ru.company.understandablepractice.model.questionnaire.Question;
 public abstract class AnswerOptionMapper {
 
 
-    @Mapping(target = "question", expression = "java(mapQuestion(questionId))")
     public abstract AnswerOption fromDtoToEntity(AnswerOptionDto dto, long questionId);
 
     public abstract AnswerOptionDto fromEntityToDto(AnswerOption entity);
-
-    Question mapQuestion (long questionId) {
-        return new Question(questionId);
-    }
 }

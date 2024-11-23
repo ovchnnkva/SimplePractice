@@ -4,13 +4,12 @@ import lombok.Data;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.Set;
 
 @Data
 @Setter
-public class QuestionnaireResponse {
+public class ClientResultMinResponse {
     private long id;
-    private String title;
+    private String questionnaireTitle;
+    private LocalDate dateResult;
     private boolean isTest;
-    private LocalDate dateCreated;
 }

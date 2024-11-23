@@ -10,15 +10,15 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Table(name = "responses")
-public class ClientResponse {
+public class ClientChoice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "response_id")
     private long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "question_id")
-    private Question question;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "question_id")
+//    private Question question;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "result_id")

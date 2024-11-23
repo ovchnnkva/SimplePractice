@@ -36,10 +36,15 @@ public class Questionnaire {
     @Column(name = "date_created")
     private LocalDate dateCreated;
 
-    @OneToMany(mappedBy = "questionnaire", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "questionnaire", cascade = CascadeType.ALL)
     private Set<Question> questions;
 
     public Questionnaire(long id) {
         this.id = id;
+    }
+
+    public void setQuestions(Set<Question> questions) {
+        questions.forEach(question -> question.setQuestionnaire(this));
+        this.questions = questions;
     }
 }

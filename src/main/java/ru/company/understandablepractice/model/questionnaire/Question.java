@@ -20,7 +20,7 @@ public class Question {
     @Column(name = "question_id")
     private long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "questionnaire_id")
     private Questionnaire questionnaire;
 
@@ -31,10 +31,15 @@ public class Question {
     @Column(name = "question_text", columnDefinition = "TEXT")
     private String text;
 
-    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private Set<AnswerOption> answerOptions;
 
     public Question(long id) {
         this.id = id;
+    }
+
+    public void setAnswerOptions(Set<AnswerOption> answerOptions) {
+        answerOptions.forEach(answerOption -> answerOption.setQuestion(this));
+        this.answerOptions = answerOptions;
     }
 }

@@ -6,6 +6,7 @@ import lombok.Setter;
 import ru.company.understandablepractice.model.Customer;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -27,4 +28,7 @@ public class ClientResult {
 
     @Column(name = "date_result")
     private LocalDate dateResult;
+
+    @OneToMany(mappedBy = "clientResult", fetch = FetchType.LAZY)
+    private Set<ClientChoice> clientChoices;
 }

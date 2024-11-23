@@ -21,9 +21,8 @@ public abstract class QuestionMapper {
     AnswerOptionMapper answerOptionMapper;
 
     @Mapping(target = "type", expression = "java(mapType(dto))")
-    @Mapping(target = "questionnaire", expression = "java(mapQuestionnaire(questionnaireId))")
     @Mapping(target = "answerOptions", expression = "java(mapAnswerOptions(dto))")
-    public abstract Question fromDtoToEntity(QuestionDto dto, long questionnaireId);
+    public abstract Question fromDtoToEntity(QuestionDto dto);
 
     @Mapping(target = "type", expression = "java(mapTypeString(entity))")
     public abstract QuestionDto fromEntityToDto(Question entity);
@@ -37,10 +36,6 @@ public abstract class QuestionMapper {
 
     String mapTypeString(Question entity) {
         return entity.getType() != null ? entity.getType().getKey() : null;
-    }
-
-    Questionnaire mapQuestionnaire(long questionnaireId) {
-        return new Questionnaire(questionnaireId);
     }
 
     Set<AnswerOption> mapAnswerOptions(QuestionDto dto) {

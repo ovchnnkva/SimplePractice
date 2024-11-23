@@ -14,7 +14,7 @@ public class AnswerOption {
     @Column(name = "answer_option_id")
     private long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "question_id")
     private Question question;
 
