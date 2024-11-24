@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Repository
 public interface ClientResultRepository extends JpaRepository<ClientResult, Long> {
-    @Query("SELECT r.id, r.questionnaire.title, r.dateResult, r.questionnaire.isTest " +
+    @Query("SELECT new ClientResult(r.id, r.dateResult, new Questionnaire(r.questionnaire.id, r.questionnaire.title, r.questionnaire.isTest))  " +
             "FROM ClientResult r " +
             "WHERE r.customer.id = :customerId " +
             "AND r.questionnaire.user.id = :userId " +

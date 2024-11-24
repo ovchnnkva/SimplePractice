@@ -43,6 +43,12 @@ public class Questionnaire {
         this.id = id;
     }
 
+    public Questionnaire(long id, String title, boolean isTest) {
+        this.id = id;
+        this.title = title;
+        this.isTest = isTest;
+    }
+
     public Questionnaire(long id, String title, LocalDate dateCreated, boolean isTest) {
         this.id = id;
         this.title = title;

@@ -18,8 +18,10 @@ public abstract class ClientResultMapper {
     @Autowired
     ClientChoiceMapper clientChoiceMapper;
 
+    @Mapping(target = "questionnaireId", expression = "java(mapQuestionnaireId(entity))")
     @Mapping(target = "questionnaireTitle", expression = "java(mapQuestionnaireTitle(entity))")
     @Mapping(target = "test", expression = "java(mapIsTest(entity))")
+    @Mapping(target = "resultId", source = "id")
     public abstract ClientResultMinResponse fromEntityToResponse(ClientResult entity);
 
     @Mapping(target = "customer", expression = "java(mapCustomer(request))")
@@ -29,6 +31,10 @@ public abstract class ClientResultMapper {
 
     String mapQuestionnaireTitle(ClientResult entity) {
         return entity.getQuestionnaire().getTitle();
+    }
+
+    long mapQuestionnaireId(ClientResult entity) {
+        return entity.getQuestionnaire().getId();
     }
 
     boolean mapIsTest(ClientResult entity) {
