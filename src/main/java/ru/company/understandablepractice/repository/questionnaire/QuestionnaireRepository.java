@@ -12,7 +12,7 @@ import java.util.Set;
 public interface QuestionnaireRepository extends JpaRepository<Questionnaire, Long> {
 
     @Query(value =
-            "SELECT q.id, q.title, q.dateCreated, q.isTest " +
+            "SELECT new Questionnaire(q.id, q.title, q.dateCreated, q.isTest) " +
                     "FROM Questionnaire q " +
                     "WHERE q.user.id = :userId " +
                     "ORDER BY q.dateCreated DESC " +

@@ -43,6 +43,13 @@ public class Questionnaire {
         this.id = id;
     }
 
+    public Questionnaire(long id, String title, LocalDate dateCreated, boolean isTest) {
+        this.id = id;
+        this.title = title;
+        this.dateCreated = dateCreated;
+        this.isTest = isTest;
+    }
+
     public void setQuestions(Set<Question> questions) {
         questions.forEach(question -> question.setQuestionnaire(this));
         this.questions = questions;

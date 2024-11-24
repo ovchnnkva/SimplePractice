@@ -9,6 +9,7 @@ import java.util.Set;
 @Data
 @Setter
 public class ClientResultRequest {
+    private long id;
     private long customerId;
     private long questionnaireId;
     private LocalDate dateResult;

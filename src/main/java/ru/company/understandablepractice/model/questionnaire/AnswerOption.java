@@ -1,13 +1,17 @@
 package ru.company.understandablepractice.model.questionnaire;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
 @Table(name = "answer_options")
+@NoArgsConstructor
+@AllArgsConstructor
 public class AnswerOption {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,4 +27,8 @@ public class AnswerOption {
 
     @Column(name = "is_correct")
     private boolean isCorrect;
+
+    public AnswerOption(long id) {
+        this.id = id;
+    }
 }

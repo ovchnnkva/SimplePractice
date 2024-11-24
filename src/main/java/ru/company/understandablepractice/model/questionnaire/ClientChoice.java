@@ -16,21 +16,14 @@ public class ClientChoice {
     @Column(name = "response_id")
     private long id;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "question_id")
-//    private Question question;
-
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "result_id")
     private ClientResult clientResult;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @PrimaryKeyJoinColumn
+    @JoinColumn(name = "answer_option_id")
     private AnswerOption answerOption;
 
     @Column(name = "response_text", columnDefinition = "TEXT")
     private String text;
-
-    @Column(name = "created_at")
-    private LocalDate createdAt;
 }

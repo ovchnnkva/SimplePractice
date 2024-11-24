@@ -1,6 +1,7 @@
 package ru.company.understandablepractice.controller.questionnaire;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,7 @@ import ru.company.understandablepractice.controller.HttpServletRequestService;
 import ru.company.understandablepractice.dto.mapper.questionnaire.ClientResultMapper;
 import ru.company.understandablepractice.dto.mapper.questionnaire.QuestionnaireMapper;
 import ru.company.understandablepractice.dto.questionnaire.ClientResultMinResponse;
+import ru.company.understandablepractice.dto.questionnaire.ClientResultRequest;
 import ru.company.understandablepractice.dto.questionnaire.QuestionnaireDto;
 import ru.company.understandablepractice.dto.questionnaire.QuestionnaireMinResponse;
 import ru.company.understandablepractice.model.User;
@@ -31,7 +33,6 @@ public class QuestionnaireController {
     private final QuestionnaireService service;
     private final QuestionnaireMapper questionnaireMapper;
     private final ClientResultMapper clientResultMapper;
-    private final HttpServletRequestService requestService;
 
     @Operation(summary = "Создание опросника",
     description = """
@@ -45,7 +46,6 @@ public class QuestionnaireController {
         ResponseEntity<Long> responseEntity;
         try {
             var entity = questionnaireMapper.fromRequestToEntity(request);
-            entity.setUser(new User(requestService.getIdFromRequestToken()));
             responseEntity = service.create(entity)
                     .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
@@ -59,7 +59,7 @@ public class QuestionnaireController {
 
     @Operation(summary = "Получить опросник/тест")
     @GetMapping("/get/{id}")
-    public ResponseEntity<QuestionnaireDto> getById(@PathVariable("id") long id) {
+    public ResponseEntity<QuestionnaireDto> getById(@PathVariable("id") @Parameter(description = "id опросника/теста") long id) {
         log.info("get questionnaire {}", id);
         return service.getById(id)
                 .map(result -> new ResponseEntity<>(questionnaireMapper.fromEntityToDto(result), HttpStatus.OK))
@@ -90,7 +90,7 @@ public class QuestionnaireController {
     @Operation(summary = "Список всех пройденных тестов клиента",
         description = "получить все тесты, которые прошел клиент. +пагинация")
     @GetMapping("get/byCustomer/{id}/{offset}/{limit}")
-    public ResponseEntity<Set<ClientResultMinResponse>> getAllByCustomer(@PathVariable("id") long customerId, @PathVariable("offset") long offset, @PathVariable("limit") long limit) {
+    public ResponseEntity<Set<ClientResultMinResponse>> getAllByCustomer(@PathVariable("id") @Parameter(description = "id клиента") long customerId, @PathVariable("offset") long offset, @PathVariable("limit") long limit) {
         log.info("get all by customer id {}", customerId);
         Set<ClientResult> result = service.getAllByCustomer(customerId, offset, limit);
         return result.isEmpty()
@@ -98,6 +98,24 @@ public class QuestionnaireController {
                 : new ResponseEntity<>(result.stream()
                 .map(clientResultMapper::fromEntityToResponse)
                 .collect(Collectors.toSet()), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Сохранение результатов теста")
+    @PostMapping("create/result")
+    public ResponseEntity<Long> createResult(@RequestBody ClientResultRequest request) {
+        log.info("create result {}", request);
+        ResponseEntity<Long> responseEntity;
+        try {
+            var entity = clientResultMapper.fromRequestToEntity(request);
+            responseEntity = service.createClientResult(entity)
+                    .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
+                    .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+        } catch (Exception e) {
+            responseEntity = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error(e.getLocalizedMessage());
+        }
+
+        return responseEntity;
     }
 
 }

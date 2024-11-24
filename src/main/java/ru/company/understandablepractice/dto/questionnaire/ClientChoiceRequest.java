@@ -6,6 +6,7 @@ import lombok.Setter;
 @Data
 @Setter
 public class ClientChoiceRequest {
+    private long id;
     private long answerOptionId;
     private String text;
 }

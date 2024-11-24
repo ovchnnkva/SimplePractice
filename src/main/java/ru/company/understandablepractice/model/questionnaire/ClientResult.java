@@ -29,6 +29,11 @@ public class ClientResult {
     @Column(name = "date_result")
     private LocalDate dateResult;
 
-    @OneToMany(mappedBy = "clientResult", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "clientResult", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<ClientChoice> clientChoices;
+
+    public void setClientChoices(Set<ClientChoice> clientChoices) {
+        clientChoices.forEach(choice -> choice.setClientResult(this));
+        this.clientChoices = clientChoices;
+    }
 }
