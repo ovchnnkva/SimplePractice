@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.company.understandablepractice.dto.mapper.TypeMethodMapper;
 import ru.company.understandablepractice.dto.projectivemethod.TypeMethodResponse;
+import ru.company.understandablepractice.model.User;
 import ru.company.understandablepractice.security.JwtType;
 import ru.company.understandablepractice.security.services.JwtService;
 import ru.company.understandablepractice.service.TypeMethodService;
@@ -29,6 +30,7 @@ public class TypeMethodController {
     private final TypeMethodMapper mapper;
     private final HttpServletRequest request;
     private final JwtService jwtService;
+    private final HttpServletRequestService requestService;
 
     @Operation(summary = "Получение по ID", description = "Позволяет получить тип по ключу")
     @GetMapping("/get/{id}")
@@ -63,6 +65,8 @@ public class TypeMethodController {
         ResponseEntity<Long> responseEntity;
         try {
             var entity = mapper.fromResponseToEntity(response);
+            var user = new User(requestService.getIdFromRequestToken());
+            entity.setUser(user);
             responseEntity = service.create(entity)
                     .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));

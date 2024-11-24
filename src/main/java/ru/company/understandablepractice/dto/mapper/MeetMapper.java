@@ -52,7 +52,7 @@ public abstract class MeetMapper {
     }
 
     String mapMeetingFormatString(Meet entity) {
-        return entity.getFormatMeet().getTittle();
+        return entity.getFormatMeet() != null ? entity.getFormatMeet().getTittle() : "";
     }
 
     PaymentType mapPaymentType(MeetResponse response) {

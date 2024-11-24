@@ -9,6 +9,8 @@ import java.util.List;
 @Data
 public class ProjectiveMethodDetailsResponse {
 
+    private long id;
+
     private MeetResponse meet;
 
     private LocalDate dateCreateMethod;
