@@ -19,12 +19,10 @@ public abstract class UserMapper {
 
     @Mapping(target = "subscriptionActive",
             expression = "java(yesNoConverter.stringToBoolean(response.getSubscriptionActive()))")
-    @Mapping(target = "userImage", expression = "java(mapUserImageToBase64String(response))")
     public abstract User fromResponseToEntity(UserResponse response);
 
     @Mapping(target = "subscriptionActive",
             expression = "java(yesNoConverter.booleanToString(user.isSubscriptionActive()))")
-    @Mapping(target = "userImage", expression = "java(mapUserImageToString(user))")
     public abstract UserResponse fromEntityToResponse(User user);
 
     String mapUserImageToString(User entity){
