@@ -3,9 +3,7 @@ package ru.company.understandablepractice.dto.mapper.questionnaire;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.company.understandablepractice.dto.questionnaire.QuestionDto;
-import ru.company.understandablepractice.dto.questionnaire.QuestionnaireDto;
-import ru.company.understandablepractice.dto.questionnaire.QuestionnaireMinResponse;
+import ru.company.understandablepractice.dto.questionnaire.*;
 import ru.company.understandablepractice.model.questionnaire.Question;
 import ru.company.understandablepractice.model.questionnaire.Questionnaire;
 
@@ -24,8 +22,10 @@ public abstract class QuestionnaireMapper {
     @Mapping(target = "questions", expression = "java(mapQuestionDto(entity))")
     public abstract QuestionnaireDto fromEntityToDto(Questionnaire entity);
 
+    @Mapping(target = "questions", expression = "java(mapQuestionResponses(entity))")
+    public abstract QuestionnaireResponse fromEntityToResponse(Questionnaire entity);
 
-    public abstract QuestionnaireMinResponse fromEntityToResponse(Questionnaire entity);
+    public abstract QuestionnaireMinResponse fromEntityToMinResponse(Questionnaire entity);
 
     Set<Question> mapQuestions(QuestionnaireDto dto) {
         return dto.getQuestions()
@@ -38,6 +38,13 @@ public abstract class QuestionnaireMapper {
         return entity.getQuestions()
                 .stream()
                 .map(questionDto -> questionMapper.fromEntityToDto(questionDto))
+                .collect(Collectors.toSet());
+    }
+
+    Set<QuestionResponse> mapQuestionResponses(Questionnaire entity) {
+        return entity.getQuestions()
+                .stream()
+                .map(questionDto -> questionMapper.fromEntityToResponse(questionDto))
                 .collect(Collectors.toSet());
     }
 }

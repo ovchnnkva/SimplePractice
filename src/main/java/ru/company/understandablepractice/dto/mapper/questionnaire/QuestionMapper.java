@@ -4,7 +4,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.company.understandablepractice.dto.questionnaire.AnswerOptionDto;
+import ru.company.understandablepractice.dto.questionnaire.AnswerOptionResponse;
 import ru.company.understandablepractice.dto.questionnaire.QuestionDto;
+import ru.company.understandablepractice.dto.questionnaire.QuestionResponse;
 import ru.company.understandablepractice.model.questionnaire.AnswerOption;
 import ru.company.understandablepractice.model.questionnaire.Question;
 import ru.company.understandablepractice.model.questionnaire.Questionnaire;
@@ -25,7 +27,12 @@ public abstract class QuestionMapper {
     public abstract Question fromDtoToEntity(QuestionDto dto);
 
     @Mapping(target = "type", expression = "java(mapTypeString(entity))")
+    @Mapping(target = "answerOptions", expression = "java(mapAnswerOptionDto(entity))")
     public abstract QuestionDto fromEntityToDto(Question entity);
+
+    @Mapping(target = "answerOptions", expression = "java(mapAnswerOptionResponse(entity))")
+    @Mapping(target = "type", expression = "java(mapTypeString(entity))")
+    public abstract QuestionResponse fromEntityToResponse(Question entity);
 
     QuestionType mapType(QuestionDto dto) {
         return Arrays.stream(QuestionType.values())
@@ -52,4 +59,10 @@ public abstract class QuestionMapper {
                 .collect(Collectors.toSet());
     }
 
+    Set<AnswerOptionResponse> mapAnswerOptionResponse(Question entity) {
+        return entity.getAnswerOptions()
+                .stream()
+                .map(questionDto -> answerOptionMapper.fromEntityToResponse(questionDto))
+                .collect(Collectors.toSet());
+    }
 }

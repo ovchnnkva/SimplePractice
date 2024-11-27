@@ -11,10 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.company.understandablepractice.controller.HttpServletRequestService;
 import ru.company.understandablepractice.dto.mapper.questionnaire.ClientResultMapper;
 import ru.company.understandablepractice.dto.mapper.questionnaire.QuestionnaireMapper;
-import ru.company.understandablepractice.dto.questionnaire.ClientResultMinResponse;
-import ru.company.understandablepractice.dto.questionnaire.ClientResultRequest;
-import ru.company.understandablepractice.dto.questionnaire.QuestionnaireDto;
-import ru.company.understandablepractice.dto.questionnaire.QuestionnaireMinResponse;
+import ru.company.understandablepractice.dto.questionnaire.*;
 import ru.company.understandablepractice.model.User;
 import ru.company.understandablepractice.model.questionnaire.ClientResult;
 import ru.company.understandablepractice.model.questionnaire.Questionnaire;
@@ -35,11 +32,11 @@ public class QuestionnaireController {
     private final ClientResultMapper clientResultMapper;
 
     @Operation(summary = "Создание опросника",
-    description = """
-    questions - список вопросов. каждый вопрос содержит answerOptions - список вариантов ответов.
-    Если тип вопроса = Cвободный ответ, то список answerOptions должен быть пустой.
-    Если запрос пришел с заполненным ид, то будет обновлен существующий опросник.
-    """)
+            description = """
+                    questions - список вопросов. каждый вопрос содержит answerOptions - список вариантов ответов.
+                    Если тип вопроса = Cвободный ответ, то список answerOptions должен быть пустой.
+                    Если запрос пришел с заполненным ид, то будет обновлен существующий опросник.
+                    """)
     @PostMapping("/create")
     public ResponseEntity<Long> create(@RequestBody QuestionnaireDto request) {
         log.info("create questionnaire {}", request);
@@ -83,12 +80,12 @@ public class QuestionnaireController {
         return result.isEmpty()
                 ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
                 : new ResponseEntity<>(result.stream()
-                .map(questionnaireMapper::fromEntityToResponse)
+                .map(questionnaireMapper::fromEntityToMinResponse)
                 .collect(Collectors.toSet()), HttpStatus.OK);
     }
 
     @Operation(summary = "Список всех пройденных тестов клиента",
-        description = "получить все тесты, которые прошел клиент. +пагинация")
+            description = "получить все тесты, которые прошел клиент. +пагинация")
     @GetMapping("get/byCustomer/{id}/{offset}/{limit}")
     public ResponseEntity<Set<ClientResultMinResponse>> getAllByCustomer(@PathVariable("id") @Parameter(description = "id клиента") long customerId, @PathVariable("offset") long offset, @PathVariable("limit") long limit) {
         log.info("get all by customer id {}", customerId);
@@ -96,7 +93,7 @@ public class QuestionnaireController {
         return result.isEmpty()
                 ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
                 : new ResponseEntity<>(result.stream()
-                .map(clientResultMapper::fromEntityToResponse)
+                .map(clientResultMapper::fromEntityToMinResponse)
                 .collect(Collectors.toSet()), HttpStatus.OK);
     }
 
@@ -118,4 +115,13 @@ public class QuestionnaireController {
         return responseEntity;
     }
 
+    @Operation(summary = "Получить результаты теста",
+            description = "получение результатов теста +информации о самом тесте по ид результата")
+    @GetMapping("get/result/{id}")
+    public ResponseEntity<ClientResultResponse> getResult(@PathVariable("id") long id) {
+        log.info("get result {}", id);
+        return service.getClientResultById(id)
+                .map(result -> new ResponseEntity<>(result, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
 }
