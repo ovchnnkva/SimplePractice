@@ -143,7 +143,6 @@ public class Customer {
 
     public Customer(long id) {
         this.id = id;
-        this.setApplicationFormStatus(ApplicationFormStatus.NOT_CREATED);
     }
 
     public Customer() {
