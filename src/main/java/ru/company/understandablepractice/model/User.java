@@ -1,6 +1,7 @@
 package ru.company.understandablepractice.model;
 
 import java.util.Base64;
+import java.util.List;
 import java.util.Objects;
 
 import jakarta.persistence.*;
@@ -41,11 +42,14 @@ public class User {
     @Column(name = "education", columnDefinition = "TEXT")
     private String education;
 
-    @Column(name = "diplomas", columnDefinition = "TEXT")
-    private String diplomas;
-
     @Column(name = "user_image", columnDefinition = "TEXT")
     private String userImage;
+
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<UserDiplomas> userDiplomasList;
 
     @OneToOne(
             mappedBy = "user",
