@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class UserResponse {
@@ -25,7 +27,7 @@ public class UserResponse {
 
     private String education;
 
-    private String diplomas;
-
     private String userImage;
+
+    private List<UserDiplomasResponse> userDiplomasList;
 }
