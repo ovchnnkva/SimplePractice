@@ -73,7 +73,6 @@ public class CustomerController {
             var user = new User(requestService.getIdFromRequestToken());
             entity.setUser(user);
             entity.setClientStatus(ClientStatus.REQUEST);
-            entity.setDateFirstRequest(LocalDate.now());
             responseEntity = service.create(entity)
                     .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
