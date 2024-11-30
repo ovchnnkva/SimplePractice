@@ -1,42 +1,59 @@
 package ru.company.understandablepractice.service;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.company.understandablepractice.controller.HttpServletRequestService;
 import ru.company.understandablepractice.dto.mapper.questionnaire.ClientResultMapper;
 import ru.company.understandablepractice.dto.mapper.questionnaire.QuestionnaireMapper;
 import ru.company.understandablepractice.dto.questionnaire.AnswerOptionResponse;
 import ru.company.understandablepractice.dto.questionnaire.ClientResultResponse;
+import ru.company.understandablepractice.model.Customer;
 import ru.company.understandablepractice.model.User;
 import ru.company.understandablepractice.model.questionnaire.ClientChoice;
 import ru.company.understandablepractice.model.questionnaire.ClientResult;
 import ru.company.understandablepractice.model.questionnaire.Questionnaire;
+import ru.company.understandablepractice.repository.CustomerRepository;
 import ru.company.understandablepractice.repository.questionnaire.ClientResultRepository;
 import ru.company.understandablepractice.repository.questionnaire.QuestionnaireRepository;
+import ru.company.understandablepractice.security.services.JwtService;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static ru.company.understandablepractice.model.types.ApplicationFormStatus.NOT_CREATED;
+
 @Service
+@Slf4j
 public class QuestionnaireService extends CRUDService<Questionnaire> {
     private final QuestionnaireRepository repository;
     private final ClientResultRepository clientResultRepository;
     private final HttpServletRequestService requestService;
+    private final CustomerRepository customerRepository;
+    private final JwtService jwtService;
 
     private final QuestionnaireMapper questionnaireMapper;
     private final ClientResultMapper clientResultMapper;
+
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     QuestionnaireService(QuestionnaireRepository repository,
                          ClientResultRepository clientResultRepository,
                          HttpServletRequestService requestService,
                          QuestionnaireMapper questionnaireMapper,
-                         ClientResultMapper clientResultMapper) {
+                         ClientResultMapper clientResultMapper,
+                         CustomerRepository customerRepository,
+                         JwtService jwtService) {
         super(repository);
         this.repository = repository;
         this.clientResultRepository = clientResultRepository;
         this.requestService = requestService;
         this.questionnaireMapper = questionnaireMapper;
         this.clientResultMapper = clientResultMapper;
+        this.customerRepository = customerRepository;
+        this.jwtService = jwtService;
     }
 
     @Override
@@ -73,6 +90,26 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
 
         }
         return Optional.ofNullable(response);
+    }
+
+    public Optional<String> createLink(long questionnaireId, long customerId) {
+        Customer customer = customerRepository.findCustomerById(customerId).orElseThrow();
+
+        setCredentials(customer);
+        String link = String.format(
+                "%s/%s",
+                questionnaireId,
+                jwtService.generatePersonToken(customer.getCustomerCredentials())
+        );
+        log.info("create person link {}", link);
+
+
+        return Optional.of(link);
+    }
+
+    private void setCredentials(Customer customer) {
+        customer.getCustomerCredentials().setUsername(customer.getMail());
+        customer.getCustomerCredentials().setPassword(encoder.encode(String.valueOf(customer.hashCode())));
     }
 
     private Set<Long> getClientChoicesIds(Set<ClientChoice> clientChoices) {

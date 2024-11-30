@@ -53,9 +53,12 @@ public class WebSecurityConfig {
                         .requestMatchers("/auth/**", "/sign-in","/registration/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/endpoint", "/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/applicationForm/get/CUSTOMER", "/api/applicationForm/update/CUSTOMER").hasRole("CUSTOMER")
-                        .requestMatchers("/api/applicationForm/get/PAIR", "/api/applicationForm/update/PAIR").hasRole("PAIR")
-                        .requestMatchers("/api/applicationForm/get/CHILD", "/api/applicationForm/update/CHILD").hasRole("CHILD")
+                        .requestMatchers("/api/applicationForm/get/CUSTOMER", "/api/applicationForm/update/CUSTOMER",
+                                "/api/questionnaire/get/*", "/api/questionnaire/create/result/*").hasRole("CUSTOMER")
+                        .requestMatchers("/api/applicationForm/get/PAIR", "/api/applicationForm/update/PAIR",
+                                "/api/questionnaire/get/*", "/api/questionnaire/create/result/*").hasRole("PAIR")
+                        .requestMatchers("/api/applicationForm/get/CHILD", "/api/applicationForm/update/CHILD",
+                                "/api/questionnaire/get/*", "/api/questionnaire/create/result/*").hasRole("CHILD")
                         .requestMatchers("/api/**").hasRole("USER")
                         .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))

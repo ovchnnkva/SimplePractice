@@ -124,4 +124,14 @@ public class QuestionnaireController {
                 .map(result -> new ResponseEntity<>(result, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
+    @Operation(summary = "Получить ссылку на тест",
+            description = "ссылка должна формироваться для конкретного клиента")
+    @GetMapping("get/link/{customerId}/{questionnaireId}")
+    public ResponseEntity<String> getLink(@PathVariable("customerId") long customerId, @PathVariable("questionnaireId") long questionnaireId) {
+        log.info("get questionnaire {} link for customer {}", questionnaireId, customerId);
+        return service.createLink(questionnaireId, customerId)
+                .map(result -> new ResponseEntity<>(result, HttpStatus.CREATED))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+    }
 }
