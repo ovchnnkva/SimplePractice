@@ -39,7 +39,8 @@ public class LeftMenuController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @Operation(summary = "Оповещения", description = "Позволяет получить список новых клиентов")
+    @Operation(summary = "Оповещения",
+            description = "Позволяет получить список новых клиентов. applicationFormStatus - статус анкеты. 0 - не создана, 1 - создана, 2 - заполнена, 3 - токен просрочен")
     @GetMapping("/notification")
     public ResponseEntity<NotificationListResponse> getNotification() {
         Long userId = jwtService.extractUserId(request.getHeader("Authorization"), JwtType.ACCESS);

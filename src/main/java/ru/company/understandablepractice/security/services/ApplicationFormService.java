@@ -66,6 +66,7 @@ public class ApplicationFormService {
         String token = null;
         try {
             customer = customerRepository.findCustomerById(id).orElseThrow();
+            updateStatusIfInvalidToken(customer);
         } catch (NoSuchElementException exception) {
             throw new NoSuchElementException();
         }
@@ -77,6 +78,13 @@ public class ApplicationFormService {
 
 
         return Optional.ofNullable(token);
+    }
+
+    private void updateStatusIfInvalidToken(Customer customer) {
+        if(jwtService.isTokenExpired(customer.getApplicationFormToken(), JwtType.ACCESS)) {
+            customer.setApplicationFormStatus(ApplicationFormStatus.INVALID);
+            customerRepository.save(customer);
+        }
     }
 
     public long getPersonId() {

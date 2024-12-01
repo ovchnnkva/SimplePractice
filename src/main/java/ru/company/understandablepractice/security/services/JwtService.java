@@ -144,7 +144,7 @@ public class JwtService {
      * @param token токен
      * @return true, если токен просрочен
      */
-    private boolean isTokenExpired(String token, JwtType type) {
+    public boolean isTokenExpired(String token, JwtType type) {
         return extractExpiration(token, type).before(new Date());
     }
 
