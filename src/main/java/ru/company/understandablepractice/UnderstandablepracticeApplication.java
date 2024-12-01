@@ -36,6 +36,7 @@ public class UnderstandablepracticeApplication {
 			roleService.saveRole(new Role(3, "ROLE_CUSTOMER"));
 			roleService.saveRole(new Role(4, "ROLE_CHILD"));
 			roleService.saveRole(new Role(5, "ROLE_PAIR"));
+			roleService.saveRole(new Role(6, "ROLE_TEST"));
 
 			User user = new User();
 			user.setId(1);

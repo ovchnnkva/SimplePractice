@@ -3,21 +3,16 @@ package ru.company.understandablepractice.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.DispatcherServlet;
-import ru.company.understandablepractice.dto.CustomerResponse;
+import ru.company.understandablepractice.dto.customers.CustomerResponse;
 import ru.company.understandablepractice.dto.mapper.CustomerMapper;
 import ru.company.understandablepractice.model.User;
 import ru.company.understandablepractice.model.types.ClientStatus;
-import ru.company.understandablepractice.model.types.ClientType;
 import ru.company.understandablepractice.service.CustomerService;
-
-import java.time.LocalDate;
 
 @Tag(
         name = "Клиенты",
@@ -73,7 +68,6 @@ public class CustomerController {
             var user = new User(requestService.getIdFromRequestToken());
             entity.setUser(user);
             entity.setClientStatus(ClientStatus.REQUEST);
-            entity.setDateFirstRequest(LocalDate.now());
             responseEntity = service.create(entity)
                     .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));

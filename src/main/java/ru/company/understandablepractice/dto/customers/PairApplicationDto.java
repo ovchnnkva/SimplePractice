@@ -1,13 +1,13 @@
-package ru.company.understandablepractice.dto;
+package ru.company.understandablepractice.dto.customers;
 
 import lombok.Getter;
 import lombok.Setter;
+import ru.company.understandablepractice.dto.PersonResponse;
 import ru.company.understandablepractice.model.types.ClientType;
 
 @Getter
 @Setter
-public class PairResponse extends CustomerResponse {
-
+public class PairApplicationDto extends CustomerApplicationDto{
     private PersonResponse secondPerson;
 
     private String clientFirstRequestTherapyReason;
@@ -28,7 +28,8 @@ public class PairResponse extends CustomerResponse {
 
     private String familyStatus;
 
-    public PairResponse() {
+    public PairApplicationDto() {
         super(ClientType.PAIR.getTittle());
     }
+
 }

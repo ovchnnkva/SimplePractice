@@ -1,4 +1,4 @@
-package ru.company.understandablepractice.dto;
+package ru.company.understandablepractice.dto.customers;
 
 import lombok.Getter;
 import lombok.Setter;

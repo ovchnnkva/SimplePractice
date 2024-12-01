@@ -3,6 +3,7 @@ package ru.company.understandablepractice.controller.questionnaire;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -12,11 +13,15 @@ import ru.company.understandablepractice.controller.HttpServletRequestService;
 import ru.company.understandablepractice.dto.mapper.questionnaire.ClientResultMapper;
 import ru.company.understandablepractice.dto.mapper.questionnaire.QuestionnaireMapper;
 import ru.company.understandablepractice.dto.questionnaire.*;
+import ru.company.understandablepractice.model.Customer;
 import ru.company.understandablepractice.model.User;
 import ru.company.understandablepractice.model.questionnaire.ClientResult;
 import ru.company.understandablepractice.model.questionnaire.Questionnaire;
+import ru.company.understandablepractice.security.JwtType;
+import ru.company.understandablepractice.security.services.JwtService;
 import ru.company.understandablepractice.service.QuestionnaireService;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -30,7 +35,8 @@ public class QuestionnaireController {
     private final QuestionnaireService service;
     private final QuestionnaireMapper questionnaireMapper;
     private final ClientResultMapper clientResultMapper;
-
+    private final JwtService jwtService;
+    private final HttpServletRequest request;
     @Operation(summary = "Создание опросника",
             description = """
                     questions - список вопросов. каждый вопрос содержит answerOptions - список вариантов ответов.
@@ -57,6 +63,8 @@ public class QuestionnaireController {
     @Operation(summary = "Получить опросник/тест")
     @GetMapping("/get/{id}")
     public ResponseEntity<QuestionnaireDto> getById(@PathVariable("id") @Parameter(description = "id опросника/теста") long id) {
+        long customerId = jwtService.extractUserId(request.getHeader("Authorization"), JwtType.ACCESS);
+        log.info("get customer by id {}", customerId);
         log.info("get questionnaire {}", id);
         return service.getById(id)
                 .map(result -> new ResponseEntity<>(questionnaireMapper.fromEntityToDto(result), HttpStatus.OK))
@@ -104,6 +112,7 @@ public class QuestionnaireController {
         ResponseEntity<Long> responseEntity;
         try {
             var entity = clientResultMapper.fromRequestToEntity(request);
+            entity.setCustomer(new Customer(service.getPersonId()));
             responseEntity = service.createClientResult(entity)
                     .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
@@ -123,5 +132,15 @@ public class QuestionnaireController {
         return service.getClientResultById(id)
                 .map(result -> new ResponseEntity<>(result, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @Operation(summary = "Получить ссылку на тест",
+            description = "ссылка должна формироваться для конкретного клиента")
+    @GetMapping("get/link/{customerId}/{questionnaireId}")
+    public ResponseEntity<String> getLink(@PathVariable("customerId") long customerId, @PathVariable("questionnaireId") long questionnaireId) {
+        log.info("get questionnaire {} link for customer {}", questionnaireId, customerId);
+        return service.createLink(questionnaireId, customerId)
+                .map(result -> new ResponseEntity<>(result, HttpStatus.CREATED))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 }

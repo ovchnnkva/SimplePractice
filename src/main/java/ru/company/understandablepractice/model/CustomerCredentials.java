@@ -47,7 +47,8 @@ public class CustomerCredentials implements UserDetails {
         return authorities;
     }
 
-    public CustomerCredentials(Set<Role> roles) {
+    public CustomerCredentials(Customer customer, Set<Role> roles) {
+        this.customer = customer;
         this.roles = roles;
     }
 }
