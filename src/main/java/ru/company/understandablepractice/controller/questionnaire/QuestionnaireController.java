@@ -13,6 +13,7 @@ import ru.company.understandablepractice.controller.HttpServletRequestService;
 import ru.company.understandablepractice.dto.mapper.questionnaire.ClientResultMapper;
 import ru.company.understandablepractice.dto.mapper.questionnaire.QuestionnaireMapper;
 import ru.company.understandablepractice.dto.questionnaire.*;
+import ru.company.understandablepractice.model.Customer;
 import ru.company.understandablepractice.model.User;
 import ru.company.understandablepractice.model.questionnaire.ClientResult;
 import ru.company.understandablepractice.model.questionnaire.Questionnaire;
@@ -20,6 +21,7 @@ import ru.company.understandablepractice.security.JwtType;
 import ru.company.understandablepractice.security.services.JwtService;
 import ru.company.understandablepractice.service.QuestionnaireService;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -110,6 +112,7 @@ public class QuestionnaireController {
         ResponseEntity<Long> responseEntity;
         try {
             var entity = clientResultMapper.fromRequestToEntity(request);
+            entity.setCustomer(new Customer(service.getPersonId()));
             responseEntity = service.createClientResult(entity)
                     .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));

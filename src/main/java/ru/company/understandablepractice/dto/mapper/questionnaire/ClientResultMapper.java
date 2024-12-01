@@ -29,7 +29,6 @@ public abstract class ClientResultMapper {
     @Mapping(target = "resultId", source = "id")
     public abstract ClientResultMinResponse fromEntityToMinResponse(ClientResult entity);
 
-    @Mapping(target = "customer", expression = "java(mapCustomer(request))")
     @Mapping(target = "questionnaire", expression = "java(mapQuestionnaire(request))")
     @Mapping(target = "clientChoices", expression = "java(mapClientChoice(request))")
     public abstract ClientResult fromRequestToEntity(ClientResultRequest request);
@@ -50,9 +49,6 @@ public abstract class ClientResultMapper {
         return entity.getQuestionnaire().isTest();
     }
 
-    Customer mapCustomer(ClientResultRequest request) {
-        return new Customer(request.getCustomerId());
-    }
     Questionnaire mapQuestionnaire(ClientResultRequest request) {
         return new Questionnaire(request.getQuestionnaireId());
     }
