@@ -56,6 +56,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/applicationForm/get/CUSTOMER", "/api/applicationForm/update/CUSTOMER").hasRole("CUSTOMER")
                         .requestMatchers("/api/applicationForm/get/PAIR", "/api/applicationForm/update/PAIR").hasRole("PAIR")
                         .requestMatchers("/api/applicationForm/get/CHILD", "/api/applicationForm/update/CHILD").hasRole("CHILD")
+                        .requestMatchers("/api/questionnaire/get/*", "/api/questionnaire/create/result/**").hasRole("TEST")
                         .requestMatchers("/api/**").hasRole("USER")
                         .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))

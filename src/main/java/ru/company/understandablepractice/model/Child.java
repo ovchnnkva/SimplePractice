@@ -56,12 +56,12 @@ public class Child extends Customer{
         this.gender = customer.getGender();
         this.clientStatus = customer.getClientStatus();
         this.meetingFormat = customer.getMeetingFormat();
-        this.setCustomerCredentials(new CustomerCredentials(Set.of(new Role(4, "ROLE_CHILD"))));
+        this.setCustomerCredentials(new CustomerCredentials(this, Set.of(new Role(4, "ROLE_CHILD"))));
         this.setApplicationFormStatus(customer.getApplicationFormStatus());
     }
 
     public Child() {
-        this.setCustomerCredentials(new CustomerCredentials(Set.of(new Role(4, "ROLE_CHILD"))));
+        this.setCustomerCredentials(new CustomerCredentials(this, Set.of(new Role(4, "ROLE_CHILD"))));
         this.setApplicationFormStatus(ApplicationFormStatus.NOT_CREATED);
     }
 }

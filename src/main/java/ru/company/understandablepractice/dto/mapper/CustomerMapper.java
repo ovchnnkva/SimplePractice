@@ -3,9 +3,11 @@ package ru.company.understandablepractice.dto.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.company.understandablepractice.dto.CustomerResponse;
+import ru.company.understandablepractice.dto.customers.CustomerApplicationDto;
+import ru.company.understandablepractice.dto.customers.CustomerResponse;
 import ru.company.understandablepractice.dto.converter.YesNoConverter;
 import ru.company.understandablepractice.model.Customer;
+import ru.company.understandablepractice.model.User;
 import ru.company.understandablepractice.model.types.*;
 
 import java.util.Arrays;
@@ -45,8 +47,50 @@ public abstract class CustomerMapper {
     @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormatString(customer))")
     public abstract CustomerResponse fromEntityToResponse(Customer customer);
 
+    @Mapping(target = "customerCredentials", ignore = true)
+    @Mapping(target = "applicationFormToken", ignore = true)
+    @Mapping(target = "applicationFormStatus", ignore = true)
+    @Mapping(target = "clientType", expression = "java(mapClientType(dto))")
+    @Mapping(target = "contactMethod", expression = "java(mapContactMethod(dto))")
+    @Mapping(target = "onlinePlatform", expression = "java(mapOnlinePlatform(dto))")
+    @Mapping(target = "familyStatus", expression = "java(mapFamilyStatus(dto))")
+    @Mapping(target = "priorityCommunicationChannel", expression = "java(mapPriorityCommunicationChannel(dto))")
+    @Mapping(target = "supervisionStatusThisClient", expression = "java(yesNoConverter.stringToBoolean(dto.getSupervisionStatusThisClient()))")
+    @Mapping(target = "gender", expression = "java(mapGender(dto))")
+    @Mapping(target = "clientStatus", expression = "java(mapClientStatus(dto))")
+    @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormat(dto))")
+    @Mapping(target = "fullName", expression = "java(mapFullName(dto))")
+    @Mapping(target = "user", expression = "java(mapUser(dto))")
+    public abstract Customer fromApplicationDtoToEntity(CustomerApplicationDto dto);
+
+    @Mapping(target = "clientType", expression = "java(mapClientTypeString(customer))")
+    @Mapping(target = "contactMethod", expression = "java(mapContactMethodString(customer))")
+    @Mapping(target = "onlinePlatform", expression = "java(mapOnlinePlatformString(customer))")
+    @Mapping(target = "familyStatus", expression = "java(mapFamilyStatusString(customer))")
+    @Mapping(target = "priorityCommunicationChannel", expression = "java(mapPriorityCommunicationChannelString(customer))")
+    @Mapping(target = "supervisionStatusThisClient", expression = "java(yesNoConverter.booleanToString(customer.isSupervisionStatusThisClient()))")
+    @Mapping(target = "gender", expression = "java(mapGenderString(customer))")
+    @Mapping(target = "clientStatus", expression = "java(mapClientStatusString(customer))")
+    @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormatString(customer))")
+    @Mapping(target = "userId", expression = "java(mapUserId(customer))")
+    public abstract CustomerApplicationDto fromEntityToApplicationDto(Customer customer);
+
+    User mapUser(CustomerApplicationDto dto) {
+        return new User(dto.getUserId());
+    }
+
+    long mapUserId(Customer customer) {
+        return customer.getUser().getId();
+    }
 
     ClientType mapClientType(CustomerResponse response) {
+        return Arrays.stream(ClientType.values())
+                .filter(value -> value.getTittle().equals(response.getClientType()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    ClientType mapClientType(CustomerApplicationDto response) {
         return Arrays.stream(ClientType.values())
                 .filter(value -> value.getTittle().equals(response.getClientType()))
                 .findFirst()
@@ -64,12 +108,15 @@ public abstract class CustomerMapper {
                 .orElse(null);
     }
 
-    String mapGenderString(Customer entity) {
-        return entity.getGender() != null ? entity.getGender().getTittle() : "";
+    Gender mapGender(CustomerApplicationDto response) {
+        return Arrays.stream(Gender.values())
+                .filter(value -> value.getTittle().equals(response.getGender()))
+                .findFirst()
+                .orElse(null);
     }
 
-    String mapCLientTypeString(Customer entity) {
-        return entity.getClientType() != null ? entity.getClientType().getTittle() : "";
+    String mapGenderString(Customer entity) {
+        return entity.getGender() != null ? entity.getGender().getTittle() : "";
     }
 
     String mapContactMethodString(Customer customer) {
@@ -77,6 +124,13 @@ public abstract class CustomerMapper {
     }
 
     ContactMethod mapContactMethod(CustomerResponse response) {
+        return Arrays.stream(ContactMethod.values())
+                .filter(status -> status.getTittle().equals(response.getContactMethod()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    ContactMethod mapContactMethod(CustomerApplicationDto response) {
         return Arrays.stream(ContactMethod.values())
                 .filter(status -> status.getTittle().equals(response.getContactMethod()))
                 .findFirst()
@@ -94,11 +148,25 @@ public abstract class CustomerMapper {
                 .orElse(null);
     }
 
+    OnlinePlatform mapOnlinePlatform(CustomerApplicationDto response) {
+        return Arrays.stream(OnlinePlatform.values())
+                .filter(status -> status.getTittle().equals(response.getOnlinePlatform()))
+                .findFirst()
+                .orElse(null);
+    }
+
     String mapFamilyStatusString(Customer customer) {
         return customer.getFamilyStatus() != null ? customer.getFamilyStatus().getTittle() : "";
     }
 
     FamilyStatus mapFamilyStatus(CustomerResponse response) {
+        return Arrays.stream(FamilyStatus.values())
+                .filter(status -> status.getTittle().equals(response.getFamilyStatus()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    FamilyStatus mapFamilyStatus(CustomerApplicationDto response) {
         return Arrays.stream(FamilyStatus.values())
                 .filter(status -> status.getTittle().equals(response.getFamilyStatus()))
                 .findFirst()
@@ -116,11 +184,25 @@ public abstract class CustomerMapper {
                 .orElse(null);
     }
 
+    PriorityCommunicationChannel mapPriorityCommunicationChannel(CustomerApplicationDto response) {
+        return Arrays.stream(PriorityCommunicationChannel.values())
+                .filter(status -> status.getTittle().equals(response.getPriorityCommunicationChannel()))
+                .findFirst()
+                .orElse(null);
+    }
+
     String mapClientStatusString(Customer customer) {
         return customer.getClientStatus() != null ? customer.getClientStatus().getTittle() : "";
     }
 
     ClientStatus mapClientStatus(CustomerResponse response) throws NoSuchElementException {
+        return Arrays.stream(ClientStatus.values())
+                .filter(status -> status.getTittle().equals(response.getClientStatus()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    ClientStatus mapClientStatus(CustomerApplicationDto response) throws NoSuchElementException {
         return Arrays.stream(ClientStatus.values())
                 .filter(status -> status.getTittle().equals(response.getClientStatus()))
                 .findFirst()
@@ -138,7 +220,19 @@ public abstract class CustomerMapper {
                 .orElse(null);
     }
 
+    MeetingFormat mapMeetingFormat(CustomerApplicationDto response) {
+        return Arrays.stream(MeetingFormat.values())
+                .filter(status -> status.getTittle().equals(response.getMeetingFormat()))
+                .findFirst()
+                .orElse(null);
+    }
+
     String mapFullName(CustomerResponse response) {
         return String.format("%s %s %s", response.getLastName(), response.getFirstName(), response.getSecondName());
     }
+
+    String mapFullName(CustomerApplicationDto response) {
+        return String.format("%s %s %s", response.getLastName(), response.getFirstName(), response.getSecondName());
+    }
+
 }

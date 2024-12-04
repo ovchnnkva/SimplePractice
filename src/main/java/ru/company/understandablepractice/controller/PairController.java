@@ -8,10 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.company.understandablepractice.dto.PairResponse;
+import ru.company.understandablepractice.dto.customers.PairResponse;
 import ru.company.understandablepractice.dto.mapper.PairMapper;
 import ru.company.understandablepractice.model.User;
-import ru.company.understandablepractice.model.types.ClientType;
 import ru.company.understandablepractice.service.PairService;
 
 @Tag(

@@ -1,0 +1,99 @@
+package ru.company.understandablepractice.dto.customers;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import ru.company.understandablepractice.model.types.ClientType;
+
+import java.time.LocalDate;
+import java.util.Objects;
+
+@Getter
+@Setter
+@ToString
+public class CustomerApplicationDto {
+    protected long id;
+
+    protected String clientType;
+
+    protected String fullName;
+
+    protected String firstName;
+
+    protected String secondName;
+
+    protected String lastName;
+
+    protected LocalDate birth;
+
+    protected String phoneNumber;
+
+    protected String mail;
+
+    protected String gender;
+
+    protected String clientStatus;
+
+    protected String meetingFormat;
+
+    protected String contactMethod;
+
+    protected LocalDate dateFirstRequest;
+
+    protected LocalDate dateFirstConsultation;
+
+    protected String onlinePlatform;
+
+    protected String offlineAddress;
+
+    protected String clientTherapyRequest;
+
+    protected String meetingTimeDay;
+
+    protected Integer financialCondition;
+
+    protected String residenceAddress;
+
+    protected String peerRecommendation;
+
+    protected String specialTermsContact;
+
+    protected String familyStatus;
+
+    protected String priorityCommunicationChannel;
+
+    protected String supervisionStatusThisClient;
+
+    protected String contactSupervisor;
+
+    protected String supervisionMaterial;
+
+    private String takingMedic;
+
+    private String prevExperience;
+
+    private String notes;
+
+    private long userId;
+
+    public CustomerApplicationDto() {
+        this.clientType = ClientType.CUSTOMER.getTittle();
+    }
+
+    public CustomerApplicationDto(String clientType) {
+        this.clientType = clientType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CustomerApplicationDto that = (CustomerApplicationDto) o;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
+}

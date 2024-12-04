@@ -10,7 +10,6 @@ import java.util.Set;
 @Setter
 public class ClientResultRequest {
     private long id;
-    private long customerId;
     private long questionnaireId;
     private LocalDate dateResult;
     private Set<ClientChoiceRequest> clientChoices;

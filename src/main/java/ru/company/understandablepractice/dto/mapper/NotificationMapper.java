@@ -15,6 +15,7 @@ public abstract class NotificationMapper {
     @Mapping(target = "dateFirstRequest", expression = "java(mapDateFirstRequest(entity))")
     @Mapping(target = "customerFullName", expression = "java(mapCustomerFullName(entity))")
     @Mapping(target = "clientType", expression = "java(mapClientType(entity))")
+    @Mapping(target = "applicationFormStatus", expression = "java(mapApplicationForm(entity))")
     public abstract NotificationResponse fromEntityToResponse(Customer entity);
 
     long mapCustomerId(Customer entity) {
@@ -31,5 +32,9 @@ public abstract class NotificationMapper {
 
     String mapClientType(Customer entity) {
         return entity.getClientType().getTittle();
+    }
+
+    int mapApplicationForm(Customer customer) {
+        return customer.getApplicationFormStatus() != null ? customer.getApplicationFormStatus().getKey() : 2;
     }
 }

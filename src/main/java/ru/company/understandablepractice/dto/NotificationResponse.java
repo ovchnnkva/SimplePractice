@@ -14,4 +14,6 @@ public class NotificationResponse {
     private String customerFullName;
 
     private String clientType;
+
+    private int applicationFormStatus;
 }
