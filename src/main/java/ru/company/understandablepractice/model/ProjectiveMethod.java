@@ -6,6 +6,7 @@ import lombok.Setter;
 import ru.company.understandablepractice.model.Meet;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,7 +26,14 @@ public class ProjectiveMethod {
     @Column(name = "date_create_method")
     private LocalDate dateCreateMethod;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "type_method_id")
     private TypeMethod typeMethod;
+
+    @OneToMany(
+            mappedBy = "projectiveMethod",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<PhotoProjectiveMethod> photoProjectiveMethods;
 }

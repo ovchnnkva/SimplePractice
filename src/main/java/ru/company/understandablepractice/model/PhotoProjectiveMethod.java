@@ -18,7 +18,6 @@ public class PhotoProjectiveMethod {
     private long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "projective_method_id")
     private ProjectiveMethod projectiveMethod;
 
     @Column(name = "photo_method")

@@ -14,17 +14,8 @@ public abstract class PhotoProjectiveMethodMapper {
     @Autowired
     private ProjectiveMethodMapper projectiveMethodMapper;
 
-    @Mapping(target = "projectiveMethod", expression = "java(mapProjectiveMethod(response))")
     public abstract PhotoProjectiveMethod fromResponseToEntity(PhotoProjectiveMethodResponse response);
 
-    @Mapping(target = "projectiveMethod", expression = "java(mapProjectiveMethodResponse(entity))")
     public abstract PhotoProjectiveMethodResponse fromEntityToResponse(PhotoProjectiveMethod entity);
 
-    ProjectiveMethod mapProjectiveMethod(PhotoProjectiveMethodResponse response) {
-        return projectiveMethodMapper.fromResponseToEntity(response.getProjectiveMethod());
-    }
-
-    ProjectiveMethodResponse mapProjectiveMethodResponse(PhotoProjectiveMethod entity) {
-        return projectiveMethodMapper.fromEntityToResponse(entity.getProjectiveMethod());
-    }
 }

@@ -2,6 +2,7 @@ package ru.company.understandablepractice.controller;
 
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +11,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.company.understandablepractice.dto.mapper.ProjectiveMethodMapper;
 import ru.company.understandablepractice.dto.projectivemethod.ProjectiveMethodResponse;
+import ru.company.understandablepractice.model.ProjectiveMethod;
 import ru.company.understandablepractice.service.ProjectiveMethodService;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Tag(
         name = "Проективные методики CRUD"
@@ -61,6 +67,7 @@ public class ProjectiveMethodController {
         ResponseEntity<Long> responseEntity;
         try {
             var entity = mapper.fromResponseToEntity(response);
+            entity.setDateCreateMethod(LocalDate.now());
             responseEntity = service.create(entity)
                     .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
@@ -78,5 +85,16 @@ public class ProjectiveMethodController {
         log.info("delete Projective Method by id {}", id);
         service.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Operation(summary = "Проективные методики для встречи", description = "Позволяет получить все проективные методики по id встречи")
+    @GetMapping("byMeet/{meetId}")
+    public ResponseEntity<List<ProjectiveMethodResponse>> getProjectiveMethods(@PathVariable @Parameter(description = "meetId") long meetId) {
+        List<ProjectiveMethod> result = service.findProjectiveMethodByMeetId(meetId);
+        return result.isEmpty()
+                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
+                : new ResponseEntity<>(result.stream()
+                .map(mapper::fromEntityToResponse)
+                .collect(Collectors.toList()), HttpStatus.OK);
     }
 }

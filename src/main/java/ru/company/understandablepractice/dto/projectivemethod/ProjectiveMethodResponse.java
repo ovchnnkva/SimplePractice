@@ -4,6 +4,7 @@ import lombok.Data;
 import ru.company.understandablepractice.dto.MeetResponse;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 public class ProjectiveMethodResponse {
@@ -15,4 +16,6 @@ public class ProjectiveMethodResponse {
     private LocalDate dateCreateMethod;
 
     private TypeMethodResponse typeMethod;
+
+    private List<PhotoProjectiveMethodResponse> photoProjectiveMethods;
 }
