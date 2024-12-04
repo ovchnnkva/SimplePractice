@@ -16,5 +16,5 @@ public interface ProjectiveMethodRepository extends JpaRepository<ProjectiveMeth
                 "WHERE pm.meet.id = :meetId " +
                 "ORDER BY pm.dateCreateMethod DESC"
     )
-    Optional<List<ProjectiveMethod>> findByMeetId(@Param("meetId")long meetId);
+    List<ProjectiveMethod> findByMeetId(@Param("meetId")long meetId);
 }

@@ -22,6 +22,10 @@ public class TypeMethodService extends CRUDService<TypeMethod> {
         this.mapper = mapper;
     }
 
+    public long saveTypeMethod(TypeMethod typeMethod) {
+        return repository.save(new TypeMethod()).getId();
+    }
+
     public Optional<List<TypeMethodResponse>> findAllByUserId(long userId) {
         List<TypeMethodResponse> response = null;
         List<TypeMethod> typeMethodList = repository.findByUserId(userId).orElse(null);

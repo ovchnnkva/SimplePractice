@@ -2,14 +2,10 @@ package ru.company.understandablepractice.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.company.understandablepractice.dto.mapper.ProjectiveMethodDetailsMapper;
-import ru.company.understandablepractice.dto.projectivemethod.ProjectiveMethodDetailsResponse;
-import ru.company.understandablepractice.model.PhotoProjectiveMethod;
+import ru.company.understandablepractice.dto.mapper.ProjectiveMethodMapper;
+import ru.company.understandablepractice.dto.projectivemethod.ProjectiveMethodResponse;
 import ru.company.understandablepractice.model.ProjectiveMethod;
-import ru.company.understandablepractice.model.TypeMethod;
-import ru.company.understandablepractice.repository.PhotoProjectiveMethodRepository;
 import ru.company.understandablepractice.repository.ProjectiveMethodRepository;
-import ru.company.understandablepractice.repository.TypeMethodRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,33 +15,27 @@ import java.util.stream.Collectors;
 @Service
 public class ProjectiveMethodService extends CRUDService<ProjectiveMethod>{
 
-    private final ProjectiveMethodDetailsMapper projectiveMethodDetailsMapper;
-
     private final ProjectiveMethodRepository repository;
-    private final TypeMethodRepository typeMethodRepository;
-    private final PhotoProjectiveMethodRepository photoProjectiveMethodRepository;
+    private final ProjectiveMethodMapper projectiveMethodMapper;
+    private final TypeMethodService typeMethodService;
 
-    ProjectiveMethodService(ProjectiveMethodDetailsMapper projectiveMethodDetailsMapper, ProjectiveMethodRepository repository,
-                            TypeMethodRepository typeMethodRepository, PhotoProjectiveMethodRepository photoProjectiveMethodRepository) {
+    ProjectiveMethodService(ProjectiveMethodRepository repository, ProjectiveMethodMapper projectiveMethodMapper, TypeMethodService typeMethodService) {
         super(repository);
-        this.projectiveMethodDetailsMapper = projectiveMethodDetailsMapper;
-        this.photoProjectiveMethodRepository = photoProjectiveMethodRepository;
         this.repository = repository;
-        this.typeMethodRepository = typeMethodRepository;
+        this.projectiveMethodMapper = projectiveMethodMapper;
+        this.typeMethodService = typeMethodService;
     }
 
-    public Optional<List<ProjectiveMethodDetailsResponse>> findProjectiveMethodByMeetId(long meetId) {
-        List<ProjectiveMethodDetailsResponse> responseList = null;
-
-        List<ProjectiveMethod> projectiveMethods = repository.findByMeetId(meetId).orElse(null);
-        if (projectiveMethods != null) {
-            responseList = projectiveMethods.stream().map(response -> {
-                List< PhotoProjectiveMethod> photoProjectiveMethodList = photoProjectiveMethodRepository.findByProjectiveMethodId(response.getId()).orElse(null);
-
-                return projectiveMethodDetailsMapper.fromEntityToResponse(response, photoProjectiveMethodList);
-            }).collect(Collectors.toList());
+    @Override
+    public Optional<ProjectiveMethod> create(ProjectiveMethod entity) throws Exception {
+        if (entity.getTypeMethod() != null && entity.getTypeMethod().getId() == 0) {
+            entity.getTypeMethod().setId(typeMethodService.saveTypeMethod(entity.getTypeMethod()));
         }
 
-        return Optional.ofNullable(responseList);
+        return super.create(entity);
+    }
+
+    public List<ProjectiveMethod> findProjectiveMethodByMeetId(long meetId) {
+        return repository.findByMeetId(meetId);
     }
 }
