@@ -20,7 +20,7 @@ public class PhotoProjectiveMethod {
     @ManyToOne(fetch = FetchType.LAZY)
     private ProjectiveMethod projectiveMethod;
 
-    @Column(name = "photo_method")
+    @Column(name = "photo_method", columnDefinition = "TEXT")
     private String photoMethod;
 
     @Column(name = "date_create_photo")
