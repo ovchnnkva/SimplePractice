@@ -39,7 +39,7 @@ public class UnderstandablepracticeApplication {
 			roleService.saveRole(new Role(6, "ROLE_TEST"));
 
 			User user = new User();
-			user.setId(1);
+			user.setId(1L);
 			UserCredentials userCredentials = new UserCredentials();
 			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 			userCredentials.setPassword(encoder.encode("pass"));

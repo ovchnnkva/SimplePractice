@@ -16,7 +16,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private long id;
+    private Long id;
 
     @Column(name = "supscription_active")
     private boolean subscriptionActive;
@@ -46,9 +46,10 @@ public class User {
     private String userImage;
 
     @OneToMany(
-            mappedBy = "user",
             cascade = CascadeType.ALL,
-            orphanRemoval = true)
+            orphanRemoval = true
+    )
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private List<UserDiplomas> userDiplomasList;
 
     @OneToOne(

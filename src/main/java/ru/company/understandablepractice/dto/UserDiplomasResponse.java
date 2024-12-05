@@ -10,7 +10,7 @@ public class UserDiplomasResponse {
 
     private long id;
 
-    private UserResponse user;
+    private Long userId;
 
     private String photoDiploma;
 }
