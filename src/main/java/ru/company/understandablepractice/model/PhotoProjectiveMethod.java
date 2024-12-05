@@ -17,8 +17,8 @@ public class PhotoProjectiveMethod {
     @Column(name = "photo_projective_method_id")
     private long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private ProjectiveMethod projectiveMethod;
+    @Column(name = "projective_method_id")
+    private Long projectiveMethod;
 
     @Column(name = "photo_method", columnDefinition = "TEXT")
     private String photoMethod;

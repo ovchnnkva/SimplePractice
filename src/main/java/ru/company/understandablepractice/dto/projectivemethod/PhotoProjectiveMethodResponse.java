@@ -9,7 +9,7 @@ public class PhotoProjectiveMethodResponse {
 
     private long id;
 
-    private ProjectiveMethodResponse projectiveMethod;
+    private Long projectiveMethod;
 
     private String photoMethod;
 

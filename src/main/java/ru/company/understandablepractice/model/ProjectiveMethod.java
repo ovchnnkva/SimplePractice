@@ -31,9 +31,9 @@ public class ProjectiveMethod {
     private TypeMethod typeMethod;
 
     @OneToMany(
-            mappedBy = "projectiveMethod",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @JoinColumn(name = "projective_method_id", referencedColumnName = "projective_method_id")
     private List<PhotoProjectiveMethod> photoProjectiveMethods;
 }

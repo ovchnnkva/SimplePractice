@@ -1,22 +1,23 @@
 package ru.company.understandablepractice.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
 @Setter
+@Getter
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "user_diplomas")
 public class UserDiplomas {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "diploma_id")
-    private long id;
+    private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
+    @Column(name = "user_id")
+    private Long userId;
 
     @Column(name = "photo_diploma")
     private String photoDiploma;
