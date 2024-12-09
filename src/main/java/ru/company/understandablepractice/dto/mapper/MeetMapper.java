@@ -1,7 +1,6 @@
 package ru.company.understandablepractice.dto.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.company.understandablepractice.dto.customers.CustomerResponse;
 import ru.company.understandablepractice.dto.MeetResponse;
@@ -31,6 +30,12 @@ public abstract class MeetMapper {
     @Mapping(target = "formatMeet", expression = "java(mapMeetingFormatString(entity))")
     @Mapping(target = "paymentType", expression = "java(mapPaymentTypeString(entity))")
     public abstract MeetResponse fromEntityToResponse(Meet entity);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "customer", expression = "java(mapCustomer(response))")
+    @Mapping(target = "formatMeet", expression = "java(mapMeetingFormat(response))")
+    @Mapping(target = "paymentType", expression = "java(mapPaymentType(response))")
+    public abstract void updateEntityFromDto(MeetResponse response, @MappingTarget Meet entity);
 
     Customer mapCustomer(MeetResponse response) {
         return response.getCustomer() != null ? customerMapper.fromResponseToEntity(response.getCustomer()) : null;

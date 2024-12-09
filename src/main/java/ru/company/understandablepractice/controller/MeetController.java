@@ -42,19 +42,8 @@ public class MeetController {
     @PutMapping
     public ResponseEntity<?> update(@RequestBody @Parameter(description = "Встреча") MeetResponse response) {
         log.info("update meet {}", response);
-        ResponseEntity<Long> responseEntity;
-        try {
-            var entity = mapper.fromResponseToEntity(response);
-            var user = new User(requestService.getIdFromRequestToken());
-            entity.setUser(user);
-            responseEntity = service.create(entity)
-                    .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
-                    .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
-        } catch (Exception e) {
-            responseEntity = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
 
-        return responseEntity;
+        return new ResponseEntity<>(service.update(response), HttpStatus.OK);
     }
 
     @Operation(summary = "Создать", description = "Создать встречу")
