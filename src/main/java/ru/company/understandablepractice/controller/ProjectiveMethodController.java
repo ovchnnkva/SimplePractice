@@ -91,9 +91,7 @@ public class ProjectiveMethodController {
     @GetMapping("byMeet/{meetId}")
     public ResponseEntity<List<ProjectiveMethodResponse>> getProjectiveMethods(@PathVariable @Parameter(description = "meetId") long meetId) {
         List<ProjectiveMethod> result = service.findProjectiveMethodByMeetId(meetId);
-        return result.isEmpty()
-                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                : new ResponseEntity<>(result.stream()
+        return new ResponseEntity<>(result.stream()
                 .map(mapper::fromEntityToResponse)
                 .collect(Collectors.toList()), HttpStatus.OK);
     }
