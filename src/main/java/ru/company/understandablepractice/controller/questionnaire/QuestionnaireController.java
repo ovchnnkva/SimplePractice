@@ -21,6 +21,7 @@ import ru.company.understandablepractice.security.JwtType;
 import ru.company.understandablepractice.security.services.JwtService;
 import ru.company.understandablepractice.service.QuestionnaireService;
 
+import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -85,9 +86,7 @@ public class QuestionnaireController {
     public ResponseEntity<Set<QuestionnaireMinResponse>> getAllByUser(@PathVariable("offset") long offset, @PathVariable("limit") long limit) {
         log.info("get all questionnaire by user id");
         Set<Questionnaire> result = service.getAllByUser(offset, limit);
-        return result.isEmpty()
-                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                : new ResponseEntity<>(result.stream()
+        return new ResponseEntity<>(result.stream()
                 .map(questionnaireMapper::fromEntityToMinResponse)
                 .collect(Collectors.toSet()), HttpStatus.OK);
     }
@@ -98,9 +97,7 @@ public class QuestionnaireController {
     public ResponseEntity<Set<ClientResultMinResponse>> getAllByCustomer(@PathVariable("id") @Parameter(description = "id клиента") long customerId, @PathVariable("offset") long offset, @PathVariable("limit") long limit) {
         log.info("get all by customer id {}", customerId);
         Set<ClientResult> result = service.getAllByCustomer(customerId, offset, limit);
-        return result.isEmpty()
-                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                : new ResponseEntity<>(result.stream()
+        return  new ResponseEntity<>(result.stream()
                 .map(clientResultMapper::fromEntityToMinResponse)
                 .collect(Collectors.toSet()), HttpStatus.OK);
     }
