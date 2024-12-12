@@ -20,8 +20,6 @@ public class PersonResponse {
 
     private String lastName;
 
-    private LocalDate birth;
-
     private String phoneNumber;
 
     private String mail;

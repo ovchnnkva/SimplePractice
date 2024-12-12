@@ -16,13 +16,12 @@ public abstract class LeftMenuUserDataMapper {
     @Mapping(target = "userMail", expression = "java(mapUserMail(user))")
     public abstract LeftMenuUserDataResponse fromEntityToResponse(User user);
 
-    //TODO Добавить пользователю картинку и реализовать ее маппинг
     String mapUserPicture(User user) {
         return user.getUserImage() != null ? user.getUserImage() : "";
     }
 
     String mapUserName(User user){
-        return user.getFullName();
+        return user.getFirstName();
     }
 
     String mapUserMail(User user){
