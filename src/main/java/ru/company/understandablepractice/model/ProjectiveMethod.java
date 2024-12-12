@@ -23,6 +23,10 @@ public class ProjectiveMethod {
     @JoinColumn(name = "meet_id")
     private Meet meet;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
+
     @Column(name = "date_create_method")
     private LocalDate dateCreateMethod;
 

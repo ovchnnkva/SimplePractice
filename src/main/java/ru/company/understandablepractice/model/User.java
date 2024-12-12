@@ -1,5 +1,6 @@
 package ru.company.understandablepractice.model;
 
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
@@ -20,6 +21,9 @@ public class User {
 
     @Column(name = "supscription_active")
     private boolean subscriptionActive;
+
+    @Column(name = "first_name")
+    private String firstName;
 
     @Column(name = "full_name")
     private String fullName;
@@ -50,7 +54,7 @@ public class User {
             orphanRemoval = true
     )
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
-    private List<UserDiplomas> userDiplomasList;
+    private List<UserDiplomas> userDiplomasList = new ArrayList<>();
 
     @OneToOne(
             mappedBy = "user",

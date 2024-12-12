@@ -7,6 +7,7 @@ import ru.company.understandablepractice.dto.projectivemethod.ProjectiveMethodRe
 import ru.company.understandablepractice.model.ProjectiveMethod;
 import ru.company.understandablepractice.repository.ProjectiveMethodRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -32,10 +33,18 @@ public class ProjectiveMethodService extends CRUDService<ProjectiveMethod>{
             entity.getTypeMethod().setId(typeMethodService.saveTypeMethod(entity.getTypeMethod()));
         }
 
+        if (entity.getPhotoProjectiveMethods() != null && !entity.getPhotoProjectiveMethods().isEmpty()) {
+            entity.getPhotoProjectiveMethods().forEach(val -> val.setDateCreatePhoto(LocalDate.now()));
+        }
+
         return super.create(entity);
     }
 
     public List<ProjectiveMethod> findProjectiveMethodByMeetId(long meetId) {
         return repository.findByMeetId(meetId);
+    }
+
+    public List<ProjectiveMethod> findProjectiveMethodByCustomerId(long customerId) {
+        return repository.findByCustomerId(customerId);
     }
 }

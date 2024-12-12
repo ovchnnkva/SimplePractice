@@ -38,9 +38,6 @@ public class Person {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "date_of_birth")
-    private LocalDate birth;
-
     @Column(name = "phone_number", length = 20)
     private String phoneNumber;
 

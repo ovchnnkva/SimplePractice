@@ -9,9 +9,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.company.understandablepractice.dto.mapper.PhotoProjectiveMethodMapper;
 import ru.company.understandablepractice.dto.mapper.ProjectiveMethodMapper;
+import ru.company.understandablepractice.dto.projectivemethod.PhotoProjectiveMethodResponse;
 import ru.company.understandablepractice.dto.projectivemethod.ProjectiveMethodResponse;
+import ru.company.understandablepractice.model.PhotoProjectiveMethod;
 import ru.company.understandablepractice.model.ProjectiveMethod;
+import ru.company.understandablepractice.service.PhotoProjectiveMethodService;
 import ru.company.understandablepractice.service.ProjectiveMethodService;
 
 import java.time.LocalDate;
@@ -19,7 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Tag(
-        name = "Проективные методики CRUD"
+        name = "Проективные методики"
 )
 @RequiredArgsConstructor
 @RestController
@@ -27,17 +31,19 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/innerOptions/projectiveMethods")
 public class ProjectiveMethodController {
 
-    private final ProjectiveMethodService service;
+    private final ProjectiveMethodService projectiveMethodService;
+    private final PhotoProjectiveMethodService photoProjectiveMethodService;
 
-    private final ProjectiveMethodMapper mapper;
+    private final ProjectiveMethodMapper projectiveMethodMapper;
+    private final PhotoProjectiveMethodMapper photoProjectiveMethodMapper;
 
     @Operation(summary = "Получение по ID", description = "Позволяет получить методику по ключу")
 
     @GetMapping("/get/{id}")
     public ResponseEntity<ProjectiveMethodResponse> getById(@PathVariable(name = "id") long id) {
         log.info("get Projective Method by id {}", id);
-        return service.getById(id)
-                .map(value -> new ResponseEntity<>(mapper.fromEntityToResponse(value), HttpStatus.OK))
+        return projectiveMethodService.getById(id)
+                .map(value -> new ResponseEntity<>(projectiveMethodMapper.fromEntityToResponse(value), HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
@@ -48,8 +54,8 @@ public class ProjectiveMethodController {
         log.info("update Projective Method {}", response);
         ResponseEntity<Long> responseEntity;
         try {
-            var entity = mapper.fromResponseToEntity(response);
-            responseEntity = service.create(entity)
+            var entity = projectiveMethodMapper.fromResponseToEntity(response);
+            responseEntity = projectiveMethodService.create(entity)
                     .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
         } catch (Exception e) {
@@ -66,9 +72,9 @@ public class ProjectiveMethodController {
         log.info("create Projective Method {}", response);
         ResponseEntity<Long> responseEntity;
         try {
-            var entity = mapper.fromResponseToEntity(response);
+            var entity = projectiveMethodMapper.fromResponseToEntity(response);
             entity.setDateCreateMethod(LocalDate.now());
-            responseEntity = service.create(entity)
+            responseEntity = projectiveMethodService.create(entity)
                     .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
         } catch (Exception e) {
@@ -83,18 +89,40 @@ public class ProjectiveMethodController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id") long id) {
         log.info("delete Projective Method by id {}", id);
-        service.delete(id);
+        projectiveMethodService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Operation(summary = "Проективные методики для встречи", description = "Позволяет получить все проективные методики по id встречи")
     @GetMapping("byMeet/{meetId}")
     public ResponseEntity<List<ProjectiveMethodResponse>> getProjectiveMethods(@PathVariable @Parameter(description = "meetId") long meetId) {
-        List<ProjectiveMethod> result = service.findProjectiveMethodByMeetId(meetId);
+        List<ProjectiveMethod> result = projectiveMethodService.findProjectiveMethodByMeetId(meetId);
         return result.isEmpty()
                 ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
                 : new ResponseEntity<>(result.stream()
-                .map(mapper::fromEntityToResponse)
+                .map(projectiveMethodMapper::fromEntityToResponse)
+                .collect(Collectors.toList()), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Проективные методики по клиенту", description = "Позволяет получить все проективные методики по id клиента")
+    @GetMapping("byCustomer/{customerId}")
+    public ResponseEntity<List<ProjectiveMethodResponse>> getProjectiveMethodsByCustomer(@PathVariable @Parameter(description = "customerId") long customerId) {
+        List<ProjectiveMethod> result = projectiveMethodService.findProjectiveMethodByCustomerId(customerId);
+        return result.isEmpty()
+                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
+                : new ResponseEntity<>(result.stream()
+                .map(projectiveMethodMapper::fromEntityToResponse)
+                .collect(Collectors.toList()), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Все фото по типу методики", description = "Позволяет получить все фото методик по id типа методики")
+    @GetMapping("getAllPhotos/{typeMethodId}")
+    public ResponseEntity<List<PhotoProjectiveMethodResponse>> getAllPhotos(@PathVariable @Parameter(description = "typeMethodId") long typeMethodId) {
+        List<PhotoProjectiveMethod> result = photoProjectiveMethodService.findPhotosByMethodType(typeMethodId);
+        return result.isEmpty()
+                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
+                : new ResponseEntity<>(result.stream()
+                .map(photoProjectiveMethodMapper::fromEntityToResponse)
                 .collect(Collectors.toList()), HttpStatus.OK);
     }
 }

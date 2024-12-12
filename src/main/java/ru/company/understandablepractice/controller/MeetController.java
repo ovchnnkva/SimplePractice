@@ -56,9 +56,8 @@ public class MeetController {
             var entity = mapper.fromResponseToEntity(response);
             var user = new User(requestService.getIdFromRequestToken());
             entity.setUser(user);
-            if (entity.getNameMeet() == null) {
-                entity.setNameMeet("Встреча");
-            }
+            entity.setNameMeet("Встреча");
+
             responseEntity = service.create(entity)
                     .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
