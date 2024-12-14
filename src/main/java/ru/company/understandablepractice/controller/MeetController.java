@@ -67,7 +67,6 @@ public class MeetController {
             var entity = mapper.fromResponseToEntity(response);
             var user = new User(requestService.getIdFromRequestToken());
             entity.setUser(user);
-            entity.setNameMeet("Встреча");
 
             responseEntity = service.create(entity)
                     .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))

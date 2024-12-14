@@ -8,4 +8,6 @@ public class HeaderSearchPersonResponse {
     private long customerId;
 
     private String fullName;
+
+    private String clientType;
 }
