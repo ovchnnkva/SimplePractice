@@ -13,6 +13,8 @@ public class UserResponse {
 
     private String subscriptionActive;
 
+    private String firstName;
+
     private String fullName;
 
     private String phoneNumber;
