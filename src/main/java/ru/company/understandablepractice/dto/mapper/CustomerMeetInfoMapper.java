@@ -21,10 +21,10 @@ public abstract class CustomerMeetInfoMapper {
     }
 
     LocalDate mapLastMeet(List<Meet> meets) {
-        return meets != null && !meets.isEmpty() ? meets.get(meets.size() - 1).getDateMeet() : null;
+        return meets != null ? meets.get(meets.size() - 1).getDateMeet() : null;
     }
 
     LocalDate mapNextMeet(List<Meet> meets) {
-        return meets != null && !meets.isEmpty() ? meets.get(meets.size() - 1).getNextDayMeet() : null;
+        return meets != null ? meets.get(meets.size() - 1).getNextDayMeet() : null;
     }
 }
