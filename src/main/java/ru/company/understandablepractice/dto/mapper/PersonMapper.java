@@ -15,6 +15,7 @@ public abstract class PersonMapper {
     @Mapping(target = "fullName", expression = "java(mapFullName(response))")
     public abstract Person fromResponseToEntity(PersonResponse response);
 
+    @Mapping(target = "gender", expression = "java(mapGenderString(entity))")
     public abstract PersonResponse fromEntityToResponse(Person entity);
 
 
@@ -23,6 +24,10 @@ public abstract class PersonMapper {
                 .filter(value -> value.getTittle().equals(response.getGender()))
                 .findFirst()
                 .orElse(null);
+    }
+
+    String mapGenderString(Person entity) {
+        return entity.getGender() != null ? entity.getGender().getTittle() : null;
     }
 
     String mapFullName(PersonResponse response) {
