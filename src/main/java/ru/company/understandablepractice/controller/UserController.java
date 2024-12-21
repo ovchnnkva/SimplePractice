@@ -3,6 +3,7 @@ package ru.company.understandablepractice.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.company.understandablepractice.dto.UserResponse;
 import ru.company.understandablepractice.dto.mapper.UserMapper;
+import ru.company.understandablepractice.security.JwtType;
+import ru.company.understandablepractice.security.services.JwtService;
 import ru.company.understandablepractice.service.UserService;
 
 @Tag(
@@ -21,16 +24,19 @@ import ru.company.understandablepractice.service.UserService;
 @Slf4j
 @RequestMapping("/api/user")
 public class UserController {
-    private final UserService service;
 
+    private final UserService service;
     private final UserMapper mapper;
+    private final HttpServletRequest request;
+    private final JwtService jwtService;
+
 
     @Operation(summary = "Получение по ID", description = "Позволяет получить пользователя по ключу")
     @GetMapping("/get/{id}")
     public ResponseEntity<UserResponse> getById(@Parameter(description = "ID пользователя") @PathVariable("id") long id) {
         log.info("get user by id {}", id);
-
-        return service.getById(id)
+        Long userId = jwtService.extractUserId(request.getHeader("Authorization"), JwtType.ACCESS);
+        return service.getById(userId)
                 .map(value -> new ResponseEntity<>(mapper.fromEntityToResponse(value), HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }

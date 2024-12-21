@@ -41,9 +41,7 @@ public class SearchMeetController {
         Long userId = jwtService.extractUserId(request.getHeader("Authorization"), JwtType.ACCESS);
         log.info("get meets by userId = {}, personId = {}", userId, customerId);
         List<Meet> result = service.getByUserIdAndCustomerId(userId, customerId, offset, limit);
-        return result.isEmpty()
-                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                : new ResponseEntity<>(result.stream()
+        return new ResponseEntity<>(result.stream()
                 .map(mapper::fromEntityToResponse)
                 .collect(Collectors.toList()), HttpStatus.OK);
     }

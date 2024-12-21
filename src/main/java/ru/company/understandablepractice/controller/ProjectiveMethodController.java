@@ -97,9 +97,7 @@ public class ProjectiveMethodController {
     @GetMapping("byMeet/{meetId}")
     public ResponseEntity<List<ProjectiveMethodResponse>> getProjectiveMethods(@PathVariable @Parameter(description = "meetId") long meetId) {
         List<ProjectiveMethod> result = projectiveMethodService.findProjectiveMethodByMeetId(meetId);
-        return result.isEmpty()
-                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                : new ResponseEntity<>(result.stream()
+        return new ResponseEntity<>(result.stream()
                 .map(projectiveMethodMapper::fromEntityToResponse)
                 .collect(Collectors.toList()), HttpStatus.OK);
     }
@@ -108,9 +106,7 @@ public class ProjectiveMethodController {
     @GetMapping("byCustomer/{customerId}")
     public ResponseEntity<List<ProjectiveMethodResponse>> getProjectiveMethodsByCustomer(@PathVariable @Parameter(description = "customerId") long customerId) {
         List<ProjectiveMethod> result = projectiveMethodService.findProjectiveMethodByCustomerId(customerId);
-        return result.isEmpty()
-                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                : new ResponseEntity<>(result.stream()
+        return new ResponseEntity<>(result.stream()
                 .map(projectiveMethodMapper::fromEntityToResponse)
                 .collect(Collectors.toList()), HttpStatus.OK);
     }
@@ -119,9 +115,7 @@ public class ProjectiveMethodController {
     @GetMapping("getAllPhotos/{typeMethodId}")
     public ResponseEntity<List<PhotoProjectiveMethodResponse>> getAllPhotos(@PathVariable @Parameter(description = "typeMethodId") long typeMethodId) {
         List<PhotoProjectiveMethod> result = photoProjectiveMethodService.findPhotosByMethodType(typeMethodId);
-        return result.isEmpty()
-                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                : new ResponseEntity<>(result.stream()
+        return new ResponseEntity<>(result.stream()
                 .map(photoProjectiveMethodMapper::fromEntityToResponse)
                 .collect(Collectors.toList()), HttpStatus.OK);
     }

@@ -34,7 +34,7 @@ public class CalendarController {
     public ResponseEntity<CalendarResponse> getCalendar(@PathVariable(name = "year") @Parameter(description = "Год, в рамках которого находятся встречи") String year) {
 
         Long userId = jwtService.extractUserId(request.getHeader("Authorization"), JwtType.ACCESS);
-        log.info("auth user {}", userId);
+        log.info("get calendar by user {}", userId);
         try{
             return calendarService.getCalendar(userId, year)
                     .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
