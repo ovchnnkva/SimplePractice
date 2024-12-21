@@ -34,6 +34,11 @@ public class MeetService extends CRUDService<Meet>{
         if(entity.getCustomer() != null && entity.getCustomer().getId() == 0) {
             entity.getCustomer().setId(customerService.saveCustomer(entity.getCustomer()));
         }
+
+        if (entity.getNameMeet() == null || entity.getNameMeet().isEmpty()) {
+            entity.setNameMeet("Встреча");
+        }
+
         return super.create(entity);
     }
 
@@ -49,7 +54,7 @@ public class MeetService extends CRUDService<Meet>{
     }
 
     public Optional<CustomerMeetInfoResponse> getCustomerMeetInfo(long customerId) {
-        CustomerMeetInfoResponse response = null;
+        CustomerMeetInfoResponse response = new CustomerMeetInfoResponse();
         List<Meet> meets = repository.findMeetByCustomerId(customerId).orElse(null);
         if (meets != null) {
             response = customerMeetInfoMapper.fromEntityToResponse(customerId, meets);

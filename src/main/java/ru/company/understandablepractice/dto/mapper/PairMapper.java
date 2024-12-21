@@ -3,6 +3,7 @@ package ru.company.understandablepractice.dto.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
+import ru.company.understandablepractice.dto.converter.YesNoConverter;
 import ru.company.understandablepractice.dto.customers.PairApplicationDto;
 import ru.company.understandablepractice.dto.customers.PairResponse;
 import ru.company.understandablepractice.dto.PersonResponse;
@@ -25,6 +26,9 @@ public abstract class PairMapper {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    YesNoConverter yesNoConverter;
+
     @Mapping(target = "clientType", expression = "java(mapClientType(response))")
     @Mapping(target = "familyStatus", expression = "java(mapFamilyStatus(response))")
     @Mapping(target = "secondPerson", expression = "java(mapSecondPerson(response))")
@@ -39,6 +43,8 @@ public abstract class PairMapper {
     @Mapping(target = "gender", expression = "java(mapGenderString(entity))")
     @Mapping(target = "clientStatus", expression = "java(mapClientStatusString(entity))")
     @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormatString(entity))")
+    @Mapping(target = "supervisionStatusThisClient",
+            expression = "java(yesNoConverter.stringToBoolean(response.getSubscriptionActive()))")
     public abstract PairResponse fromEntityToResponse(Pair entity);
 
     @Mapping(target = "clientType", expression = "java(mapClientType(dto))")

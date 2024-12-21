@@ -3,6 +3,7 @@ package ru.company.understandablepractice.dto.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
+import ru.company.understandablepractice.dto.converter.YesNoConverter;
 import ru.company.understandablepractice.dto.customers.ChildApplicationDto;
 import ru.company.understandablepractice.dto.customers.ChildResponse;
 import ru.company.understandablepractice.dto.PersonResponse;
@@ -26,6 +27,8 @@ public abstract class ChildMapper {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    YesNoConverter yesNoConverter;
 
     @Mapping(target = "clientType", expression = "java(mapClientType(response))")
     @Mapping(target = "bringsClient", expression = "java(mapBringsClient(response))")
@@ -44,6 +47,8 @@ public abstract class ChildMapper {
     @Mapping(target = "gender", expression = "java(mapGenderString(child))")
     @Mapping(target = "clientStatus", expression = "java(mapClientStatusString(child))")
     @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormatString(child))")
+    @Mapping(target = "supervisionStatusThisClient",
+            expression = "java(yesNoConverter.stringToBoolean(response.getSubscriptionActive()))")
     public abstract ChildResponse fromEntityToResponse(Child child);
 
     @Mapping(target = "clientType", expression = "java(mapClientType(dto))")
@@ -194,5 +199,9 @@ public abstract class ChildMapper {
 
     String mapFullName(ChildApplicationDto response) {
         return String.format("%s %s %s", response.getLastName(), response.getFirstName(), response.getSecondName());
+    }
+
+    String mapSupervisionStatusThisClient(Child entity) {
+        return entity.isSupervisionStatusThisClient() ? "Да" : "Нет";
     }
 }
