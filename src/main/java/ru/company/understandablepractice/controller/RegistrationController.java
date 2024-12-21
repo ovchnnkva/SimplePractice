@@ -6,23 +6,22 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.company.understandablepractice.security.SignInRequest;
 import ru.company.understandablepractice.security.UserAlreadyExists;
 import ru.company.understandablepractice.security.services.SignInService;
 
 @RestController
 @RequestMapping("/registration")
+@RequiredArgsConstructor
 @Tag(name = "Регистрация")
 public class RegistrationController {
-    @Autowired
-    private SignInService signInService;
 
-    @PutMapping("/sign-up")
+    private final SignInService signInService;
+
+    @PostMapping("/sign-up")
     @Operation(summary = "Регистрация пользователя")
-    public ResponseEntity<String> signUp(SignInRequest signInRequest){
+    public ResponseEntity<?> signUp(@RequestBody SignInRequest signInRequest){
         ResponseEntity<String> response = null;
         try {
             signInService.signIn(signInRequest);
