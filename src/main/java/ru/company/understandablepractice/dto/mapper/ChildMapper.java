@@ -48,7 +48,7 @@ public abstract class ChildMapper {
     @Mapping(target = "clientStatus", expression = "java(mapClientStatusString(child))")
     @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormatString(child))")
     @Mapping(target = "supervisionStatusThisClient",
-            expression = "java(yesNoConverter.stringToBoolean(response.getSubscriptionActive()))")
+            expression = "java(yesNoConverter.booleanToString(child.isSupervisionStatusThisClient()))")
     public abstract ChildResponse fromEntityToResponse(Child child);
 
     @Mapping(target = "clientType", expression = "java(mapClientType(dto))")
