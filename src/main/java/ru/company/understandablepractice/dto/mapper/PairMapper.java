@@ -44,7 +44,7 @@ public abstract class PairMapper {
     @Mapping(target = "clientStatus", expression = "java(mapClientStatusString(entity))")
     @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormatString(entity))")
     @Mapping(target = "supervisionStatusThisClient",
-            expression = "java(yesNoConverter.stringToBoolean(response.getSubscriptionActive()))")
+            expression = "java(yesNoConverter.booleanToString(entity.isSupervisionStatusThisClient()))")
     public abstract PairResponse fromEntityToResponse(Pair entity);
 
     @Mapping(target = "clientType", expression = "java(mapClientType(dto))")
