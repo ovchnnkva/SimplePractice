@@ -18,6 +18,7 @@ public abstract class CalendarMeetMapper {
     @Mapping(target = "endTime", expression = "java(mapEndTime(entity))")
     @Mapping(target = "formatMeet", expression = "java(mapFormatMeet(entity))")
     @Mapping(target = "title", expression = "java(mapTitleMeet(entity))")
+    @Mapping(target = "id", source = "id")
     public abstract CalendarMeetResponse fromEntityToResponse(Meet entity);
 
     LocalDateTime mapStartTime(Meet entity) {
