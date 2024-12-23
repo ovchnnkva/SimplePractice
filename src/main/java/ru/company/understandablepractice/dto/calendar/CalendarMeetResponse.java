@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 
 @Data
 public class CalendarMeetResponse {
+    private long id;
+
     private LocalDateTime startTime;
 
     private LocalDateTime endTime;
