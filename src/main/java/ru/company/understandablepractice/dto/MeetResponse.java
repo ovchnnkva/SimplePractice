@@ -4,6 +4,7 @@ import lombok.Data;
 import ru.company.understandablepractice.dto.customers.CustomerResponse;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Data
@@ -17,9 +18,9 @@ public class MeetResponse {
 
     private LocalDate dateMeet;
 
-    private LocalTime startMeet;
+    private LocalDateTime startMeet;
 
-    private LocalTime endMeet;
+    private LocalDateTime endMeet;
 
     private String formatMeet;
 
@@ -27,9 +28,9 @@ public class MeetResponse {
 
     private LocalDate nextDayMeet;
 
-    private LocalTime nextStartMeet;
+    private LocalDateTime nextStartMeet;
 
-    private LocalTime nextEndMeet;
+    private LocalDateTime nextEndMeet;
 
     private String clientSessionRequest;
 
