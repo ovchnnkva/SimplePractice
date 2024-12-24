@@ -20,22 +20,24 @@ public class SignInService {
     public void signIn(SignInRequest signInRequest) throws Exception {
         var username = signInRequest.getUsername();
         var password = signInRequest.getPassword();
+        var email = signInRequest.getEmail();
         var name = signInRequest.getFirstName();
         var fullName = String.format("%s %s %s", signInRequest.getLastName(), signInRequest.getFirstName(), signInRequest.getSecondName());
 
         if(userCredentialsService.isUserCredentialsAlreadyExists(username)){
             throw new UserAlreadyExists("User with such username already exists ");
         }
-        var user = createUser(username, password, name, fullName);
+        var user = createUser(username, password, email, name, fullName);
 
         userService.create(user);
     }
 
-    private User createUser(String username, String password, String name, String fullName){
+    private User createUser(String username, String password, String email, String name, String fullName){
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         var user = new User();
         user.setFirstName(name);
         user.setFullName(fullName);
+        user.setMail(email);
         var userCredentials = new UserCredentials();
         userCredentials.setUser(user);
         userCredentials.setUsername(username);
