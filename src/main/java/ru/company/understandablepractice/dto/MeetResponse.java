@@ -18,9 +18,9 @@ public class MeetResponse {
 
     private LocalDate dateMeet;
 
-    private LocalDateTime startMeet;
+    private LocalTime startMeet;
 
-    private LocalDateTime endMeet;
+    private LocalTime endMeet;
 
     private String formatMeet;
 
@@ -28,9 +28,9 @@ public class MeetResponse {
 
     private LocalDate nextDayMeet;
 
-    private LocalDateTime nextStartMeet;
+    private LocalTime nextStartMeet;
 
-    private LocalDateTime nextEndMeet;
+    private LocalTime nextEndMeet;
 
     private String clientSessionRequest;
 
