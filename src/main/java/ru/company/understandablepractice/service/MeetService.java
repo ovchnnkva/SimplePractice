@@ -44,7 +44,10 @@ public class MeetService extends CRUDService<Meet>{
 
     public MeetResponse update(MeetResponse response) {
         Optional<Meet> entity = repository.findById(response.getId());
-        entity.ifPresent(meet -> mapper.updateEntityFromDto(response, meet));
+        entity.ifPresent(meet -> {
+            mapper.updateEntityFromDto(response, meet);
+            repository.save(meet);
+        });
 
         return response;
     }
