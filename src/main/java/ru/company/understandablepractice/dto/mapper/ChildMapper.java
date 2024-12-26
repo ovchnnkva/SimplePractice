@@ -41,7 +41,7 @@ public abstract class ChildMapper {
     public abstract Child fromResponseToEntity(ChildResponse response);
 
 
-    @Mapping(target = "clientType", expression = "java(mapClientTypeString(response))")
+    @Mapping(target = "clientType", expression = "java(mapClientTypeString(child))")
     @Mapping(target = "bringsClient", expression = "java(mapBringsClientString(child))")
     @Mapping(target = "firstParent", expression = "java(mapFirstParentResponse(child))")
     @Mapping(target = "secondParent", expression = "java(mapSecondParentResponse(child))")
