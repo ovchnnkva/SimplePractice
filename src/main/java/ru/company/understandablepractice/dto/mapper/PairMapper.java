@@ -38,7 +38,7 @@ public abstract class PairMapper {
     @Mapping(target = "fullName", expression = "java(mapFullName(response))")
     public abstract Pair fromResponseToEntity(PairResponse response);
 
-    @Mapping(target = "clientType", expression = "java(mapClientTypeString(response))")
+    @Mapping(target = "clientType", expression = "java(mapClientTypeString(entity))")
     @Mapping(target = "familyStatus", expression = "java(mapFamilyStatusString(entity))")
     @Mapping(target = "secondPerson", expression = "java(mapSecondPersonResponse(entity))")
     @Mapping(target = "gender", expression = "java(mapGenderString(entity))")
