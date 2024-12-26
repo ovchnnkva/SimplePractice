@@ -38,6 +38,7 @@ public abstract class PairMapper {
     @Mapping(target = "fullName", expression = "java(mapFullName(response))")
     public abstract Pair fromResponseToEntity(PairResponse response);
 
+    @Mapping(target = "clientType", expression = "java(mapClientTypeString(response))")
     @Mapping(target = "familyStatus", expression = "java(mapFamilyStatusString(entity))")
     @Mapping(target = "secondPerson", expression = "java(mapSecondPersonResponse(entity))")
     @Mapping(target = "gender", expression = "java(mapGenderString(entity))")
@@ -99,7 +100,7 @@ public abstract class PairMapper {
                 .orElse(null);
     }
 
-    String mapCLientTypeString(Pair entity) {
+    String mapClientTypeString(Pair entity) {
         return entity.getClientType() != null ? entity.getClientType().getTittle() : "";
     }
 

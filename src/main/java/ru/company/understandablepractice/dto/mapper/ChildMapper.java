@@ -41,6 +41,7 @@ public abstract class ChildMapper {
     public abstract Child fromResponseToEntity(ChildResponse response);
 
 
+    @Mapping(target = "clientType", expression = "java(mapClientTypeString(response))")
     @Mapping(target = "bringsClient", expression = "java(mapBringsClientString(child))")
     @Mapping(target = "firstParent", expression = "java(mapFirstParentResponse(child))")
     @Mapping(target = "secondParent", expression = "java(mapSecondParentResponse(child))")
@@ -93,7 +94,7 @@ public abstract class ChildMapper {
                 .orElse(null);
     }
 
-    String mapCLientTypeString(Child entity) {
+    String mapClientTypeString(Child entity) {
         return entity.getClientType() != null ? entity.getClientType().getTittle() : "";
     }
 
