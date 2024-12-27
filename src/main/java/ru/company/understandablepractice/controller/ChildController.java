@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import ru.company.understandablepractice.dto.customers.ChildResponse;
 import ru.company.understandablepractice.dto.mapper.ChildMapper;
 import ru.company.understandablepractice.model.User;
+import ru.company.understandablepractice.model.types.ClientStatus;
 import ru.company.understandablepractice.service.ChildService;
+
+import java.time.LocalDate;
 
 @Tag(
         name = "Ребенок",
@@ -64,6 +67,8 @@ public class ChildController {
             var entity = mapper.fromResponseToEntity(response);
             var user = new User(requestService.getIdFromRequestToken());
             entity.setUser(user);
+            entity.setClientStatus(ClientStatus.REQUEST);
+            entity.setDateFirstRequest(LocalDate.now());
             responseEntity = service.create(entity)
                     .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
