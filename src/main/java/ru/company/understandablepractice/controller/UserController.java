@@ -45,16 +45,7 @@ public class UserController {
     @PutMapping
     public ResponseEntity<?> update(@RequestBody @Parameter(description = "Пользователь") UserResponse response) {
         log.info("update user {}", response);
-        ResponseEntity<Long> responseEntity;
-        try {
-            responseEntity = service.create(mapper.fromResponseToEntity(response))
-                    .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
-                    .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
-        } catch (Exception e) {
-            responseEntity = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-        return responseEntity;
+        return new ResponseEntity<>(service.update(response), HttpStatus.OK);
     }
 
     @Operation(summary = "Создать", description = "Создать пользователя")
