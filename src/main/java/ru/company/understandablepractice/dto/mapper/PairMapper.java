@@ -4,9 +4,12 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.company.understandablepractice.dto.converter.YesNoConverter;
+import ru.company.understandablepractice.dto.customers.ChildApplicationDto;
+import ru.company.understandablepractice.dto.customers.ChildResponse;
 import ru.company.understandablepractice.dto.customers.PairApplicationDto;
 import ru.company.understandablepractice.dto.customers.PairResponse;
 import ru.company.understandablepractice.dto.PersonResponse;
+import ru.company.understandablepractice.model.Child;
 import ru.company.understandablepractice.model.Pair;
 import ru.company.understandablepractice.model.Person;
 import ru.company.understandablepractice.model.User;
@@ -30,6 +33,8 @@ public abstract class PairMapper {
     YesNoConverter yesNoConverter;
 
     @Mapping(target = "clientType", expression = "java(mapClientType(response))")
+    @Mapping(target = "contactMethod", expression = "java(mapContactMethod(response))")
+    @Mapping(target = "onlinePlatform", expression = "java(mapOnlinePlatform(response))")
     @Mapping(target = "familyStatus", expression = "java(mapFamilyStatus(response))")
     @Mapping(target = "secondPerson", expression = "java(mapSecondPerson(response))")
     @Mapping(target = "gender", expression = "java(mapGender(response))")
@@ -39,6 +44,8 @@ public abstract class PairMapper {
     public abstract Pair fromResponseToEntity(PairResponse response);
 
     @Mapping(target = "clientType", expression = "java(mapClientTypeString(entity))")
+    @Mapping(target = "contactMethod", expression = "java(mapContactMethodString(entity))")
+    @Mapping(target = "onlinePlatform", expression = "java(mapOnlinePlatformString(entity))")
     @Mapping(target = "familyStatus", expression = "java(mapFamilyStatusString(entity))")
     @Mapping(target = "secondPerson", expression = "java(mapSecondPersonResponse(entity))")
     @Mapping(target = "gender", expression = "java(mapGenderString(entity))")
@@ -49,6 +56,8 @@ public abstract class PairMapper {
     public abstract PairResponse fromEntityToResponse(Pair entity);
 
     @Mapping(target = "clientType", expression = "java(mapClientType(dto))")
+    @Mapping(target = "contactMethod", expression = "java(mapContactMethod(dto))")
+    @Mapping(target = "onlinePlatform", expression = "java(mapOnlinePlatform(dto))")
     @Mapping(target = "familyStatus", expression = "java(mapFamilyStatus(dto))")
     @Mapping(target = "secondPerson", expression = "java(mapSecondPerson(dto))")
     @Mapping(target = "gender", expression = "java(mapGender(dto))")
@@ -58,6 +67,9 @@ public abstract class PairMapper {
     @Mapping(target = "user", expression = "java(mapUser(dto))")
     public abstract Pair fromApplicationDtoToEntity(PairApplicationDto dto);
 
+    @Mapping(target = "clientType", expression = "java(mapClientTypeString(entity))")
+    @Mapping(target = "contactMethod", expression = "java(mapContactMethodString(entity))")
+    @Mapping(target = "onlinePlatform", expression = "java(mapOnlinePlatformString(entity))")
     @Mapping(target = "familyStatus", expression = "java(mapFamilyStatusString(entity))")
     @Mapping(target = "secondPerson", expression = "java(mapSecondPersonResponse(entity))")
     @Mapping(target = "gender", expression = "java(mapGenderString(entity))")
@@ -84,6 +96,42 @@ public abstract class PairMapper {
 
     PersonResponse mapSecondPersonResponse(Pair entity) {
         return personMapper.fromEntityToResponse(entity.getSecondPerson());
+    }
+
+    ContactMethod mapContactMethod(PairResponse response){
+        return Arrays.stream(ContactMethod.values())
+                .filter(value -> value.getTittle().equals(response.getContactMethod()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    ContactMethod mapContactMethod(PairApplicationDto response){
+        return Arrays.stream(ContactMethod.values())
+                .filter(value -> value.getTittle().equals(response.getContactMethod()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    String mapContactMethodString(Pair entity) {
+        return entity.getContactMethod() != null ? entity.getContactMethod().getTittle() : "";
+    }
+
+    OnlinePlatform mapOnlinePlatform(PairResponse response) {
+        return Arrays.stream(OnlinePlatform.values())
+                .filter(value -> value.getTittle().equals(response.getOnlinePlatform()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    OnlinePlatform mapOnlinePlatform(PairApplicationDto response) {
+        return Arrays.stream(OnlinePlatform.values())
+                .filter(value -> value.getTittle().equals(response.getOnlinePlatform()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    String mapOnlinePlatformString(Pair entity) {
+        return entity.getOnlinePlatform() != null ? entity.getOnlinePlatform().getTittle() : "";
     }
 
     ClientType mapClientType(PairResponse response) {
