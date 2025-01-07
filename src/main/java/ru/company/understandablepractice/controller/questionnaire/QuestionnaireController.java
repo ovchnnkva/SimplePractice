@@ -82,10 +82,11 @@ public class QuestionnaireController {
     }
 
     @Operation(summary = "Список тестов и опросников терапевта",
-            description = "получить все встречи, созданные терапевтом. +пагинация \n" +
-                    "+сортировка по дате создания и по признаку тест/не тест. \n" +
-                    "Если в итоговом массиве записи должны начинаться с тестов, то в orderIsTest передаем desc, иначе asc.\n" +
-                    "Если в итоговом массиве записи должны быть отсортированы по дате создания по убыванию, то передаем desc, иначе asc")
+            description = """
+                    получить все встречи, созданные терапевтом. +пагинация\s
+                    +сортировка по дате создания и по признаку тест/не тест.\s
+                    Если в итоговом массиве записи должны начинаться с тестов, то в orderIsTest передаем desc, иначе asc.
+                    Если в итоговом массиве записи должны быть отсортированы по дате создания по убыванию, то передаем desc, иначе asc""")
     @GetMapping("/get/byUser/{offset}/{limit}")
     public ResponseEntity<List<QuestionnaireMinResponse>> getAllByUser(@PathVariable("offset") int offset, @PathVariable("limit") int limit,
                                                                       @RequestParam(name = "orderIsTest", required = false) String orderIsTest,
@@ -104,14 +105,26 @@ public class QuestionnaireController {
     }
 
     @Operation(summary = "Список всех пройденных тестов клиента",
-            description = "получить все тесты, которые прошел клиент. +пагинация")
+            description = """
+                    получить все тесты, которые прошел клиент. +пагинация\s
+                    +сортировка по дате создания и по признаку тест/не тест.\s
+                    Если в итоговом массиве записи должны начинаться с тестов, то в orderIsTest передаем desc, иначе asc.
+                    Если в итоговом массиве записи должны быть отсортированы по дате создания по убыванию, то передаем desc, иначе asc""")
     @GetMapping("get/byCustomer/{id}/{offset}/{limit}")
-    public ResponseEntity<Set<ClientResultMinResponse>> getAllByCustomer(@PathVariable("id") @Parameter(description = "id клиента") long customerId, @PathVariable("offset") long offset, @PathVariable("limit") long limit) {
+    public ResponseEntity<List<ClientResultMinResponse>> getAllByCustomer(@PathVariable("id") @Parameter(description = "id клиента") long customerId,
+                                                                         @PathVariable("offset") int offset, @PathVariable("limit") int limit,
+                                                                         @RequestParam(name = "orderIsTest", required = false) String orderIsTest,
+                                                                         @RequestParam(name = "orderDate", required = false) String orderDate) {
         log.info("get all by customer id {}", customerId);
-        Set<ClientResult> result = service.getAllByCustomer(customerId, offset, limit);
+
+        Sort sort = SortUtil.createSort(Map.of(
+                "questionnaire.isTest", StringUtil.nullStringToEmpty(orderIsTest),
+                "dateResult", StringUtil.nullStringToEmpty(orderDate))
+        );
+        List<ClientResult> result = service.getAllByCustomer(customerId, offset, limit, sort);
         return  new ResponseEntity<>(result.stream()
                 .map(clientResultMapper::fromEntityToMinResponse)
-                .collect(Collectors.toSet()), HttpStatus.OK);
+                .collect(Collectors.toList()), HttpStatus.OK);
     }
 
     @Operation(summary = "Сохранение результатов теста")

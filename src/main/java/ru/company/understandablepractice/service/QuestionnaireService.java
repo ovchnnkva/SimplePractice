@@ -2,11 +2,8 @@ package ru.company.understandablepractice.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.util.Streamable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.company.understandablepractice.controller.HttpServletRequestService;
@@ -75,9 +72,9 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
         return repository.findByUser_id(PageRequest.of(offset, limit, sort), userId);
     }
 
-    public Set<ClientResult> getAllByCustomer(long customerId, long offset, long limit) {
+    public List<ClientResult> getAllByCustomer(long customerId, int offset, int limit, Sort sort) {
         long userId = requestService.getIdFromRequestToken();
-        return clientResultRepository.findAllByCustomerId(customerId, userId, offset, limit);
+        return clientResultRepository.findByCustomer_idAndQuestionnaire_User_id(PageRequest.of(offset, limit, sort), customerId, userId);
     }
 
     public Optional<ClientResult> createClientResult(ClientResult entity) {
@@ -101,19 +98,22 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
     }
 
     public Optional<String> createLink(long questionnaireId, long customerId) {
-        Customer customer = customerRepository.findCustomerById(customerId).orElseThrow();
-        setCredentials(customer);
-        String token = jwtService.generatePersonToken(customer.getCustomerCredentials());
-        String link = String.format(
-                "%s/%s",
-                questionnaireId,
-                token
-        );
-        customer.setApplicationFormToken(token);
-        log.info("create person link {}", link);
-        customerRepository.save(customer);
+        Optional<Customer> customerOptional = customerRepository.findCustomerById(customerId);
+        if (customerOptional.isPresent()) {
+            Customer customer = customerOptional.get();
+            setCredentials(customer);
+            String token = jwtService.generatePersonToken(customer.getCustomerCredentials());
+            String link = String.format(
+                    "%s/%s",
+                    questionnaireId,
+                    token
+            );
+            customer.setApplicationFormToken(token);
+            log.info("create person link {}", link);
+            customerRepository.save(customer);
 
-        return Optional.of(link);
+            return Optional.of(link);
+        } else return Optional.empty();
     }
 
     private void setCredentials(Customer customer) {
