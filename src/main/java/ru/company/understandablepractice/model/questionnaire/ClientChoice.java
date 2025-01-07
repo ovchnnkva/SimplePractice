@@ -20,7 +20,7 @@ public class ClientChoice {
     @JoinColumn(name = "result_id")
     private ClientResult clientResult;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "answer_option_id")
     private AnswerOption answerOption;
 
