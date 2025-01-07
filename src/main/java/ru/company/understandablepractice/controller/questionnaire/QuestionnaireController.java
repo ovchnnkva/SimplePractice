@@ -1,11 +1,13 @@
 package ru.company.understandablepractice.controller.questionnaire;
 
+import ch.qos.logback.core.util.StringUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,10 +22,9 @@ import ru.company.understandablepractice.model.questionnaire.Questionnaire;
 import ru.company.understandablepractice.security.JwtType;
 import ru.company.understandablepractice.security.services.JwtService;
 import ru.company.understandablepractice.service.QuestionnaireService;
+import ru.company.understandablepractice.utils.SortUtil;
 
-import java.util.Collections;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -81,14 +82,25 @@ public class QuestionnaireController {
     }
 
     @Operation(summary = "Список тестов и опросников терапевта",
-            description = "получить все встречи, созданные терапевтом. +пагинация")
+            description = "получить все встречи, созданные терапевтом. +пагинация \n" +
+                    "+сортировка по дате создания и по признаку тест/не тест. \n" +
+                    "Если в итоговом массиве записи должны начинаться с тестов, то в orderIsTest передаем desc, иначе asc.\n" +
+                    "Если в итоговом массиве записи должны быть отсортированы по дате создания по убыванию, то передаем desc, иначе asc")
     @GetMapping("/get/byUser/{offset}/{limit}")
-    public ResponseEntity<Set<QuestionnaireMinResponse>> getAllByUser(@PathVariable("offset") long offset, @PathVariable("limit") long limit) {
+    public ResponseEntity<List<QuestionnaireMinResponse>> getAllByUser(@PathVariable("offset") int offset, @PathVariable("limit") int limit,
+                                                                      @RequestParam(name = "orderIsTest", required = false) String orderIsTest,
+                                                                      @RequestParam(name = "orderDate", required = false) String orderDate) {
         log.info("get all questionnaire by user id");
-        Set<Questionnaire> result = service.getAllByUser(offset, limit);
+
+        Sort sort = SortUtil.createSort(Map.of(
+                "isTest", StringUtil.nullStringToEmpty(orderIsTest),
+                "dateCreated", StringUtil.nullStringToEmpty(orderDate))
+        );
+        List<Questionnaire> result = service.getAllByUser(offset, limit, sort);
+
         return new ResponseEntity<>(result.stream()
                 .map(questionnaireMapper::fromEntityToMinResponse)
-                .collect(Collectors.toSet()), HttpStatus.OK);
+                .collect(Collectors.toList()), HttpStatus.OK);
     }
 
     @Operation(summary = "Список всех пройденных тестов клиента",

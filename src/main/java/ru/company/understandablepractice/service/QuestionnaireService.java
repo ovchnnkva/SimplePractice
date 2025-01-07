@@ -2,6 +2,11 @@ package ru.company.understandablepractice.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.util.Streamable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.company.understandablepractice.controller.HttpServletRequestService;
@@ -65,9 +70,9 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
         return super.create(entity);
     }
 
-    public Set<Questionnaire> getAllByUser(long offset, long limit) {
+    public List<Questionnaire> getAllByUser(int offset, int limit, Sort sort) {
         long userId = requestService.getIdFromRequestToken();
-        return repository.findAllByUserId(userId, offset, limit);
+        return repository.findByUser_id(PageRequest.of(offset, limit, sort), userId);
     }
 
     public Set<ClientResult> getAllByCustomer(long customerId, long offset, long limit) {
