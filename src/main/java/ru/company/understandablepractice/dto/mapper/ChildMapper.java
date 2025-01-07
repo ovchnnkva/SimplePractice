@@ -31,6 +31,8 @@ public abstract class ChildMapper {
     YesNoConverter yesNoConverter;
 
     @Mapping(target = "clientType", expression = "java(mapClientType(response))")
+    @Mapping(target = "contactMethod", expression = "java(mapContactMethod(response))")
+    @Mapping(target = "onlinePlatform", expression = "java(mapOnlinePlatform(response))")
     @Mapping(target = "bringsClient", expression = "java(mapBringsClient(response))")
     @Mapping(target = "firstParent", expression = "java(mapFirstParent(response))")
     @Mapping(target = "secondParent", expression = "java(mapSecondParent(response))")
@@ -42,6 +44,8 @@ public abstract class ChildMapper {
 
 
     @Mapping(target = "clientType", expression = "java(mapClientTypeString(child))")
+    @Mapping(target = "contactMethod", expression = "java(mapContactMethodString(child))")
+    @Mapping(target = "onlinePlatform", expression = "java(mapOnlinePlatformString(child))")
     @Mapping(target = "bringsClient", expression = "java(mapBringsClientString(child))")
     @Mapping(target = "firstParent", expression = "java(mapFirstParentResponse(child))")
     @Mapping(target = "secondParent", expression = "java(mapSecondParentResponse(child))")
@@ -53,6 +57,8 @@ public abstract class ChildMapper {
     public abstract ChildResponse fromEntityToResponse(Child child);
 
     @Mapping(target = "clientType", expression = "java(mapClientType(dto))")
+    @Mapping(target = "contactMethod", expression = "java(mapContactMethod(dto))")
+    @Mapping(target = "onlinePlatform", expression = "java(mapOnlinePlatform(dto))")
     @Mapping(target = "bringsClient", expression = "java(mapBringsClient(dto))")
     @Mapping(target = "firstParent", expression = "java(mapFirstParent(dto))")
     @Mapping(target = "secondParent", expression = "java(mapSecondParent(dto))")
@@ -63,6 +69,9 @@ public abstract class ChildMapper {
     @Mapping(target = "user", expression = "java(mapUser(dto))")
     public abstract Child fromApplicationDtoToEntity(ChildApplicationDto dto);
 
+    @Mapping(target = "clientType", expression = "java(mapClientTypeString(child))")
+    @Mapping(target = "contactMethod", expression = "java(mapContactMethodString(child))")
+    @Mapping(target = "onlinePlatform", expression = "java(mapOnlinePlatformString(child))")
     @Mapping(target = "bringsClient", expression = "java(mapBringsClientString(child))")
     @Mapping(target = "firstParent", expression = "java(mapFirstParentResponse(child))")
     @Mapping(target = "secondParent", expression = "java(mapSecondParentResponse(child))")
@@ -70,6 +79,8 @@ public abstract class ChildMapper {
     @Mapping(target = "clientStatus", expression = "java(mapClientStatusString(child))")
     @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormatString(child))")
     @Mapping(target = "userId", expression = "java(mapUserId(child))")
+    @Mapping(target = "supervisionStatusThisClient",
+            expression = "java(yesNoConverter.booleanToString(child.isSupervisionStatusThisClient()))")
     public abstract ChildApplicationDto fromEntityToApplicationDto(Child child);
 
     User mapUser(ChildApplicationDto dto) {
@@ -96,6 +107,42 @@ public abstract class ChildMapper {
 
     String mapClientTypeString(Child entity) {
         return entity.getClientType() != null ? entity.getClientType().getTittle() : "";
+    }
+
+    ContactMethod mapContactMethod(ChildResponse response){
+        return Arrays.stream(ContactMethod.values())
+                .filter(value -> value.getTittle().equals(response.getContactMethod()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    ContactMethod mapContactMethod(ChildApplicationDto response){
+        return Arrays.stream(ContactMethod.values())
+                .filter(value -> value.getTittle().equals(response.getContactMethod()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    String mapContactMethodString(Child entity) {
+        return entity.getContactMethod() != null ? entity.getContactMethod().getTittle() : "";
+    }
+
+    OnlinePlatform mapOnlinePlatform(ChildResponse response) {
+        return Arrays.stream(OnlinePlatform.values())
+                .filter(value -> value.getTittle().equals(response.getOnlinePlatform()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    OnlinePlatform mapOnlinePlatform(ChildApplicationDto response) {
+        return Arrays.stream(OnlinePlatform.values())
+                .filter(value -> value.getTittle().equals(response.getOnlinePlatform()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    String mapOnlinePlatformString(Child entity) {
+        return entity.getOnlinePlatform() != null ? entity.getOnlinePlatform().getTittle() : "";
     }
 
     String mapBringsClientString(Child child){
