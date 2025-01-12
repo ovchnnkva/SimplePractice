@@ -4,13 +4,17 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.company.understandablepractice.dto.SearchCustomerResponse;
 import ru.company.understandablepractice.model.Customer;
+import ru.company.understandablepractice.model.Meet;
 import ru.company.understandablepractice.model.types.ClientStatus;
 import ru.company.understandablepractice.model.types.MeetingFormat;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public abstract class SearchCustomerMapper {
@@ -21,11 +25,11 @@ public abstract class SearchCustomerMapper {
     @Mapping(target = "clientType", expression = "java(mapClientType(customer))")
     @Mapping(target = "mail", expression = "java(mapMail(customer))")
     @Mapping(target = "phone", expression = "java(mapPhone(customer))")
-    @Mapping(target = "meetDate", expression = "java(mapMeetDate(meetDates))")
-    @Mapping(target = "countMeet", expression = "java(mapMeetCount(meetDates))")
+    @Mapping(target = "meetDate", expression = "java(mapMeetDate(customer))")
+    @Mapping(target = "countMeet", expression = "java(mapMeetCount(customer))")
     @Mapping(target = "clientStatus", expression = "java(mapClientStatus(customer))")
     @Mapping(target = "meetingType", expression = "java(mapMeetingType(customer))")
-    public abstract SearchCustomerResponse fromEntityToResponse(Customer customer, List<LocalDate> meetDates);
+    public abstract SearchCustomerResponse fromEntityToResponse(Customer customer);
 
     long mapCustomerId(Customer customer) {
         return customer.getId();
@@ -51,12 +55,13 @@ public abstract class SearchCustomerMapper {
         return customer.getPhoneNumber();
     }
 
-    LocalDate mapMeetDate(List<LocalDate> meetDates){
-        return meetDates.stream().findFirst().orElse(null);
+    LocalDate mapMeetDate(Customer customer){
+        if(customer.getMeets().isEmpty()) return null;
+        return customer.getMeets().stream().map(Meet::getDateMeet).sorted(Comparator.reverseOrder()).toList().get(0);
     }
 
-    int mapMeetCount(List<LocalDate> meetDates) {
-        return meetDates.size();
+    int mapMeetCount(Customer customer) {
+        return customer.getMeets().size();
     }
 
     String mapClientStatus(Customer customer){

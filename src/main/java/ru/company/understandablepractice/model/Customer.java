@@ -4,10 +4,12 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import ru.company.understandablepractice.model.questionnaire.ClientChoice;
 import ru.company.understandablepractice.model.types.*;
 import ru.company.understandablepractice.model.types.converters.*;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -132,6 +134,9 @@ public class Customer {
 
     @Column(name = "notes", columnDefinition = "TEXT")
     protected String notes;
+
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Meet> meets;
 
     @OneToOne(
             mappedBy = "customer",
