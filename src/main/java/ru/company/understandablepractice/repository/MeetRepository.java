@@ -21,17 +21,10 @@ public interface MeetRepository extends JpaRepository<Meet, Long> {
     List<Meet> findByUserIdAndYear(long userId, String year);
 
     @Query(value =
-            "SELECT m.dateMeet " +
-            "FROM Meet m " +
-            "WHERE m.customer.id = :customerId " +
-            "ORDER BY m.dateMeet DESC")
-    Optional<List<LocalDate>> findClientDateMeet(@Param("customerId") long customerId);
-
-    @Query(value =
             "SELECT m " +
                     "FROM Meet m " +
                     "WHERE m.customer.id = :customerId")
-    Optional<List<Meet>> findMeetByCustomerId(@Param("customerId") long customerId);
+    List<Meet> findMeetByCustomerId(@Param("customerId") long customerId);
 
     @Query(value =
             "SELECT m " +

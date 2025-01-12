@@ -58,7 +58,7 @@ public class MeetService extends CRUDService<Meet>{
 
     public Optional<CustomerMeetInfoResponse> getCustomerMeetInfo(long customerId) {
         CustomerMeetInfoResponse response = new CustomerMeetInfoResponse();
-        List<Meet> meets = repository.findMeetByCustomerId(customerId).orElse(null);
+        List<Meet> meets = repository.findMeetByCustomerId(customerId);
         if (meets != null) {
             response = customerMeetInfoMapper.fromEntityToResponse(customerId, meets);
         }
