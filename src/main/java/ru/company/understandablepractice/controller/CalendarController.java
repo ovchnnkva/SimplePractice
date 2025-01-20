@@ -8,10 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.company.understandablepractice.dto.calendar.CalendarResponse;
 import ru.company.understandablepractice.security.services.JwtService;
 import ru.company.understandablepractice.security.JwtType;
@@ -26,17 +23,18 @@ import ru.company.understandablepractice.service.CalendarService;
 @RequestMapping("/api/v1/General/calendarData/")
 public class CalendarController {
     private final CalendarService calendarService;
-    private final HttpServletRequest request;
-    private final JwtService jwtService;
+
 
     @Operation(summary = "Встречи на текущий год", description = "Позволяет получить все встречи пользователя на текущий год")
     @GetMapping("/get/{year}")
-    public ResponseEntity<CalendarResponse> getCalendar(@PathVariable(name = "year") @Parameter(description = "Год, в рамках которого находятся встречи") String year) {
+    public ResponseEntity<CalendarResponse> getCalendar(@PathVariable(name = "year") @Parameter(description = "Год, в рамках которого находятся встречи") int year,
+                                                        @RequestParam(required = false) @Parameter(description = "фильтр по статусу клиента") String clientStatus,
+                                                        @RequestParam(required = false) @Parameter(description = "фильтр по типу клиента") String clientType,
+                                                        @RequestParam(required = false) @Parameter(description = "фильтр по формату встречи") String formatMeet) {
 
-        Long userId = jwtService.extractUserId(request.getHeader("Authorization"), JwtType.ACCESS);
-        log.info("get calendar by user {}", userId);
+        log.info("get calendar. Client status {}, client type {}, meet format {}", clientStatus, clientType, formatMeet);
         try{
-            return calendarService.getCalendar(userId, year)
+            return calendarService.getCalendar(year, clientStatus, clientType, formatMeet)
                     .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND)); //
         } catch (Exception e) {

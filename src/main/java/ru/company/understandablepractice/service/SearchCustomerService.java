@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 import ru.company.understandablepractice.dto.SearchCustomerResponse;
 import ru.company.understandablepractice.dto.mapper.SearchCustomerMapper;
 import ru.company.understandablepractice.model.Customer;
+import ru.company.understandablepractice.model.types.ClientStatus;
+import ru.company.understandablepractice.model.types.converters.ClientStatusConverter;
+import ru.company.understandablepractice.model.types.converters.ClientTypeConverter;
 import ru.company.understandablepractice.repository.CustomerRepository;
 import ru.company.understandablepractice.repository.MeetRepository;
 import ru.company.understandablepractice.security.JwtType;
@@ -34,20 +37,31 @@ public class SearchCustomerService {
     private final HttpServletRequest request;
     private final JwtService jwtService;
 
+    private final ClientTypeConverter clientTypeConverter = new ClientTypeConverter();
+    private final ClientStatusConverter clientStatusConverter = new ClientStatusConverter();
+
 
     @Transactional
-    public List<SearchCustomerResponse> findByName(String customerName, Pageable pageable, String orderDate, String orderMeetCount){
+    public List<SearchCustomerResponse> findByName(String customerName, Pageable pageable,
+                                                   String orderDate, String orderMeetCount,
+                                                   String clientStatus, String clientType){
         Long userId = jwtService.extractUserId(request.getHeader("Authorization"), JwtType.ACCESS);
 
-        Specification<Customer> spec = CustomerSpecification.hasUser(userId)
-                .and(CustomerSpecification.containingFullName(customerName))
-                .and(CustomerSpecification.sortByDateMeet(orderDate))
-                .and(CustomerSpecification.sortByMeetsSize(orderMeetCount));
-
-        List<Customer> customerList = customerRepository.findAll(spec, pageable).getContent();
+        List<Customer> customerList = customerRepository.findAll(buildSpec(customerName, userId, orderDate, orderMeetCount, clientStatus, clientType), pageable).getContent();
         customerList.forEach(customer -> Hibernate.initialize(customer.getMeets()));
         return customerList.stream()
                 .map(searchCustomerMapper::fromEntityToResponse)
                 .collect(Collectors.toList());
+    }
+
+    private Specification<Customer> buildSpec(String customerName, long userId,
+                                              String orderDate, String orderMeetCount,
+                                              String clientStatus, String clientType) {
+        return CustomerSpecification.hasUser(userId)
+                .and(CustomerSpecification.containingFullName(customerName))
+                .and(CustomerSpecification.sortByDateMeet(orderDate))
+                .and(CustomerSpecification.sortByMeetsSize(orderMeetCount))
+                .and(CustomerSpecification.hasClientStatus(clientStatusConverter.convertToEntityAttribute(clientStatus)))
+                .and(CustomerSpecification.hasClientType(clientTypeConverter.convertToEntityAttribute(clientType)));
     }
 }
