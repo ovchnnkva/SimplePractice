@@ -27,7 +27,7 @@ public class CustomerSpecification {
                     query.orderBy(criteriaBuilder.asc(subquery));
                 }
 
-                return null;
+                return query.getRestriction();
             };
     }
 
