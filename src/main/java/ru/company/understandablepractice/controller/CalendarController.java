@@ -23,8 +23,7 @@ import ru.company.understandablepractice.service.CalendarService;
 @RequestMapping("/api/v1/General/calendarData/")
 public class CalendarController {
     private final CalendarService calendarService;
-    private final HttpServletRequest request;
-    private final JwtService jwtService;
+
 
     @Operation(summary = "Встречи на текущий год", description = "Позволяет получить все встречи пользователя на текущий год")
     @GetMapping("/get/{year}")
@@ -33,10 +32,9 @@ public class CalendarController {
                                                         @RequestParam(required = false) @Parameter(description = "фильтр по типу клиента") String clientType,
                                                         @RequestParam(required = false) @Parameter(description = "фильтр по формату встречи") String formatMeet) {
 
-        Long userId = jwtService.extractUserId(request.getHeader("Authorization"), JwtType.ACCESS);
-        log.info("get calendar by user {}. Client status {}, client type {}, meet format {}", userId, clientStatus, clientType, formatMeet);
+        log.info("get calendar. Client status {}, client type {}, meet format {}", clientStatus, clientType, formatMeet);
         try{
-            return calendarService.getCalendar(userId, year, clientStatus, clientType, formatMeet)
+            return calendarService.getCalendar(year, clientStatus, clientType, formatMeet)
                     .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND)); //
         } catch (Exception e) {
