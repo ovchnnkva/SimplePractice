@@ -44,10 +44,12 @@ public class SearchCustomerController {
                                                                            @PathVariable @Parameter(description = "limit") int limit,
                                                                            @RequestParam(name = "customerName", required = false) @Parameter(description = "Имя клиента") String customerName,
                                                                            @RequestParam(name = "orderDate", required = false) String orderDate,
-                                                                           @RequestParam(name = "orderMeetCount", required = false) String orderMeetCount) {
+                                                                           @RequestParam(name = "orderMeetCount", required = false) String orderMeetCount,
+                                                                           @RequestParam(required = false) @Parameter(description = "фильтр по типу клиента") String clientType,
+                                                                           @RequestParam(required = false) @Parameter(description = "фильтр по статусу киента") String clientStatus) {
 
                 return new ResponseEntity<>(
-                        searchService.findByName(customerName, PageRequest.of(offset, limit), orderDate, orderMeetCount),
+                        searchService.findByName(customerName, PageRequest.of(offset, limit), orderDate, orderMeetCount, clientStatus, clientType),
                         HttpStatus.OK
                 );
     }
