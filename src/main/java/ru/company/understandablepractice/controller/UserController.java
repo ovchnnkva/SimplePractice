@@ -31,12 +31,12 @@ public class UserController {
     private final JwtService jwtService;
 
 
-    @Operation(summary = "Получение по ID", description = "Позволяет получить пользователя по ключу")
-    @GetMapping("/get/{id}")
-    public ResponseEntity<UserResponse> getById(@Parameter(description = "ID пользователя") @PathVariable("id") long id) {
+    @Operation(summary = "Получение пользователя", description = "Позволяет получить пользователя ")
+    @GetMapping("/get")
+    public ResponseEntity<UserResponse> getById() {
+        Long id = jwtService.extractUserId(request.getHeader("Authorization"), JwtType.ACCESS);
         log.info("get user by id {}", id);
-        Long userId = jwtService.extractUserId(request.getHeader("Authorization"), JwtType.ACCESS);
-        return service.getById(userId)
+        return service.getById(id)
                 .map(value -> new ResponseEntity<>(mapper.fromEntityToResponse(value), HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }

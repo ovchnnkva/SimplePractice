@@ -10,7 +10,9 @@ import ru.company.understandablepractice.controller.HttpServletRequestService;
 import ru.company.understandablepractice.dto.mapper.questionnaire.ClientResultMapper;
 import ru.company.understandablepractice.dto.mapper.questionnaire.QuestionnaireMapper;
 import ru.company.understandablepractice.dto.questionnaire.AnswerOptionResponse;
+import ru.company.understandablepractice.dto.questionnaire.ClientResultListMinResponse;
 import ru.company.understandablepractice.dto.questionnaire.ClientResultResponse;
+import ru.company.understandablepractice.dto.questionnaire.QuestionnaireListMinResponse;
 import ru.company.understandablepractice.model.Customer;
 import ru.company.understandablepractice.model.CustomerCredentials;
 import ru.company.understandablepractice.model.Role;
@@ -67,14 +69,20 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
         return super.create(entity);
     }
 
-    public List<Questionnaire> getAllByUser(int offset, int limit, Sort sort) {
+    public QuestionnaireListMinResponse getAllByUser(int offset, int limit, Sort sort) {
         long userId = requestService.getIdFromRequestToken();
-        return repository.findByUser_id(PageRequest.of(offset, limit, sort), userId);
+
+        return new QuestionnaireListMinResponse(repository.findByUser_id(PageRequest.of(offset, limit, sort), userId).stream()
+                .map(questionnaireMapper::fromEntityToMinResponse)
+                .collect(Collectors.toList()), repository.count());
     }
 
-    public List<ClientResult> getAllByCustomer(long customerId, int offset, int limit, Sort sort) {
+    public ClientResultListMinResponse getAllByCustomer(long customerId, int offset, int limit, Sort sort) {
         long userId = requestService.getIdFromRequestToken();
-        return clientResultRepository.findByCustomer_idAndQuestionnaire_User_id(PageRequest.of(offset, limit, sort), customerId, userId);
+        List<ClientResult> result = clientResultRepository.findByCustomer_idAndQuestionnaire_User_id(PageRequest.of(offset, limit, sort), customerId, userId);
+        return new ClientResultListMinResponse(
+                result.stream().map(clientResultMapper::fromEntityToMinResponse).collect(Collectors.toList()),
+                clientResultRepository.count());
     }
 
     public Optional<ClientResult> createClientResult(ClientResult entity) {

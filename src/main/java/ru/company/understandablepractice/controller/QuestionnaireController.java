@@ -1,4 +1,4 @@
-package ru.company.understandablepractice.controller.questionnaire;
+package ru.company.understandablepractice.controller;
 
 import ch.qos.logback.core.util.StringUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,12 +11,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.company.understandablepractice.controller.HttpServletRequestService;
 import ru.company.understandablepractice.dto.mapper.questionnaire.ClientResultMapper;
 import ru.company.understandablepractice.dto.mapper.questionnaire.QuestionnaireMapper;
 import ru.company.understandablepractice.dto.questionnaire.*;
 import ru.company.understandablepractice.model.Customer;
-import ru.company.understandablepractice.model.User;
 import ru.company.understandablepractice.model.questionnaire.ClientResult;
 import ru.company.understandablepractice.model.questionnaire.Questionnaire;
 import ru.company.understandablepractice.security.JwtType;
@@ -88,7 +86,7 @@ public class QuestionnaireController {
                     Если в итоговом массиве записи должны начинаться с тестов, то в orderIsTest передаем desc, иначе asc.
                     Если в итоговом массиве записи должны быть отсортированы по дате создания по убыванию, то передаем desc, иначе asc""")
     @GetMapping("/get/byUser/{offset}/{limit}")
-    public ResponseEntity<List<QuestionnaireMinResponse>> getAllByUser(@PathVariable("offset") int offset, @PathVariable("limit") int limit,
+    public ResponseEntity<QuestionnaireListMinResponse> getAllByUser(@PathVariable("offset") int offset, @PathVariable("limit") int limit,
                                                                       @RequestParam(name = "orderIsTest", required = false) String orderIsTest,
                                                                       @RequestParam(name = "orderDate", required = false) String orderDate) {
         log.info("get all questionnaire by user id");
@@ -97,11 +95,7 @@ public class QuestionnaireController {
                 "isTest", StringUtil.nullStringToEmpty(orderIsTest),
                 "dateCreated", StringUtil.nullStringToEmpty(orderDate))
         );
-        List<Questionnaire> result = service.getAllByUser(offset, limit, sort);
-
-        return new ResponseEntity<>(result.stream()
-                .map(questionnaireMapper::fromEntityToMinResponse)
-                .collect(Collectors.toList()), HttpStatus.OK);
+        return new ResponseEntity<>(service.getAllByUser(offset, limit, sort), HttpStatus.OK);
     }
 
     @Operation(summary = "Список всех пройденных тестов клиента",
@@ -111,7 +105,7 @@ public class QuestionnaireController {
                     Если в итоговом массиве записи должны начинаться с тестов, то в orderIsTest передаем desc, иначе asc.
                     Если в итоговом массиве записи должны быть отсортированы по дате создания по убыванию, то передаем desc, иначе asc""")
     @GetMapping("get/byCustomer/{id}/{offset}/{limit}")
-    public ResponseEntity<List<ClientResultMinResponse>> getAllByCustomer(@PathVariable("id") @Parameter(description = "id клиента") long customerId,
+    public ResponseEntity<ClientResultListMinResponse> getAllByCustomer(@PathVariable("id") @Parameter(description = "id клиента") long customerId,
                                                                          @PathVariable("offset") int offset, @PathVariable("limit") int limit,
                                                                          @RequestParam(name = "orderIsTest", required = false) String orderIsTest,
                                                                          @RequestParam(name = "orderDate", required = false) String orderDate) {
@@ -121,10 +115,7 @@ public class QuestionnaireController {
                 "questionnaire.isTest", StringUtil.nullStringToEmpty(orderIsTest),
                 "dateResult", StringUtil.nullStringToEmpty(orderDate))
         );
-        List<ClientResult> result = service.getAllByCustomer(customerId, offset, limit, sort);
-        return  new ResponseEntity<>(result.stream()
-                .map(clientResultMapper::fromEntityToMinResponse)
-                .collect(Collectors.toList()), HttpStatus.OK);
+        return  new ResponseEntity<>(service.getAllByCustomer(customerId, offset, limit, sort), HttpStatus.OK);
     }
 
     @Operation(summary = "Сохранение результатов теста")
