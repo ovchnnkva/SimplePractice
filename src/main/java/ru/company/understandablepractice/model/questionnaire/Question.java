@@ -7,6 +7,8 @@ import lombok.Setter;
 import ru.company.understandablepractice.model.types.QuestionType;
 import ru.company.understandablepractice.model.types.converters.QuestionTypeConverter;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -20,7 +22,7 @@ public class Question {
     @Column(name = "question_id")
     private long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "questionnaire_id")
     private Questionnaire questionnaire;
 
@@ -31,15 +33,33 @@ public class Question {
     @Column(name = "question_text", columnDefinition = "TEXT")
     private String text;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
-    private Set<AnswerOption> answerOptions;
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AnswerOption> answerOptions;
 
     public Question(long id) {
         this.id = id;
     }
 
-    public void setAnswerOptions(Set<AnswerOption> answerOptions) {
+    public void setAnswerOptions(List<AnswerOption> answerOptions) {
         answerOptions.forEach(answerOption -> answerOption.setQuestion(this));
-        this.answerOptions = answerOptions;
+        if(this.answerOptions == null) {
+            this.answerOptions = answerOptions;
+        } else {
+            this.answerOptions.clear();
+            this.answerOptions.addAll(answerOptions);
+        }
+
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Question question = (Question) o;
+        return id == question.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

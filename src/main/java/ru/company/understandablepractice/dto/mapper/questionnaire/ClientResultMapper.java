@@ -12,6 +12,7 @@ import ru.company.understandablepractice.model.questionnaire.ClientChoice;
 import ru.company.understandablepractice.model.questionnaire.ClientResult;
 import ru.company.understandablepractice.model.questionnaire.Questionnaire;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -61,10 +62,10 @@ public abstract class ClientResultMapper {
         return entity.getCustomer() != null ? entity.getCustomer().getFullName() : "";
     }
 
-    Set<ClientChoice> mapClientChoice(ClientResultRequest request) {
+    List<ClientChoice> mapClientChoice(ClientResultRequest request) {
         return request.getClientChoices()
                 .stream()
                 .map(clientChoiceMapper::fromRequestToEntity)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 }

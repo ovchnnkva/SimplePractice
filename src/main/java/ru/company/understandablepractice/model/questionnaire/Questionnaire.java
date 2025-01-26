@@ -4,9 +4,12 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import ru.company.understandablepractice.model.User;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -14,6 +17,7 @@ import java.util.Set;
 @Setter
 @Table(name = "questionnaires")
 @NoArgsConstructor
+@ToString
 public class Questionnaire {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,8 +40,8 @@ public class Questionnaire {
     @Column(name = "date_created")
     private LocalDate dateCreated;
 
-    @OneToMany(mappedBy = "questionnaire", cascade = CascadeType.ALL)
-    private Set<Question> questions;
+    @OneToMany(mappedBy = "questionnaire", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Question> questions;
 
     public Questionnaire(long id) {
         this.id = id;
@@ -56,8 +60,25 @@ public class Questionnaire {
         this.isTest = isTest;
     }
 
-    public void setQuestions(Set<Question> questions) {
+    public void setQuestions(List<Question> questions) {
         questions.forEach(question -> question.setQuestionnaire(this));
-        this.questions = questions;
+        if(this.questions == null) {
+            this.questions = questions;
+        } else {
+            this.questions.clear();
+            this.questions.addAll(questions);
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Questionnaire that = (Questionnaire) o;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

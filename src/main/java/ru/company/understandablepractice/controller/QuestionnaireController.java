@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.company.understandablepractice.dto.MeetResponse;
 import ru.company.understandablepractice.dto.mapper.questionnaire.ClientResultMapper;
 import ru.company.understandablepractice.dto.mapper.questionnaire.QuestionnaireMapper;
 import ru.company.understandablepractice.dto.questionnaire.*;
@@ -58,6 +59,14 @@ public class QuestionnaireController {
         }
 
         return responseEntity;
+    }
+
+    @Operation(summary = "Обновление", description = "Позволяет обновить опросник/тест")
+    @PutMapping
+    public ResponseEntity<?> update(@RequestBody QuestionnaireDto request) {
+        log.info("update questionnaire {}", request);
+
+        return new ResponseEntity<>(service.update(request), HttpStatus.OK);
     }
 
     @Operation(summary = "Получить опросник/тест")

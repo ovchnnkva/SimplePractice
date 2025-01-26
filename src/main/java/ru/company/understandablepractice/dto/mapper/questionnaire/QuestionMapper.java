@@ -1,18 +1,15 @@
 package ru.company.understandablepractice.dto.mapper.questionnaire;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.company.understandablepractice.dto.questionnaire.AnswerOptionDto;
-import ru.company.understandablepractice.dto.questionnaire.AnswerOptionResponse;
-import ru.company.understandablepractice.dto.questionnaire.QuestionDto;
-import ru.company.understandablepractice.dto.questionnaire.QuestionResponse;
+import ru.company.understandablepractice.dto.questionnaire.*;
 import ru.company.understandablepractice.model.questionnaire.AnswerOption;
 import ru.company.understandablepractice.model.questionnaire.Question;
 import ru.company.understandablepractice.model.questionnaire.Questionnaire;
 import ru.company.understandablepractice.model.types.QuestionType;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -34,6 +31,11 @@ public abstract class QuestionMapper {
     @Mapping(target = "type", expression = "java(mapTypeString(entity))")
     public abstract QuestionResponse fromEntityToResponse(Question entity);
 
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "type", expression = "java(mapType(dto))")
+    @Mapping(target = "answerOptions", expression = "java(mapAnswerOptions(dto))")
+    public abstract void updateEntityFromDto(QuestionDto dto, @MappingTarget Question entity);
+
     QuestionType mapType(QuestionDto dto) {
         return Arrays.stream(QuestionType.values())
                 .filter(type -> type.getKey().equals(dto.getType()))
@@ -45,24 +47,24 @@ public abstract class QuestionMapper {
         return entity.getType() != null ? entity.getType().getKey() : null;
     }
 
-    Set<AnswerOption> mapAnswerOptions(QuestionDto dto) {
+    List<AnswerOption> mapAnswerOptions(QuestionDto dto) {
         return dto.getAnswerOptions()
                 .stream()
                 .map(questionDto -> answerOptionMapper.fromDtoToEntity(questionDto, dto.getId()))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
-    Set<AnswerOptionDto> mapAnswerOptionDto(Question entity) {
+    List<AnswerOptionDto> mapAnswerOptionDto(Question entity) {
         return entity.getAnswerOptions()
                 .stream()
                 .map(questionDto -> answerOptionMapper.fromEntityToDto(questionDto))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
-    Set<AnswerOptionResponse> mapAnswerOptionResponse(Question entity) {
+    List<AnswerOptionResponse> mapAnswerOptionResponse(Question entity) {
         return entity.getAnswerOptions()
                 .stream()
                 .map(questionDto -> answerOptionMapper.fromEntityToResponse(questionDto))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 }

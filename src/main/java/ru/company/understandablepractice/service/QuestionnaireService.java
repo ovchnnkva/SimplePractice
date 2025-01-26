@@ -7,16 +7,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.company.understandablepractice.controller.HttpServletRequestService;
+import ru.company.understandablepractice.dto.MeetResponse;
 import ru.company.understandablepractice.dto.mapper.questionnaire.ClientResultMapper;
 import ru.company.understandablepractice.dto.mapper.questionnaire.QuestionnaireMapper;
-import ru.company.understandablepractice.dto.questionnaire.AnswerOptionResponse;
-import ru.company.understandablepractice.dto.questionnaire.ClientResultListMinResponse;
-import ru.company.understandablepractice.dto.questionnaire.ClientResultResponse;
-import ru.company.understandablepractice.dto.questionnaire.QuestionnaireListMinResponse;
-import ru.company.understandablepractice.model.Customer;
-import ru.company.understandablepractice.model.CustomerCredentials;
-import ru.company.understandablepractice.model.Role;
-import ru.company.understandablepractice.model.User;
+import ru.company.understandablepractice.dto.questionnaire.*;
+import ru.company.understandablepractice.model.*;
 import ru.company.understandablepractice.model.questionnaire.ClientChoice;
 import ru.company.understandablepractice.model.questionnaire.ClientResult;
 import ru.company.understandablepractice.model.questionnaire.Questionnaire;
@@ -69,6 +64,18 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
         return super.create(entity);
     }
 
+    public QuestionnaireDto update(QuestionnaireDto response) {
+        Optional<Questionnaire> entity = repository.findById(response.getId());
+
+        entity.ifPresent(questionnaire -> {
+            questionnaireMapper.updateEntityFromDto(response, questionnaire);
+            questionnaire.setUser(new User(requestService.getIdFromRequestToken()));
+            repository.save(questionnaire);
+        });
+        entity.get().getQuestions().forEach(q -> log.info(q.toString()));
+        return response;
+    }
+
     public QuestionnaireListMinResponse getAllByUser(int offset, int limit, Sort sort) {
         long userId = requestService.getIdFromRequestToken();
 
@@ -95,7 +102,7 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
         if (clientResult.isPresent()) {
             response = clientResultMapper.fromEntityToResponse(clientResult.get());
 
-            Set<Long> clientChoiceIds = getClientChoicesIds(clientResult.get().getClientChoices());
+            List<Long> clientChoiceIds = getClientChoicesIds(clientResult.get().getClientChoices());
 
             response.getQuestionnaire()
                     .getQuestions()
@@ -132,13 +139,13 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
         customerCredentials.setRoles(new HashSet<>(List.of(new Role(6, "ROLE_TEST"))));
     }
 
-    private Set<Long> getClientChoicesIds(Set<ClientChoice> clientChoices) {
+    private List<Long> getClientChoicesIds(List<ClientChoice> clientChoices) {
         return clientChoices.stream()
                 .map(clientChoice -> clientChoice.getAnswerOption().getId())
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
-    private void setIsChoice(Set<AnswerOptionResponse> answerOptionResponses, Set<Long> clientChoiceIds) {
+    private void setIsChoice(List<AnswerOptionResponse> answerOptionResponses, List<Long> clientChoiceIds) {
         answerOptionResponses.forEach(answerOptionResponse ->
                 answerOptionResponse.setChoice(clientChoiceIds.contains(answerOptionResponse.getId()))
         );
