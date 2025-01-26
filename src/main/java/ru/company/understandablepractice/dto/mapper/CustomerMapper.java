@@ -1,12 +1,13 @@
 package ru.company.understandablepractice.dto.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.company.understandablepractice.dto.customers.CustomerApplicationDto;
 import ru.company.understandablepractice.dto.customers.CustomerResponse;
 import ru.company.understandablepractice.dto.converter.YesNoConverter;
+import ru.company.understandablepractice.dto.customers.PairResponse;
 import ru.company.understandablepractice.model.Customer;
+import ru.company.understandablepractice.model.Pair;
 import ru.company.understandablepractice.model.User;
 import ru.company.understandablepractice.model.types.*;
 
@@ -47,22 +48,6 @@ public abstract class CustomerMapper {
     @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormatString(customer))")
     public abstract CustomerResponse fromEntityToResponse(Customer customer);
 
-    @Mapping(target = "customerCredentials", ignore = true)
-    @Mapping(target = "applicationFormToken", ignore = true)
-    @Mapping(target = "applicationFormStatus", ignore = true)
-    @Mapping(target = "clientType", expression = "java(mapClientType(dto))")
-    @Mapping(target = "contactMethod", expression = "java(mapContactMethod(dto))")
-    @Mapping(target = "onlinePlatform", expression = "java(mapOnlinePlatform(dto))")
-    @Mapping(target = "familyStatus", expression = "java(mapFamilyStatus(dto))")
-    @Mapping(target = "priorityCommunicationChannel", expression = "java(mapPriorityCommunicationChannel(dto))")
-    @Mapping(target = "supervisionStatusThisClient", expression = "java(yesNoConverter.stringToBoolean(dto.getSupervisionStatusThisClient()))")
-    @Mapping(target = "gender", expression = "java(mapGender(dto))")
-    @Mapping(target = "clientStatus", expression = "java(mapClientStatus(dto))")
-    @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormat(dto))")
-    @Mapping(target = "fullName", expression = "java(mapFullName(dto))")
-    @Mapping(target = "user", expression = "java(mapUser(dto))")
-    public abstract Customer fromApplicationDtoToEntity(CustomerApplicationDto dto);
-
     @Mapping(target = "clientType", expression = "java(mapClientTypeString(customer))")
     @Mapping(target = "contactMethod", expression = "java(mapContactMethodString(customer))")
     @Mapping(target = "onlinePlatform", expression = "java(mapOnlinePlatformString(customer))")
@@ -74,6 +59,22 @@ public abstract class CustomerMapper {
     @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormatString(customer))")
     @Mapping(target = "userId", expression = "java(mapUserId(customer))")
     public abstract CustomerApplicationDto fromEntityToApplicationDto(Customer customer);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "customerCredentials", ignore = true)
+    @Mapping(target = "applicationFormToken", ignore = true)
+    @Mapping(target = "applicationFormStatus", ignore = true)
+    @Mapping(target = "clientType", expression = "java(mapClientType(response))")
+    @Mapping(target = "contactMethod", expression = "java(mapContactMethod(response))")
+    @Mapping(target = "onlinePlatform", expression = "java(mapOnlinePlatform(response))")
+    @Mapping(target = "familyStatus", expression = "java(mapFamilyStatus(response))")
+    @Mapping(target = "priorityCommunicationChannel", expression = "java(mapPriorityCommunicationChannel(response))")
+    @Mapping(target = "supervisionStatusThisClient", expression = "java(yesNoConverter.stringToBoolean(response.getSupervisionStatusThisClient()))")
+    @Mapping(target = "gender", expression = "java(mapGender(response))")
+    @Mapping(target = "clientStatus", expression = "java(mapClientStatus(response))")
+    @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormat(response))")
+    @Mapping(target = "fullName", expression = "java(mapFullName(response))")
+    public abstract void updateEntityFromDto(CustomerResponse response, @MappingTarget Customer entity);
 
     User mapUser(CustomerApplicationDto dto) {
         return new User(dto.getUserId());

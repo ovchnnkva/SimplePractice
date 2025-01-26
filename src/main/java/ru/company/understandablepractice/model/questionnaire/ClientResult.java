@@ -8,6 +8,7 @@ import ru.company.understandablepractice.model.Customer;
 import ru.company.understandablepractice.service.QuestionnaireService;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -33,14 +34,14 @@ public class ClientResult {
     private LocalDate dateResult;
 
     @OneToMany(mappedBy = "clientResult", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<ClientChoice> clientChoices;
+    private List<ClientChoice> clientChoices;
 
     public ClientResult(long id, LocalDate dateResult, Questionnaire questionnaire) {
         this.id = id;
         this.dateResult = dateResult;
         this.questionnaire = questionnaire;
     }
-    public void setClientChoices(Set<ClientChoice> clientChoices) {
+    public void setClientChoices(List<ClientChoice> clientChoices) {
         clientChoices.forEach(choice -> choice.setClientResult(this));
         this.clientChoices = clientChoices;
     }

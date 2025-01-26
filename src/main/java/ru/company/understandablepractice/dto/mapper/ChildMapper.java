@@ -1,13 +1,14 @@
 package ru.company.understandablepractice.dto.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.company.understandablepractice.dto.converter.YesNoConverter;
 import ru.company.understandablepractice.dto.customers.ChildApplicationDto;
 import ru.company.understandablepractice.dto.customers.ChildResponse;
 import ru.company.understandablepractice.dto.PersonResponse;
+import ru.company.understandablepractice.dto.customers.PairResponse;
 import ru.company.understandablepractice.model.Child;
+import ru.company.understandablepractice.model.Pair;
 import ru.company.understandablepractice.model.Person;
 import ru.company.understandablepractice.model.User;
 import ru.company.understandablepractice.model.types.*;
@@ -82,6 +83,19 @@ public abstract class ChildMapper {
     @Mapping(target = "supervisionStatusThisClient",
             expression = "java(yesNoConverter.booleanToString(child.isSupervisionStatusThisClient()))")
     public abstract ChildApplicationDto fromEntityToApplicationDto(Child child);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "clientType", expression = "java(mapClientType(response))")
+    @Mapping(target = "contactMethod", expression = "java(mapContactMethod(response))")
+    @Mapping(target = "onlinePlatform", expression = "java(mapOnlinePlatform(response))")
+    @Mapping(target = "bringsClient", expression = "java(mapBringsClient(response))")
+    @Mapping(target = "firstParent", expression = "java(mapFirstParent(response))")
+    @Mapping(target = "secondParent", expression = "java(mapSecondParent(response))")
+    @Mapping(target = "gender", expression = "java(mapGender(response))")
+    @Mapping(target = "clientStatus", expression = "java(mapClientStatus(response))")
+    @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormat(response))")
+    @Mapping(target = "fullName", expression = "java(mapFullName(response))")
+    public abstract void updateEntityFromDto(ChildResponse response, @MappingTarget Child entity);
 
     User mapUser(ChildApplicationDto dto) {
         return new User(dto.getUserId());

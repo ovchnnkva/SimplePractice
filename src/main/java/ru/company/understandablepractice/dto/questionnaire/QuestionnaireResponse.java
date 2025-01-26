@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -14,5 +15,5 @@ public class QuestionnaireResponse {
     private String description;
     private boolean isTest;
     private LocalDate dateCreated;
-    private Set<QuestionResponse> questions;
+    private List<QuestionResponse> questions;
 }

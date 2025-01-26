@@ -1,18 +1,15 @@
 package ru.company.understandablepractice.dto.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import ru.company.understandablepractice.dto.MeetResponse;
 import ru.company.understandablepractice.dto.converter.YesNoConverter;
 import ru.company.understandablepractice.dto.customers.ChildApplicationDto;
 import ru.company.understandablepractice.dto.customers.ChildResponse;
 import ru.company.understandablepractice.dto.customers.PairApplicationDto;
 import ru.company.understandablepractice.dto.customers.PairResponse;
 import ru.company.understandablepractice.dto.PersonResponse;
-import ru.company.understandablepractice.model.Child;
-import ru.company.understandablepractice.model.Pair;
-import ru.company.understandablepractice.model.Person;
-import ru.company.understandablepractice.model.User;
+import ru.company.understandablepractice.model.*;
 import ru.company.understandablepractice.model.types.*;
 
 import java.util.Arrays;
@@ -55,28 +52,17 @@ public abstract class PairMapper {
             expression = "java(yesNoConverter.booleanToString(entity.isSupervisionStatusThisClient()))")
     public abstract PairResponse fromEntityToResponse(Pair entity);
 
-    @Mapping(target = "clientType", expression = "java(mapClientType(dto))")
-    @Mapping(target = "contactMethod", expression = "java(mapContactMethod(dto))")
-    @Mapping(target = "onlinePlatform", expression = "java(mapOnlinePlatform(dto))")
-    @Mapping(target = "familyStatus", expression = "java(mapFamilyStatus(dto))")
-    @Mapping(target = "secondPerson", expression = "java(mapSecondPerson(dto))")
-    @Mapping(target = "gender", expression = "java(mapGender(dto))")
-    @Mapping(target = "clientStatus", expression = "java(mapClientStatus(dto))")
-    @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormat(dto))")
-    @Mapping(target = "fullName", expression = "java(mapFullName(dto))")
-    @Mapping(target = "user", expression = "java(mapUser(dto))")
-    public abstract Pair fromApplicationDtoToEntity(PairApplicationDto dto);
-
-    @Mapping(target = "clientType", expression = "java(mapClientTypeString(entity))")
-    @Mapping(target = "contactMethod", expression = "java(mapContactMethodString(entity))")
-    @Mapping(target = "onlinePlatform", expression = "java(mapOnlinePlatformString(entity))")
-    @Mapping(target = "familyStatus", expression = "java(mapFamilyStatusString(entity))")
-    @Mapping(target = "secondPerson", expression = "java(mapSecondPersonResponse(entity))")
-    @Mapping(target = "gender", expression = "java(mapGenderString(entity))")
-    @Mapping(target = "clientStatus", expression = "java(mapClientStatusString(entity))")
-    @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormatString(entity))")
-    @Mapping(target = "userId", expression = "java(mapUserId(entity))")
-    public abstract PairApplicationDto fromEntityToApplicationDto(Pair entity);
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "clientType", expression = "java(mapClientType(response))")
+    @Mapping(target = "contactMethod", expression = "java(mapContactMethod(response))")
+    @Mapping(target = "onlinePlatform", expression = "java(mapOnlinePlatform(response))")
+    @Mapping(target = "familyStatus", expression = "java(mapFamilyStatus(response))")
+    @Mapping(target = "secondPerson", expression = "java(mapSecondPerson(response))")
+    @Mapping(target = "gender", expression = "java(mapGender(response))")
+    @Mapping(target = "clientStatus", expression = "java(mapClientStatus(response))")
+    @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormat(response))")
+    @Mapping(target = "fullName", expression = "java(mapFullName(response))")
+    public abstract void updateEntityFromDto(PairResponse response, @MappingTarget Pair entity);
 
     User mapUser(PairApplicationDto dto) {
         return new User(dto.getUserId());
