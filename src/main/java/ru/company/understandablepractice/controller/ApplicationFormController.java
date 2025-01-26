@@ -79,21 +79,11 @@ public class ApplicationFormController {
     }
 
     @PutMapping("/update/CHILD")
-    public ResponseEntity<?> updateChildForm(@RequestBody ChildApplicationDto response) {
+    public ResponseEntity<?> updateChildForm(@RequestBody ChildResponse response) {
         long id = applicationFormService.getPersonId();
         log.info("update child by id {}", id);
 
-        ResponseEntity<Long> responseEntity;
-        try {
-            responseEntity = applicationFormService.updateChild(childMapper.fromApplicationDtoToEntity(response), id)
-                    .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
-                    .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
-        } catch (Exception e) {
-            log.error(e.getLocalizedMessage());
-            responseEntity = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-        return responseEntity;
+        return new ResponseEntity<>(applicationFormService.update(response, id), HttpStatus.OK);
     }
 
     @PutMapping("/update/PAIR")
@@ -101,34 +91,14 @@ public class ApplicationFormController {
         long id = applicationFormService.getPersonId();
         log.info("update pair by id {}", id);
 
-        ResponseEntity<Long> responseEntity;
-        try {
-            responseEntity = applicationFormService.updatePair(pairMapper.fromResponseToEntity(response), id)
-                    .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
-                    .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
-        } catch (Exception e) {
-            log.error(e.getLocalizedMessage());
-            responseEntity = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-        return responseEntity;
+        return new ResponseEntity<>(applicationFormService.update(response, id), HttpStatus.OK);
     }
 
     @PutMapping("/update/CUSTOMER")
-    public ResponseEntity<?> updateCustomerForm(@RequestBody CustomerApplicationDto response) {
+    public ResponseEntity<?> updateCustomerForm(@RequestBody CustomerResponse response) {
         long id = applicationFormService.getPersonId();
         log.info("update customer by id {}", id);
 
-        ResponseEntity<Long> responseEntity;
-        try {
-            responseEntity = applicationFormService.updateCustomer(customerMapper.fromApplicationDtoToEntity(response), id)
-                    .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
-                    .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
-        } catch (Exception e) {
-            log.error(e.getLocalizedMessage());
-            responseEntity = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-        return responseEntity;
+        return new ResponseEntity<>(applicationFormService.update(response, id), HttpStatus.OK);
     }
 }

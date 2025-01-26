@@ -7,11 +7,20 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.company.understandablepractice.dto.customers.ChildResponse;
+import ru.company.understandablepractice.dto.customers.CustomerResponse;
+import ru.company.understandablepractice.dto.customers.PairResponse;
+import ru.company.understandablepractice.dto.mapper.ChildMapper;
+import ru.company.understandablepractice.dto.mapper.CustomerMapper;
+import ru.company.understandablepractice.dto.mapper.PairMapper;
 import ru.company.understandablepractice.model.Child;
 import ru.company.understandablepractice.model.Customer;
+import ru.company.understandablepractice.model.Meet;
 import ru.company.understandablepractice.model.Pair;
 import ru.company.understandablepractice.model.types.ApplicationFormStatus;
+import ru.company.understandablepractice.repository.ChildRepository;
 import ru.company.understandablepractice.repository.CustomerRepository;
+import ru.company.understandablepractice.repository.PairRepository;
 import ru.company.understandablepractice.security.JwtType;
 import ru.company.understandablepractice.service.ChildService;
 import ru.company.understandablepractice.service.CustomerService;
@@ -27,13 +36,16 @@ import static ru.company.understandablepractice.model.types.ApplicationFormStatu
 @Service
 @RequiredArgsConstructor
 public class ApplicationFormService {
-    private final CustomerRepository customerRepository;
     private final JwtService jwtService;
     private final HttpServletRequest request;
 
-    private final ChildService childService;
-    private final PairService pairService;
-    private final CustomerService customerService;
+    private final ChildRepository childRepository;
+    private final PairRepository pairRepository;
+    private final CustomerRepository customerRepository;
+
+    private final PairMapper pairMapper;
+    private final CustomerMapper customerMapper;
+    private final ChildMapper childMapper;
 
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -102,49 +114,43 @@ public class ApplicationFormService {
         customerRepository.save(customer);
     }
 
-    public Optional<Child> updateChild(Child child, long id) {
-        child.setApplicationFormStatus(ApplicationFormStatus.PROCESSED);
-        child.setApplicationFormToken("");
-        child.setId(id);
+    public ChildResponse update(ChildResponse response, long id) {
+        Optional<Child> entity = childRepository.findById(response.getId());
+        entity.ifPresent(child -> {
+            childMapper.updateEntityFromDto(response, child);
+            child.setApplicationFormStatus(ApplicationFormStatus.PROCESSED);
+            child.setApplicationFormToken("");
+            child.setId(id);
+            childRepository.save(child);
+        });
 
-        Optional<Child> newChild;
-
-        try{
-            newChild = childService.create(child);
-        } catch (Exception e) {
-            newChild = Optional.empty();
-        }
-        return newChild;
+        return response;
     }
 
-    public Optional<Pair> updatePair(Pair pair, long id) {
-        pair.setApplicationFormStatus(ApplicationFormStatus.PROCESSED);
-        pair.setApplicationFormToken("");
-        pair.setId(id);
+    public PairResponse update(PairResponse response, long id) {
+        Optional<Pair> entity = pairRepository.findById(response.getId());
+        entity.ifPresent(pair -> {
+            pairMapper.updateEntityFromDto(response, pair);
+            pair.setApplicationFormStatus(ApplicationFormStatus.PROCESSED);
+            pair.setApplicationFormToken("");
+            pair.setId(id);
+            pairRepository.save(pair);
+        });
 
-        Optional<Pair> newPair;
-
-        try{
-            newPair = pairService.create(pair);
-        } catch (Exception e) {
-            newPair = Optional.empty();
-        }
-        return newPair;
+        return response;
     }
 
-    public Optional<Customer> updateCustomer(Customer customer, long id) {
-        customer.setApplicationFormStatus(ApplicationFormStatus.PROCESSED);
-        customer.setApplicationFormToken("");
-        customer.setId(id);
+    public CustomerResponse update(CustomerResponse response, long id) {
+        Optional<Pair> entity = pairRepository.findById(response.getId());
+        entity.ifPresent(customer -> {
+            customerMapper.updateEntityFromDto(response, customer);
+            customer.setApplicationFormStatus(ApplicationFormStatus.PROCESSED);
+            customer.setApplicationFormToken("");
+            customer.setId(id);
+            customerRepository.save(customer);
+        });
 
-        Optional<Customer> newCustomer;
-
-        try{
-            newCustomer = customerService.create(customer);
-        } catch (Exception e) {
-            newCustomer = Optional.empty();
-        }
-        return newCustomer;
+        return response;
     }
 
 }
