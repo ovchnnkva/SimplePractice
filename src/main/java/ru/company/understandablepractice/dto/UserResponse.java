@@ -1,5 +1,6 @@
 package ru.company.understandablepractice.dto;
 
+import jakarta.persistence.Column;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +15,10 @@ public class UserResponse {
     private String subscriptionActive;
 
     private String firstName;
+
+    private String secondName;
+
+    private String lastName;
 
     private String fullName;
 
