@@ -22,6 +22,9 @@ public class Question {
     @Column(name = "question_id")
     private long id;
 
+    @Column(name = "question_order")
+    private int order;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "questionnaire_id")
     private Questionnaire questionnaire;

@@ -12,5 +12,6 @@ public class QuestionDto {
     private long id;
     private String type;
     private String text;
+    private int order;
     private List<AnswerOptionDto> answerOptions;
 }
