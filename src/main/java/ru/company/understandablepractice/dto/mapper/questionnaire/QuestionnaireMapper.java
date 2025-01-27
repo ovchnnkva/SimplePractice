@@ -8,6 +8,7 @@ import ru.company.understandablepractice.model.Meet;
 import ru.company.understandablepractice.model.questionnaire.Question;
 import ru.company.understandablepractice.model.questionnaire.Questionnaire;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -42,7 +43,7 @@ public abstract class QuestionnaireMapper {
 
     List<QuestionDto> mapQuestionDto(Questionnaire entity) {
         return entity.getQuestions()
-                .stream()
+                .stream().sorted(Comparator.comparingInt(Question::getOrder))
                 .map(questionDto -> questionMapper.fromEntityToDto(questionDto))
                 .collect(Collectors.toList());
     }

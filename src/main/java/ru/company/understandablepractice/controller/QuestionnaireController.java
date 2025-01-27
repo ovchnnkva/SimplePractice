@@ -11,20 +11,16 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.company.understandablepractice.dto.MeetResponse;
 import ru.company.understandablepractice.dto.mapper.questionnaire.ClientResultMapper;
 import ru.company.understandablepractice.dto.mapper.questionnaire.QuestionnaireMapper;
 import ru.company.understandablepractice.dto.questionnaire.*;
 import ru.company.understandablepractice.model.Customer;
-import ru.company.understandablepractice.model.questionnaire.ClientResult;
-import ru.company.understandablepractice.model.questionnaire.Questionnaire;
 import ru.company.understandablepractice.security.JwtType;
 import ru.company.understandablepractice.security.services.JwtService;
 import ru.company.understandablepractice.service.QuestionnaireService;
 import ru.company.understandablepractice.utils.SortUtil;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 @Slf4j
 @RestController
