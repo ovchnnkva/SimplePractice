@@ -10,7 +10,5 @@ public class UserDiplomasResponse {
 
     private long id;
 
-    private Long userId;
-
     private String photoDiploma;
 }
