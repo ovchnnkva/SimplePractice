@@ -44,6 +44,8 @@ public class UserController {
     @Operation(summary = "Обновление", description = "Позволяет обновить данные пользователя")
     @PutMapping
     public ResponseEntity<?> update(@RequestBody @Parameter(description = "Пользователь") UserResponse response) {
+        Long id = jwtService.extractUserId(request.getHeader("Authorization"), JwtType.ACCESS);
+        response.setId(id);
         log.info("update user {}", response);
         return new ResponseEntity<>(service.update(response), HttpStatus.OK);
     }
