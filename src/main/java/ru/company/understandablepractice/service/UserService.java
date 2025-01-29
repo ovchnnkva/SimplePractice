@@ -24,12 +24,23 @@ public class UserService extends CRUDService<User>{
         return this.findUserByLogin(login);
     }
 
+    @Override
+    public Optional<User> create(User entity) throws Exception {
+        if(entity.getUserDiplomasList() != null && !entity.getUserDiplomasList().isEmpty()){
+            entity.getUserDiplomasList().forEach(val -> val.setUserId(entity.getId()));
+        }
+
+        return super.create(entity);
+    }
 
     public UserResponse update(UserResponse response) {
         Optional<User> entity = repository.findById(response.getId());
-        entity.ifPresent(meet -> {
-            mapper.updateEntityFromDto(response, meet);
-            repository.save(meet);
+        entity.ifPresent(user -> {
+            if(user.getUserDiplomasList() != null && !user.getUserDiplomasList().isEmpty()){
+                user.getUserDiplomasList().forEach(val -> val.setUserId(user.getId()));
+            }
+            mapper.updateEntityFromDto(response, user);
+            repository.save(user);
         });
 
         return response;
