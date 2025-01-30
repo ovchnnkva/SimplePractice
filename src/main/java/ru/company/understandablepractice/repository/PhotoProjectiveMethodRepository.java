@@ -14,7 +14,8 @@ public interface PhotoProjectiveMethodRepository extends JpaRepository<PhotoProj
             "SELECT ppm " +
                     "FROM PhotoProjectiveMethod ppm " +
                     "INNER JOIN ProjectiveMethod pm " +
-                    "ON pm.typeMethod.id = :typeMethodId " +
+                    "ON pm.id = ppm.projectiveMethod " +
+                    "WHERE pm.typeMethod.id = :typeMethodId " +
                     "ORDER BY ppm.dateCreatePhoto DESC"
     )
     List<PhotoProjectiveMethod> findPhotosByTypeMethodId(@Param("typeMethodId") long typeMethodId);
