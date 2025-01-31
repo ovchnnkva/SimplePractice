@@ -30,8 +30,9 @@ public class AnswerOption {
     @Column(name = "is_correct")
     private boolean isCorrect;
 
-    public AnswerOption(long id) {
+    public AnswerOption(long id, String text) {
         this.id = id;
+        this.text = text;
     }
 
     @Override

@@ -12,10 +12,12 @@ import ru.company.understandablepractice.dto.mapper.questionnaire.ClientResultMa
 import ru.company.understandablepractice.dto.mapper.questionnaire.QuestionnaireMapper;
 import ru.company.understandablepractice.dto.questionnaire.*;
 import ru.company.understandablepractice.model.*;
+import ru.company.understandablepractice.model.questionnaire.AnswerOption;
 import ru.company.understandablepractice.model.questionnaire.ClientChoice;
 import ru.company.understandablepractice.model.questionnaire.ClientResult;
 import ru.company.understandablepractice.model.questionnaire.Questionnaire;
 import ru.company.understandablepractice.repository.CustomerRepository;
+import ru.company.understandablepractice.repository.questionnaire.AnswerOptionRepository;
 import ru.company.understandablepractice.repository.questionnaire.ClientResultRepository;
 import ru.company.understandablepractice.repository.questionnaire.QuestionnaireRepository;
 import ru.company.understandablepractice.security.JwtType;
@@ -29,6 +31,7 @@ import java.util.stream.Collectors;
 public class QuestionnaireService extends CRUDService<Questionnaire> {
     private final QuestionnaireRepository repository;
     private final ClientResultRepository clientResultRepository;
+    private final AnswerOptionRepository answerOptionRepository;
     private final HttpServletRequestService requestService;
     private final CustomerRepository customerRepository;
     private final JwtService jwtService;
@@ -45,6 +48,7 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
                          QuestionnaireMapper questionnaireMapper,
                          ClientResultMapper clientResultMapper,
                          CustomerRepository customerRepository,
+                         AnswerOptionRepository answerOptionRepository,
                          JwtService jwtService,
                          HttpServletRequest request) {
         super(repository);
@@ -54,6 +58,7 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
         this.questionnaireMapper = questionnaireMapper;
         this.clientResultMapper = clientResultMapper;
         this.customerRepository = customerRepository;
+        this.answerOptionRepository = answerOptionRepository;
         this.jwtService = jwtService;
         this.request = request;
     }
@@ -92,7 +97,16 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
                 clientResultRepository.count());
     }
 
-    public Optional<ClientResult> createClientResult(ClientResult entity) {
+    public Optional<ClientResult> createClientResult(ClientResultRequest request) {
+        var entity = clientResultMapper.fromRequestToEntity(request);
+
+        for (ClientChoice choice : entity.getClientChoices()) {
+            AnswerOption answerOption = answerOptionRepository.findById(choice.getAnswerOption().getId()).orElseThrow();
+            answerOption.setText(choice.getAnswerOption().getText());
+            choice.setAnswerOption(answerOption);
+        }
+
+        entity.setCustomer(new Customer(getPersonId()));
         return Optional.of(clientResultRepository.save(entity));
     }
 

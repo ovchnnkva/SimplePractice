@@ -13,6 +13,6 @@ public abstract class ClientChoiceMapper {
     public abstract ClientChoice fromRequestToEntity(ClientChoiceRequest request);
 
     AnswerOption mapAnswerOption(ClientChoiceRequest request) {
-        return new AnswerOption(request.getAnswerOptionId());
+        return new AnswerOption(request.getAnswerOptionId(), request.getText());
     }
 }
