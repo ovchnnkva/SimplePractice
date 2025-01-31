@@ -129,9 +129,7 @@ public class QuestionnaireController {
         log.info("create result {}", request);
         ResponseEntity<Long> responseEntity;
         try {
-            var entity = clientResultMapper.fromRequestToEntity(request);
-            entity.setCustomer(new Customer(service.getPersonId()));
-            responseEntity = service.createClientResult(entity)
+            responseEntity = service.createClientResult(request)
                     .map(value -> new ResponseEntity<>(value.getId(), HttpStatus.OK))
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
         } catch (Exception e) {

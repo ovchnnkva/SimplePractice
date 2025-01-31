@@ -33,7 +33,7 @@ public class ClientResult {
     @Column(name = "date_result")
     private LocalDate dateResult;
 
-    @OneToMany(mappedBy = "clientResult", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "clientResult", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<ClientChoice> clientChoices;
 
     public ClientResult(long id, LocalDate dateResult, Questionnaire questionnaire) {

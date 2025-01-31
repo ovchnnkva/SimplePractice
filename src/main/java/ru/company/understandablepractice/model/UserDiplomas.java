@@ -19,6 +19,6 @@ public class UserDiplomas {
     @Column(name = "user_id")
     private Long userId;
 
-    @Column(name = "photo_diploma")
+    @Column(name = "photo_diploma", columnDefinition = "TEXT")
     private String photoDiploma;
 }
