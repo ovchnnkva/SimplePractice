@@ -171,4 +171,8 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
     public long getPersonId() {
         return jwtService.extractUserId(request.getHeader("Authorization"), JwtType.ACCESS);
     }
+
+    public void deleteClientResult(long id) {
+        clientResultRepository.deleteById(id);
+    }
 }
