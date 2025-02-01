@@ -85,7 +85,7 @@ public class QuestionnaireController {
     }
 
     @Operation(summary = "Удалить результат теста/опросника")
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete/result/{id}")
     private ResponseEntity<?> deleteResult(@PathVariable("id") long id) {
         log.info("delete client result {}", id);
         service.deleteClientResult(id);
