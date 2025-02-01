@@ -1,5 +1,6 @@
 package ru.company.understandablepractice.service;
 
+import ch.qos.logback.core.util.StringUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -102,7 +103,9 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
 
         for (ClientChoice choice : entity.getClientChoices()) {
             AnswerOption answerOption = answerOptionRepository.findById(choice.getAnswerOption().getId()).orElseThrow();
-            answerOption.setText(choice.getAnswerOption().getText());
+            if(!StringUtil.isNullOrEmpty(choice.getAnswerOption().getText())) {
+                answerOption.setText(choice.getAnswerOption().getText());
+            }
             choice.setAnswerOption(answerOption);
         }
 
