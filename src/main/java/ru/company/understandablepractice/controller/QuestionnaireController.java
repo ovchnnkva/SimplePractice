@@ -84,6 +84,14 @@ public class QuestionnaireController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Operation(summary = "Удалить результат теста/опросника")
+    @DeleteMapping("/delete/result/{id}")
+    private ResponseEntity<?> deleteResult(@PathVariable("id") long id) {
+        log.info("delete client result {}", id);
+        service.deleteClientResult(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @Operation(summary = "Список тестов и опросников терапевта",
             description = """
                     получить все встречи, созданные терапевтом. +пагинация\s
