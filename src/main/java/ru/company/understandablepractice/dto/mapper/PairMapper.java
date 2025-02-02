@@ -2,10 +2,7 @@ package ru.company.understandablepractice.dto.mapper;
 
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.company.understandablepractice.dto.MeetResponse;
 import ru.company.understandablepractice.dto.converter.YesNoConverter;
-import ru.company.understandablepractice.dto.customers.ChildApplicationDto;
-import ru.company.understandablepractice.dto.customers.ChildResponse;
 import ru.company.understandablepractice.dto.customers.PairApplicationDto;
 import ru.company.understandablepractice.dto.customers.PairResponse;
 import ru.company.understandablepractice.dto.PersonResponse;
@@ -38,6 +35,7 @@ public abstract class PairMapper {
     @Mapping(target = "clientStatus", expression = "java(mapClientStatus(response))")
     @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormat(response))")
     @Mapping(target = "fullName", expression = "java(mapFullName(response))")
+    @Mapping(target = "priorityCommunicationChannel", expression = "java(mapPriorityCommunicationChannel(response))")
     public abstract Pair fromResponseToEntity(PairResponse response);
 
     @Mapping(target = "clientType", expression = "java(mapClientTypeString(entity))")
@@ -50,6 +48,7 @@ public abstract class PairMapper {
     @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormatString(entity))")
     @Mapping(target = "supervisionStatusThisClient",
             expression = "java(yesNoConverter.booleanToString(entity.isSupervisionStatusThisClient()))")
+    @Mapping(target = "priorityCommunicationChannel", expression = "java(mapPriorityCommunicationChannelString(entity))")
     public abstract PairResponse fromEntityToResponse(Pair entity);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
@@ -62,6 +61,7 @@ public abstract class PairMapper {
     @Mapping(target = "clientStatus", expression = "java(mapClientStatus(response))")
     @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormat(response))")
     @Mapping(target = "fullName", expression = "java(mapFullName(response))")
+    @Mapping(target = "priorityCommunicationChannel", expression = "java(mapPriorityCommunicationChannel(response))")
     public abstract void updateEntityFromDto(PairResponse response, @MappingTarget Pair entity);
 
     User mapUser(PairApplicationDto dto) {
@@ -216,5 +216,23 @@ public abstract class PairMapper {
 
     String mapFullName(PairApplicationDto response) {
         return String.format("%s %s %s", response.getLastName(), response.getFirstName(), response.getSecondName());
+    }
+
+    PriorityCommunicationChannel mapPriorityCommunicationChannel(PairResponse response) {
+        return Arrays.stream(PriorityCommunicationChannel.values())
+                .filter(status -> status.getTittle().equals(response.getPriorityCommunicationChannel()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    PriorityCommunicationChannel mapPriorityCommunicationChannel(PairApplicationDto response) {
+        return Arrays.stream(PriorityCommunicationChannel.values())
+                .filter(status -> status.getTittle().equals(response.getPriorityCommunicationChannel()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    String mapPriorityCommunicationChannelString(Pair pair) {
+        return pair.getPriorityCommunicationChannel() != null ? pair.getPriorityCommunicationChannel().getTittle() : "";
     }
 }

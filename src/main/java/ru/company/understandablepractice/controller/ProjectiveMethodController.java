@@ -11,12 +11,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.company.understandablepractice.dto.mapper.PhotoProjectiveMethodMapper;
 import ru.company.understandablepractice.dto.mapper.ProjectiveMethodMapper;
+import ru.company.understandablepractice.dto.mapper.TypeMethodMapper;
 import ru.company.understandablepractice.dto.projectivemethod.PhotoProjectiveMethodResponse;
 import ru.company.understandablepractice.dto.projectivemethod.ProjectiveMethodResponse;
+import ru.company.understandablepractice.dto.projectivemethod.TypeMethodResponse;
 import ru.company.understandablepractice.model.PhotoProjectiveMethod;
 import ru.company.understandablepractice.model.ProjectiveMethod;
+import ru.company.understandablepractice.model.TypeMethod;
 import ru.company.understandablepractice.service.PhotoProjectiveMethodService;
 import ru.company.understandablepractice.service.ProjectiveMethodService;
+import ru.company.understandablepractice.service.TypeMethodService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -33,9 +37,11 @@ public class ProjectiveMethodController {
 
     private final ProjectiveMethodService projectiveMethodService;
     private final PhotoProjectiveMethodService photoProjectiveMethodService;
+    private final TypeMethodService typeMethodService;
 
     private final ProjectiveMethodMapper projectiveMethodMapper;
     private final PhotoProjectiveMethodMapper photoProjectiveMethodMapper;
+    private final TypeMethodMapper typeMethodMapper;
 
     @Operation(summary = "Получение по ID", description = "Позволяет получить методику по ключу")
 
@@ -104,17 +110,18 @@ public class ProjectiveMethodController {
 
     @Operation(summary = "Проективные методики по клиенту", description = "Позволяет получить все проективные методики по id клиента")
     @GetMapping("byCustomer/{customerId}")
-    public ResponseEntity<List<ProjectiveMethodResponse>> getProjectiveMethodsByCustomer(@PathVariable @Parameter(description = "customerId") long customerId) {
-        List<ProjectiveMethod> result = projectiveMethodService.findProjectiveMethodByCustomerId(customerId);
+    public ResponseEntity<List<TypeMethodResponse>> getProjectiveMethodsByCustomer(@PathVariable @Parameter(description = "customerId") long customerId) {
+        List<TypeMethod> result = typeMethodService.findTypeMethodByCustomerId(customerId);
         return new ResponseEntity<>(result.stream()
-                .map(projectiveMethodMapper::fromEntityToResponse)
+                .map(typeMethodMapper::fromEntityToResponse)
                 .collect(Collectors.toList()), HttpStatus.OK);
     }
 
     @Operation(summary = "Все фото по типу методики", description = "Позволяет получить все фото методик по id типа методики")
-    @GetMapping("getAllPhotos/{typeMethodId}")
-    public ResponseEntity<List<PhotoProjectiveMethodResponse>> getAllPhotos(@PathVariable @Parameter(description = "typeMethodId") long typeMethodId) {
-        List<PhotoProjectiveMethod> result = photoProjectiveMethodService.findPhotosByMethodType(typeMethodId);
+    @GetMapping("getAllPhotos/{customerId}/{typeMethodId}")
+    public ResponseEntity<List<PhotoProjectiveMethodResponse>> getAllPhotos(@PathVariable @Parameter(description = "customerId") long customerId,
+                                                                            @PathVariable @Parameter(description = "typeMethodId") long typeMethodId) {
+        List<PhotoProjectiveMethod> result = photoProjectiveMethodService.findPhotosByMethodType(typeMethodId, customerId);
         return new ResponseEntity<>(result.stream()
                 .map(photoProjectiveMethodMapper::fromEntityToResponse)
                 .collect(Collectors.toList()), HttpStatus.OK);

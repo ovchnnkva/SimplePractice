@@ -16,4 +16,14 @@ public interface TypeMethodRepository extends JpaRepository<TypeMethod, Long> {
                 "WHERE tm.user.id = :userId"
     )
     Optional<List<TypeMethod>> findByUserId(@Param("userId") long userId);
+
+    @Query(value =
+        "SELECT tm " +
+                "FROM TypeMethod tm " +
+                "INNER JOIN ProjectiveMethod pm " +
+                "ON pm.typeMethod.id = tm.id " +
+                "WHERE pm.customer.id = :customerId " +
+                "GROUP BY tm.id "
+    )
+    List<TypeMethod> findByCustomerId(@Param("customerId") long customerId);
 }

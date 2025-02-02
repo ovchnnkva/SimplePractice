@@ -46,6 +46,9 @@ public class Pair extends Customer {
     @Column(name = "financial_terms_between_cotherapists")
     private String financialTermsCotherapists;
 
+    @Column(name = "payer_full_name")
+    private String payerFullName;
+
     public Pair(Customer customer) {
 
         this.id = customer.getId();

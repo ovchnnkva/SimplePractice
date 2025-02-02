@@ -43,8 +43,4 @@ public class ProjectiveMethodService extends CRUDService<ProjectiveMethod>{
     public List<ProjectiveMethod> findProjectiveMethodByMeetId(long meetId) {
         return repository.findByMeetId(meetId);
     }
-
-    public List<ProjectiveMethod> findProjectiveMethodByCustomerId(long customerId) {
-        return repository.findByCustomerId(customerId);
-    }
 }

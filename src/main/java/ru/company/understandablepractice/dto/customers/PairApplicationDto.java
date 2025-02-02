@@ -28,6 +28,8 @@ public class PairApplicationDto extends CustomerApplicationDto{
 
     private String familyStatus;
 
+    private String payerFullName;
+
     public PairApplicationDto() {
         super(ClientType.PAIR.getTittle());
     }
