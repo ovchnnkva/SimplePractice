@@ -6,9 +6,7 @@ import ru.company.understandablepractice.dto.converter.YesNoConverter;
 import ru.company.understandablepractice.dto.customers.ChildApplicationDto;
 import ru.company.understandablepractice.dto.customers.ChildResponse;
 import ru.company.understandablepractice.dto.PersonResponse;
-import ru.company.understandablepractice.dto.customers.PairResponse;
 import ru.company.understandablepractice.model.Child;
-import ru.company.understandablepractice.model.Pair;
 import ru.company.understandablepractice.model.Person;
 import ru.company.understandablepractice.model.User;
 import ru.company.understandablepractice.model.types.*;
@@ -41,6 +39,8 @@ public abstract class ChildMapper {
     @Mapping(target = "clientStatus", expression = "java(mapClientStatus(response))")
     @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormat(response))")
     @Mapping(target = "fullName", expression = "java(mapFullName(response))")
+    @Mapping(target = "priorityCommunicationChannel", expression = "java(mapPriorityCommunicationChannel(response))")
+    @Mapping(target = "familyStatus", expression = "java(mapFamilyStatus(response))")
     public abstract Child fromResponseToEntity(ChildResponse response);
 
 
@@ -55,6 +55,8 @@ public abstract class ChildMapper {
     @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormatString(child))")
     @Mapping(target = "supervisionStatusThisClient",
             expression = "java(yesNoConverter.booleanToString(child.isSupervisionStatusThisClient()))")
+    @Mapping(target = "priorityCommunicationChannel", expression = "java(mapPriorityCommunicationChannelString(child))")
+    @Mapping(target = "familyStatus", expression = "java(mapFamilyStatusString(child))")
     public abstract ChildResponse fromEntityToResponse(Child child);
 
     @Mapping(target = "clientType", expression = "java(mapClientType(dto))")
@@ -68,6 +70,8 @@ public abstract class ChildMapper {
     @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormat(dto))")
     @Mapping(target = "fullName", expression = "java(mapFullName(dto))")
     @Mapping(target = "user", expression = "java(mapUser(dto))")
+    @Mapping(target = "priorityCommunicationChannel", expression = "java(mapPriorityCommunicationChannel(dto))")
+    @Mapping(target = "familyStatus", expression = "java(mapFamilyStatus(dto))")
     public abstract Child fromApplicationDtoToEntity(ChildApplicationDto dto);
 
     @Mapping(target = "clientType", expression = "java(mapClientTypeString(child))")
@@ -82,6 +86,8 @@ public abstract class ChildMapper {
     @Mapping(target = "userId", expression = "java(mapUserId(child))")
     @Mapping(target = "supervisionStatusThisClient",
             expression = "java(yesNoConverter.booleanToString(child.isSupervisionStatusThisClient()))")
+    @Mapping(target = "priorityCommunicationChannel", expression = "java(mapPriorityCommunicationChannelString(child))")
+    @Mapping(target = "familyStatus", expression = "java(mapFamilyStatusString(child))")
     public abstract ChildApplicationDto fromEntityToApplicationDto(Child child);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
@@ -95,6 +101,8 @@ public abstract class ChildMapper {
     @Mapping(target = "clientStatus", expression = "java(mapClientStatus(response))")
     @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormat(response))")
     @Mapping(target = "fullName", expression = "java(mapFullName(response))")
+    @Mapping(target = "priorityCommunicationChannel", expression = "java(mapPriorityCommunicationChannel(response))")
+    @Mapping(target = "familyStatus", expression = "java(mapFamilyStatus(response))")
     public abstract void updateEntityFromDto(ChildResponse response, @MappingTarget Child entity);
 
     User mapUser(ChildApplicationDto dto) {
@@ -265,5 +273,41 @@ public abstract class ChildMapper {
 
     String mapSupervisionStatusThisClient(Child entity) {
         return entity.isSupervisionStatusThisClient() ? "Да" : "Нет";
+    }
+
+    PriorityCommunicationChannel mapPriorityCommunicationChannel(ChildResponse response) {
+        return Arrays.stream(PriorityCommunicationChannel.values())
+                .filter(status -> status.getTittle().equals(response.getPriorityCommunicationChannel()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    PriorityCommunicationChannel mapPriorityCommunicationChannel(ChildApplicationDto response) {
+        return Arrays.stream(PriorityCommunicationChannel.values())
+                .filter(status -> status.getTittle().equals(response.getPriorityCommunicationChannel()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    String mapPriorityCommunicationChannelString(Child child) {
+        return child.getPriorityCommunicationChannel() != null ? child.getPriorityCommunicationChannel().getTittle() : "";
+    }
+
+    String mapFamilyStatusString(Child child) {
+        return child.getFamilyStatus() != null ? child.getFamilyStatus().getTittle() : "";
+    }
+
+    FamilyStatus mapFamilyStatus(ChildResponse response) {
+        return Arrays.stream(FamilyStatus.values())
+                .filter(status -> status.getTittle().equals(response.getFamilyStatus()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    FamilyStatus mapFamilyStatus(ChildApplicationDto response) {
+        return Arrays.stream(FamilyStatus.values())
+                .filter(status -> status.getTittle().equals(response.getFamilyStatus()))
+                .findFirst()
+                .orElse(null);
     }
 }

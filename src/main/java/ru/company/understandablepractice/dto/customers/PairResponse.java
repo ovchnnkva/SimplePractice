@@ -29,6 +29,8 @@ public class PairResponse extends CustomerResponse {
 
     private String familyStatus;
 
+    private String payerFullName;
+
     public PairResponse() {
         super(ClientType.PAIR.getTittle());
     }
