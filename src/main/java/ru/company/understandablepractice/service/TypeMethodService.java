@@ -36,4 +36,8 @@ public class TypeMethodService extends CRUDService<TypeMethod> {
 
         return Optional.ofNullable(response);
     }
+
+    public List<TypeMethod> findTypeMethodByCustomerId(long customerId){
+        return repository.findByCustomerId(customerId);
+    }
 }

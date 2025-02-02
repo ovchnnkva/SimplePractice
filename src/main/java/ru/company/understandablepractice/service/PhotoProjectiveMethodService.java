@@ -18,7 +18,7 @@ public class PhotoProjectiveMethodService {
         this.photoProjectiveMethodRepository = photoProjectiveMethodRepository;
     }
 
-    public List<PhotoProjectiveMethod> findPhotosByMethodType(long typeMethodId) {
-        return photoProjectiveMethodRepository.findPhotosByTypeMethodId(typeMethodId);
+    public List<PhotoProjectiveMethod> findPhotosByMethodType(long typeMethodId, long customerId) {
+        return photoProjectiveMethodRepository.findPhotosByTypeMethodId(typeMethodId, customerId);
     }
 }

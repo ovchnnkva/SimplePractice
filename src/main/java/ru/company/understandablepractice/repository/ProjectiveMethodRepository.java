@@ -18,11 +18,4 @@ public interface ProjectiveMethodRepository extends JpaRepository<ProjectiveMeth
     )
     List<ProjectiveMethod> findByMeetId(@Param("meetId")long meetId);
 
-    @Query(value =
-        "SELECT pm " +
-                "FROM ProjectiveMethod pm " +
-                "WHERE pm.customer.id = :customerId " +
-                "ORDER BY pm.dateCreateMethod DESC"
-    )
-    List<ProjectiveMethod> findByCustomerId(@Param("customerId") long customerId);
 }
