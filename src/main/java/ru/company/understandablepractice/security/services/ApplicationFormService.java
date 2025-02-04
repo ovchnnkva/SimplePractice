@@ -115,40 +115,31 @@ public class ApplicationFormService {
     }
 
     public ChildResponse update(ChildResponse response, long id) {
-        Optional<Child> entity = childRepository.findById(response.getId());
-        entity.ifPresent(child -> {
-            childMapper.updateEntityFromDto(response, child);
-            child.setApplicationFormStatus(ApplicationFormStatus.PROCESSED);
-            child.setApplicationFormToken("");
-            child.setId(id);
-            childRepository.save(child);
-        });
+        Child child = childMapper.fromResponseToEntity(response);
+        child.setApplicationFormStatus(ApplicationFormStatus.PROCESSED);
+        child.setApplicationFormToken("");
+        child.setId(id);
+        childRepository.save(child);
 
         return response;
     }
 
     public PairResponse update(PairResponse response, long id) {
-        Optional<Pair> entity = pairRepository.findById(response.getId());
-        entity.ifPresent(pair -> {
-            pairMapper.updateEntityFromDto(response, pair);
-            pair.setApplicationFormStatus(ApplicationFormStatus.PROCESSED);
-            pair.setApplicationFormToken("");
-            pair.setId(id);
-            pairRepository.save(pair);
-        });
+        Pair pair = pairMapper.fromResponseToEntity(response);
+        pair.setApplicationFormStatus(ApplicationFormStatus.PROCESSED);
+        pair.setApplicationFormToken("");
+        pair.setId(id);
+        pairRepository.save(pair);
 
         return response;
     }
 
     public CustomerResponse update(CustomerResponse response, long id) {
-        Optional<Pair> entity = pairRepository.findById(response.getId());
-        entity.ifPresent(customer -> {
-            customerMapper.updateEntityFromDto(response, customer);
-            customer.setApplicationFormStatus(ApplicationFormStatus.PROCESSED);
-            customer.setApplicationFormToken("");
-            customer.setId(id);
-            customerRepository.save(customer);
-        });
+        Customer customer = customerMapper.fromResponseToEntity(response);
+        customer.setApplicationFormStatus(ApplicationFormStatus.PROCESSED);
+        customer.setApplicationFormToken("");
+        customer.setId(id);
+        customerRepository.save(customer);
 
         return response;
     }

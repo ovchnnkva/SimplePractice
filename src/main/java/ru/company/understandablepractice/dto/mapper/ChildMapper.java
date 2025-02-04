@@ -59,21 +59,6 @@ public abstract class ChildMapper {
     @Mapping(target = "familyStatus", expression = "java(mapFamilyStatusString(child))")
     public abstract ChildResponse fromEntityToResponse(Child child);
 
-    @Mapping(target = "clientType", expression = "java(mapClientType(dto))")
-    @Mapping(target = "contactMethod", expression = "java(mapContactMethod(dto))")
-    @Mapping(target = "onlinePlatform", expression = "java(mapOnlinePlatform(dto))")
-    @Mapping(target = "bringsClient", expression = "java(mapBringsClient(dto))")
-    @Mapping(target = "firstParent", expression = "java(mapFirstParent(dto))")
-    @Mapping(target = "secondParent", expression = "java(mapSecondParent(dto))")
-    @Mapping(target = "gender", expression = "java(mapGender(dto))")
-    @Mapping(target = "clientStatus", expression = "java(mapClientStatus(dto))")
-    @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormat(dto))")
-    @Mapping(target = "fullName", expression = "java(mapFullName(dto))")
-    @Mapping(target = "user", expression = "java(mapUser(dto))")
-    @Mapping(target = "priorityCommunicationChannel", expression = "java(mapPriorityCommunicationChannel(dto))")
-    @Mapping(target = "familyStatus", expression = "java(mapFamilyStatus(dto))")
-    public abstract Child fromApplicationDtoToEntity(ChildApplicationDto dto);
-
     @Mapping(target = "clientType", expression = "java(mapClientTypeString(child))")
     @Mapping(target = "contactMethod", expression = "java(mapContactMethodString(child))")
     @Mapping(target = "onlinePlatform", expression = "java(mapOnlinePlatformString(child))")
