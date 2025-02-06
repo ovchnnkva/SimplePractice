@@ -13,10 +13,7 @@ import ru.company.understandablepractice.dto.customers.PairResponse;
 import ru.company.understandablepractice.dto.mapper.ChildMapper;
 import ru.company.understandablepractice.dto.mapper.CustomerMapper;
 import ru.company.understandablepractice.dto.mapper.PairMapper;
-import ru.company.understandablepractice.model.Child;
-import ru.company.understandablepractice.model.Customer;
-import ru.company.understandablepractice.model.Meet;
-import ru.company.understandablepractice.model.Pair;
+import ru.company.understandablepractice.model.*;
 import ru.company.understandablepractice.model.types.ApplicationFormStatus;
 import ru.company.understandablepractice.repository.ChildRepository;
 import ru.company.understandablepractice.repository.CustomerRepository;
@@ -119,6 +116,11 @@ public class ApplicationFormService {
         child.setApplicationFormStatus(ApplicationFormStatus.PROCESSED);
         child.setApplicationFormToken("");
         child.setId(id);
+
+        //todo отрефакторить этот ужас
+        Child oldChild = childRepository.findById(id).orElseThrow();
+        child.setUser(oldChild.getUser());
+
         childRepository.save(child);
 
         return response;
@@ -129,6 +131,11 @@ public class ApplicationFormService {
         pair.setApplicationFormStatus(ApplicationFormStatus.PROCESSED);
         pair.setApplicationFormToken("");
         pair.setId(id);
+
+        //todo отрефакторить этот ужас
+        Pair oldPair = pairRepository.findById(id).orElseThrow();
+        pair.setUser(oldPair.getUser());
+
         pairRepository.save(pair);
 
         return response;
@@ -139,6 +146,11 @@ public class ApplicationFormService {
         customer.setApplicationFormStatus(ApplicationFormStatus.PROCESSED);
         customer.setApplicationFormToken("");
         customer.setId(id);
+
+        //todo отрефакторить этот ужас
+        Customer oldCustomer = customerRepository.findById(id).orElseThrow();
+        customer.setUser(oldCustomer.getUser());
+
         customerRepository.save(customer);
 
         return response;
