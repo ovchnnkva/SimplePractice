@@ -112,46 +112,34 @@ public class ApplicationFormService {
     }
 
     public ChildResponse update(ChildResponse response, long id) {
-        Child child = childMapper.fromResponseToEntity(response);
-        child.setApplicationFormStatus(ApplicationFormStatus.PROCESSED);
-        child.setApplicationFormToken("");
-        child.setId(id);
+        Child oldEntity = childRepository.findById(id).orElseThrow();
+        childMapper.updateEntityFromDto(response, oldEntity);
+        oldEntity.setApplicationFormStatus(ApplicationFormStatus.PROCESSED);
+        oldEntity.setApplicationFormToken("");
 
-        //todo отрефакторить этот ужас
-        Child oldChild = childRepository.findById(id).orElseThrow();
-        child.setUser(oldChild.getUser());
-
-        childRepository.save(child);
+        childRepository.save(oldEntity);
 
         return response;
     }
 
     public PairResponse update(PairResponse response, long id) {
-        Pair pair = pairMapper.fromResponseToEntity(response);
-        pair.setApplicationFormStatus(ApplicationFormStatus.PROCESSED);
-        pair.setApplicationFormToken("");
-        pair.setId(id);
+        Pair oldEntity = pairRepository.findById(id).orElseThrow();
+        pairMapper.updateEntityFromDto(response, oldEntity);
+        oldEntity.setApplicationFormStatus(ApplicationFormStatus.PROCESSED);
+        oldEntity.setApplicationFormToken("");
 
-        //todo отрефакторить этот ужас
-        Pair oldPair = pairRepository.findById(id).orElseThrow();
-        pair.setUser(oldPair.getUser());
-
-        pairRepository.save(pair);
+        pairRepository.save(oldEntity);
 
         return response;
     }
 
     public CustomerResponse update(CustomerResponse response, long id) {
-        Customer customer = customerMapper.fromResponseToEntity(response);
-        customer.setApplicationFormStatus(ApplicationFormStatus.PROCESSED);
-        customer.setApplicationFormToken("");
-        customer.setId(id);
+        Customer oldEntity = customerRepository.findById(id).orElseThrow();
+        customerMapper.updateEntityFromDto(response, oldEntity);
+        oldEntity.setApplicationFormStatus(ApplicationFormStatus.PROCESSED);
+        oldEntity.setApplicationFormToken("");
 
-        //todo отрефакторить этот ужас
-        Customer oldCustomer = customerRepository.findById(id).orElseThrow();
-        customer.setUser(oldCustomer.getUser());
-
-        customerRepository.save(customer);
+        customerRepository.save(oldEntity);
 
         return response;
     }
