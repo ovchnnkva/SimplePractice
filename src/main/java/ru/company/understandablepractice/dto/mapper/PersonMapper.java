@@ -18,6 +18,7 @@ public abstract class PersonMapper {
     public abstract PersonResponse fromEntityToResponse(Person entity);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "gender", expression = "java(mapGender(response))")
     @Mapping(target = "fullName", expression = "java(mapFullName(response))")
     public abstract void updateEntityFromDto(PersonResponse response, @MappingTarget Person entity);
