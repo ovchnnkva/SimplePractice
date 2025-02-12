@@ -80,8 +80,8 @@ public abstract class ChildMapper {
     @Mapping(target = "contactMethod", expression = "java(mapContactMethod(response))")
     @Mapping(target = "onlinePlatform", expression = "java(mapOnlinePlatform(response))")
     @Mapping(target = "bringsClient", expression = "java(mapBringsClient(response))")
-    @Mapping(target = "firstParent", expression = "java(mapFirstParent(response))")
-    @Mapping(target = "secondParent", expression = "java(mapSecondParent(response))")
+    @Mapping(target = "firstParent", expression = "java(updateFirstParent(response, entity))")
+    @Mapping(target = "secondParent", expression = "java(updateSecondParent(response, entity))")
     @Mapping(target = "gender", expression = "java(mapGender(response))")
     @Mapping(target = "clientStatus", expression = "java(mapClientStatus(response))")
     @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormat(response))")
@@ -176,6 +176,16 @@ public abstract class ChildMapper {
 
     Person mapFirstParent(ChildResponse response){
         return personMapper.fromResponseToEntity(response.getFirstParent());
+    }
+
+    Person updateFirstParent(ChildResponse response, Child entity) {
+        personMapper.updateEntityFromDto(response.getFirstParent(), entity.getFirstParent());
+        return entity.getFirstParent();
+    }
+
+    Person updateSecondParent(ChildResponse response, Child entity) {
+        personMapper.updateEntityFromDto(response.getSecondParent(), entity.getSecondParent());
+        return entity.getSecondParent();
     }
 
     Person mapFirstParent(ChildApplicationDto response){

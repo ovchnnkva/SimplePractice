@@ -56,7 +56,7 @@ public abstract class PairMapper {
     @Mapping(target = "contactMethod", expression = "java(mapContactMethod(response))")
     @Mapping(target = "onlinePlatform", expression = "java(mapOnlinePlatform(response))")
     @Mapping(target = "familyStatus", expression = "java(mapFamilyStatus(response))")
-    @Mapping(target = "secondPerson", expression = "java(mapSecondPerson(response))")
+    @Mapping(target = "secondPerson", expression = "java(updateSecondPerson(response, entity))")
     @Mapping(target = "gender", expression = "java(mapGender(response))")
     @Mapping(target = "clientStatus", expression = "java(mapClientStatus(response))")
     @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormat(response))")
@@ -82,6 +82,11 @@ public abstract class PairMapper {
 
     PersonResponse mapSecondPersonResponse(Pair entity) {
         return personMapper.fromEntityToResponse(entity.getSecondPerson());
+    }
+
+    Person updateSecondPerson(PairResponse response, Pair entity) {
+        personMapper.updateEntityFromDto(response.getSecondPerson(), entity.getSecondPerson());
+        return entity.getSecondPerson();
     }
 
     ContactMethod mapContactMethod(PairResponse response){
