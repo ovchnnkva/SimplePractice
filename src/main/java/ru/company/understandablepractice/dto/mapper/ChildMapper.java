@@ -76,6 +76,7 @@ public abstract class ChildMapper {
     public abstract ChildApplicationDto fromEntityToApplicationDto(Child child);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "clientType", expression = "java(mapClientType(response))")
     @Mapping(target = "contactMethod", expression = "java(mapContactMethod(response))")
     @Mapping(target = "onlinePlatform", expression = "java(mapOnlinePlatform(response))")
