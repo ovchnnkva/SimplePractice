@@ -8,10 +8,11 @@ import lombok.Getter;
 public enum OnlinePlatform {
     ZOOM("Zoom"),
     TELEMOST("Телемост"),
-    GOOGLE_MEET("GoogleMeet"),
     TELEGRAM("Telegram"),
     WHATS_APP("WhatsApp"),
-    SKYPE("Skype");
+    SKYPE("Skype"),
+    GOOGLE_MEET("GoogleMeet"),
+    DISCORD("Discord");
 
     private final String tittle;
 }
