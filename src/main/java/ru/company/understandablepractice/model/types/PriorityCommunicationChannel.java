@@ -10,6 +10,7 @@ public enum PriorityCommunicationChannel {
     WHATS_APP("WhatsApp"),
     VIBER("Viber"),
     SKYPE("Skype"),
+    DISCORD("Discord"),
     MAIL("Почта"),
     SNAPCHAT("Snapchat");
 

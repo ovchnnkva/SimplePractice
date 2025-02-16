@@ -40,6 +40,7 @@ public class UserService extends CRUDService<User>{
                 user.getUserDiplomasList().forEach(val -> val.setUserId(user.getId()));
             }
             mapper.updateEntityFromDto(response, user);
+            user.setFullName(String.format("%s %s %s", user.getLastName(), user.getFirstName(), user.getSecondName()));
             repository.save(user);
         });
 
