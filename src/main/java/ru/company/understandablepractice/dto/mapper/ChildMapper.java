@@ -84,10 +84,11 @@ public abstract class ChildMapper {
     @Mapping(target = "firstParent", expression = "java(updateFirstParent(response, entity))")
     @Mapping(target = "secondParent", expression = "java(updateSecondParent(response, entity))")
     @Mapping(target = "gender", expression = "java(mapGender(response))")
-    @Mapping(target = "clientStatus", expression = "java(mapClientStatus(response))")
-    @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormat(response))")
+    @Mapping(target = "clientStatus", expression = "java(mapClientStatus(response))", ignore = true)
+    @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormat(response))", ignore = true)
     @Mapping(target = "fullName", expression = "java(mapFullName(response))")
     @Mapping(target = "priorityCommunicationChannel", expression = "java(mapPriorityCommunicationChannel(response))")
+    @Mapping(target = "supervisionStatusThisClient", expression = "java(yesNoConverter.stringToBoolean(response.getSupervisionStatusThisClient()))")
     @Mapping(target = "familyStatus", expression = "java(mapFamilyStatus(response))")
     public abstract void updateEntityFromDto(ChildResponse response, @MappingTarget Child entity);
 
