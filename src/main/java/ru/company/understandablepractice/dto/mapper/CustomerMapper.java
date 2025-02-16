@@ -72,8 +72,8 @@ public abstract class CustomerMapper {
     @Mapping(target = "priorityCommunicationChannel", expression = "java(mapPriorityCommunicationChannel(response))")
     @Mapping(target = "supervisionStatusThisClient", expression = "java(yesNoConverter.stringToBoolean(response.getSupervisionStatusThisClient()))")
     @Mapping(target = "gender", expression = "java(mapGender(response))")
-    @Mapping(target = "clientStatus", expression = "java(mapClientStatus(response))")
-    @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormat(response))")
+    @Mapping(target = "clientStatus", expression = "java(mapClientStatus(response))", ignore = true)
+    @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormat(response))", ignore = true)
     @Mapping(target = "fullName", expression = "java(mapFullName(response))")
     public abstract void updateEntityFromDto(CustomerResponse response, @MappingTarget Customer entity);
 

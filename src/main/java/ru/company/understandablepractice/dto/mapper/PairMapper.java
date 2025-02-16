@@ -59,10 +59,11 @@ public abstract class PairMapper {
     @Mapping(target = "familyStatus", expression = "java(mapFamilyStatus(response))")
     @Mapping(target = "secondPerson", expression = "java(updateSecondPerson(response, entity))")
     @Mapping(target = "gender", expression = "java(mapGender(response))")
-    @Mapping(target = "clientStatus", expression = "java(mapClientStatus(response))")
-    @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormat(response))")
+    @Mapping(target = "clientStatus", expression = "java(mapClientStatus(response))", ignore = true)
+    @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormat(response))", ignore = true)
     @Mapping(target = "fullName", expression = "java(mapFullName(response))")
     @Mapping(target = "priorityCommunicationChannel", expression = "java(mapPriorityCommunicationChannel(response))")
+    @Mapping(target = "supervisionStatusThisClient", expression = "java(yesNoConverter.stringToBoolean(response.getSupervisionStatusThisClient()))")
     public abstract void updateEntityFromDto(PairResponse response, @MappingTarget Pair entity);
 
     User mapUser(PairApplicationDto dto) {
