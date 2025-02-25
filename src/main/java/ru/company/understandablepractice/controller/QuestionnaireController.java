@@ -68,8 +68,6 @@ public class QuestionnaireController {
     @Operation(summary = "Получить опросник/тест")
     @GetMapping("/get/{id}")
     public ResponseEntity<QuestionnaireDto> getById(@PathVariable("id") @Parameter(description = "id опросника/теста") long id) {
-        long customerId = jwtService.extractUserId(request.getHeader("Authorization"), JwtType.ACCESS);
-        log.info("get customer by id {}", customerId);
         log.info("get questionnaire {}", id);
         return service.getById(id)
                 .map(result -> new ResponseEntity<>(questionnaireMapper.fromEntityToDto(result), HttpStatus.OK))

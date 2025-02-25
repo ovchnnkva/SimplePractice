@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface ClientResultRepository extends JpaRepository<ClientResult, Long> {
     List<ClientResult> findByCustomer_idAndQuestionnaire_User_id(PageRequest pageRequest, Long customerId, Long userId);
+    ClientResult findByCustomer_idAndQuestionnaire_id(Long customerId, Long questionnaireId);
 }
