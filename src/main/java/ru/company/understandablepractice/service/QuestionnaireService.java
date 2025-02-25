@@ -73,6 +73,16 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
         return super.create(entity);
     }
 
+    @Override
+    public Optional<Questionnaire> getById(long id) {
+        long customerId = getPersonId();
+        if(customerRepository.findById(customerId).isPresent()) {
+            return clientResultRepository.findByCustomer_idAndQuestionnaire_id(customerId, id) != null ? Optional.empty() : repository.findById(id);
+        }
+        return repository.findById(id);
+    }
+
+
     public QuestionnaireDto update(QuestionnaireDto response) {
         Optional<Questionnaire> entity = repository.findById(response.getId());
 
