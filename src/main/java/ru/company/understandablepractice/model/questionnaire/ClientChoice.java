@@ -20,7 +20,10 @@ public class ClientChoice {
     @JoinColumn(name = "result_id")
     private ClientResult clientResult;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "answer_option_id")
     private AnswerOption answerOption;
+
+    @Column(name = "option_text", columnDefinition = "TEXT")
+    private String text;
 }

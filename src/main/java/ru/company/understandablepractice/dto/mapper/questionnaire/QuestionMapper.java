@@ -32,11 +32,19 @@ public abstract class QuestionMapper {
     public abstract QuestionResponse fromEntityToResponse(Question entity);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(target = "type", expression = "java(mapType(dto))")
-    @Mapping(target = "answerOptions", expression = "java(mapAnswerOptions(dto))")
+    @Mapping(target = "type", expression = "java(updateType(dto, entity))")
+    @Mapping(target = "answerOptions", ignore = true)
     public abstract void updateEntityFromDto(QuestionDto dto, @MappingTarget Question entity);
 
     QuestionType mapType(QuestionDto dto) {
+        return Arrays.stream(QuestionType.values())
+                .filter(type -> type.getKey().equals(dto.getType()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    QuestionType updateType(QuestionDto dto, Question entity) {
+        if (dto.getType() == null) return entity.getType();
         return Arrays.stream(QuestionType.values())
                 .filter(type -> type.getKey().equals(dto.getType()))
                 .findFirst()

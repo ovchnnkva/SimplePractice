@@ -9,17 +9,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.company.understandablepractice.controller.HttpServletRequestService;
 import ru.company.understandablepractice.dto.MeetResponse;
+import ru.company.understandablepractice.dto.mapper.questionnaire.AnswerOptionMapper;
 import ru.company.understandablepractice.dto.mapper.questionnaire.ClientResultMapper;
+import ru.company.understandablepractice.dto.mapper.questionnaire.QuestionMapper;
 import ru.company.understandablepractice.dto.mapper.questionnaire.QuestionnaireMapper;
 import ru.company.understandablepractice.dto.questionnaire.*;
 import ru.company.understandablepractice.model.*;
-import ru.company.understandablepractice.model.questionnaire.AnswerOption;
-import ru.company.understandablepractice.model.questionnaire.ClientChoice;
-import ru.company.understandablepractice.model.questionnaire.ClientResult;
-import ru.company.understandablepractice.model.questionnaire.Questionnaire;
+import ru.company.understandablepractice.model.questionnaire.*;
 import ru.company.understandablepractice.repository.CustomerRepository;
 import ru.company.understandablepractice.repository.questionnaire.AnswerOptionRepository;
 import ru.company.understandablepractice.repository.questionnaire.ClientResultRepository;
+import ru.company.understandablepractice.repository.questionnaire.QuestionRepository;
 import ru.company.understandablepractice.repository.questionnaire.QuestionnaireRepository;
 import ru.company.understandablepractice.security.JwtType;
 import ru.company.understandablepractice.security.services.JwtService;
@@ -32,7 +32,6 @@ import java.util.stream.Collectors;
 public class QuestionnaireService extends CRUDService<Questionnaire> {
     private final QuestionnaireRepository repository;
     private final ClientResultRepository clientResultRepository;
-    private final AnswerOptionRepository answerOptionRepository;
     private final HttpServletRequestService requestService;
     private final CustomerRepository customerRepository;
     private final JwtService jwtService;
@@ -40,6 +39,8 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
 
     private final QuestionnaireMapper questionnaireMapper;
     private final ClientResultMapper clientResultMapper;
+    private final QuestionMapper questionMapper;
+    private final AnswerOptionMapper answerOptionMapper;
 
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -48,8 +49,9 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
                          HttpServletRequestService requestService,
                          QuestionnaireMapper questionnaireMapper,
                          ClientResultMapper clientResultMapper,
+                         AnswerOptionMapper answerOptionMapper,
+                         QuestionMapper questionMapper,
                          CustomerRepository customerRepository,
-                         AnswerOptionRepository answerOptionRepository,
                          JwtService jwtService,
                          HttpServletRequest request) {
         super(repository);
@@ -57,9 +59,10 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
         this.clientResultRepository = clientResultRepository;
         this.requestService = requestService;
         this.questionnaireMapper = questionnaireMapper;
+        this.questionMapper = questionMapper;
+        this.answerOptionMapper = answerOptionMapper;
         this.clientResultMapper = clientResultMapper;
         this.customerRepository = customerRepository;
-        this.answerOptionRepository = answerOptionRepository;
         this.jwtService = jwtService;
         this.request = request;
     }
@@ -76,10 +79,52 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
         entity.ifPresent(questionnaire -> {
             questionnaireMapper.updateEntityFromDto(response, questionnaire);
             questionnaire.setUser(new User(requestService.getIdFromRequestToken()));
+            updateQuestions(response.getQuestions(), questionnaire.getQuestions());
             repository.save(questionnaire);
         });
-        entity.get().getQuestions().forEach(q -> log.info(q.toString()));
+
         return response;
+    }
+
+    private void updateQuestions(List<QuestionDto> questionDtos, List<Question> questions) {
+        if(questionDtos.isEmpty()) return;
+
+        for(Question question : questions) {
+            questionDtos.stream()
+                    .filter(questionDto -> questionDto.getId() == question.getId()).findFirst()
+                    .ifPresent(questionDto -> {
+                        questionMapper.updateEntityFromDto(questionDto, question);
+                        updateAnswerOptions(questionDto.getAnswerOptions(), question);
+                    });
+        }
+
+        if(questionDtos.size() > questions.size()) {
+            questions.addAll(
+                    questionDtos.stream()
+                            .filter(questionDto -> questionDto.getId() == 0)
+                            .map(questionMapper::fromDtoToEntity)
+                            .toList()
+            );
+        }
+    }
+
+    private void updateAnswerOptions(List<AnswerOptionDto> answerOptionDtos, Question question) {
+        if(answerOptionDtos.isEmpty()) return;
+
+        for (AnswerOption answerOption : question.getAnswerOptions()) {
+            answerOptionDtos.stream()
+                    .filter(answerOptionDto -> answerOptionDto.getId() == answerOption.getId()).findFirst()
+                    .ifPresent(answerOptionDto -> answerOptionMapper.updateEntityFromDto(answerOptionDto, answerOption));
+        }
+
+        if(answerOptionDtos.size() > question.getAnswerOptions().size()) {
+            question.getAnswerOptions().addAll(
+                    answerOptionDtos.stream()
+                            .filter(answerOptionDto -> answerOptionDto.getId() == 0)
+                            .map(answerOptionDto -> answerOptionMapper.fromDtoToEntity(answerOptionDto, question.getId()))
+                            .toList()
+            );
+        }
     }
 
     public QuestionnaireListMinResponse getAllByUser(int offset, int limit, Sort sort) {
@@ -100,14 +145,6 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
 
     public Optional<ClientResult> createClientResult(ClientResultRequest request) {
         var entity = clientResultMapper.fromRequestToEntity(request);
-
-        for (ClientChoice choice : entity.getClientChoices()) {
-            AnswerOption answerOption = answerOptionRepository.findById(choice.getAnswerOption().getId()).orElseThrow();
-            if(!StringUtil.isNullOrEmpty(choice.getAnswerOption().getText())) {
-                answerOption.setText(choice.getAnswerOption().getText());
-            }
-            choice.setAnswerOption(answerOption);
-        }
 
         entity.setCustomer(new Customer(getPersonId()));
         return Optional.of(clientResultRepository.save(entity));
