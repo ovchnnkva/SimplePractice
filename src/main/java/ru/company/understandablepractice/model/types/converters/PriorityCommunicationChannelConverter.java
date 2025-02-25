@@ -32,6 +32,9 @@ public class PriorityCommunicationChannelConverter implements AttributeConverter
             case "Snapchat" -> {
                 return PriorityCommunicationChannel.SNAPCHAT;
             }
+            case "Discord" -> {
+                return PriorityCommunicationChannel.DISCORD;
+            }
             default -> throw new IllegalArgumentException(s + " not supported.");
         }
     }

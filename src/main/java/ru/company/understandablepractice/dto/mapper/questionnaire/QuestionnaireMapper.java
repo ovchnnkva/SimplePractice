@@ -31,7 +31,7 @@ public abstract class QuestionnaireMapper {
     public abstract QuestionnaireMinResponse fromEntityToMinResponse(Questionnaire entity);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(target = "questions", expression = "java(mapQuestions(dto))")
+    @Mapping(target = "questions", ignore = true)
     public abstract void updateEntityFromDto(QuestionnaireDto dto, @MappingTarget Questionnaire entity);
 
     List<Question> mapQuestions(QuestionnaireDto dto) {

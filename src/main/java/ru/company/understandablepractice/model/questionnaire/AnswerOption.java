@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -24,15 +25,22 @@ public class AnswerOption {
     @JoinColumn(name = "question_id")
     private Question question;
 
-    @Column(name = "option_text", columnDefinition = "TEXT")
+    @Column(name = "text")
     private String text;
 
     @Column(name = "is_correct")
     private boolean isCorrect;
 
-    public AnswerOption(long id, String text) {
+    @OneToMany(mappedBy = "answerOption", fetch = FetchType.EAGER)
+    private List<ClientChoice> clientChoices;
+
+    public AnswerOption(long id) {
         this.id = id;
-        this.text = text;
+    }
+
+    public void setClientChoices(List<ClientChoice> clientChoices) {
+        clientChoices.forEach(choice -> choice.setAnswerOption(this));
+        this.clientChoices = clientChoices;
     }
 
     @Override

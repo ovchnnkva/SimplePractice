@@ -34,6 +34,9 @@ public class OnlinePlatformConverter implements AttributeConverter<OnlinePlatfor
             case "Skype" -> {
                 return OnlinePlatform.SKYPE;
             }
+            case "Discord" -> {
+                return OnlinePlatform.DISCORD;
+            }
             default -> throw new IllegalArgumentException(s + " not supported.");
         }
     }
