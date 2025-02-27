@@ -18,7 +18,7 @@ public class FamilyStatusConverter implements AttributeConverter<FamilyStatus, S
             case "Женат/Замужем" -> {
                 return FamilyStatus.MARRIED;
             }
-            case "Холост/Незамужем" -> {
+            case "Холост/Не замужем" -> {
                 return FamilyStatus.UNMARRIED;
             }
             case "В разводе" -> {

@@ -22,7 +22,7 @@ public class OnlinePlatformConverter implements AttributeConverter<OnlinePlatfor
             case "Телемост" -> {
                 return OnlinePlatform.TELEMOST;
             }
-            case "GoogleMeet" -> {
+            case "Google Meet" -> {
                 return OnlinePlatform.GOOGLE_MEET;
             }
             case "Telegram" -> {
