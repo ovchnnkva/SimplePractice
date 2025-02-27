@@ -12,7 +12,7 @@ public class MeetingFormatConverter implements AttributeConverter<MeetingFormat,
 
     @Override
     public MeetingFormat convertToEntityAttribute(String s) {
-        if(s == null) return null;
+        if (s == null) return null;
         switch (s) {
             case "Онлайн" -> {
                 return MeetingFormat.ONLINE;

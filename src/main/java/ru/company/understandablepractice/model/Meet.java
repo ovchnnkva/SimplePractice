@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 import ru.company.understandablepractice.model.types.MeetingFormat;
 import ru.company.understandablepractice.model.types.PaymentType;
+import ru.company.understandablepractice.model.types.converters.MeetingFormatConverter;
+import ru.company.understandablepractice.model.types.converters.PaymentTypeConverter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -43,9 +45,11 @@ public class Meet {
     @JsonFormat(pattern = "hh:mm:ss")
     private LocalTime endMeet;
 
+    @Convert(converter = MeetingFormatConverter.class)
     @Column(name = "format_meet")
     private MeetingFormat formatMeet;
 
+    @Convert(converter = PaymentTypeConverter.class)
     @Column(name = "payment_type")
     private PaymentType paymentType;
 

@@ -9,12 +9,13 @@ import ru.company.understandablepractice.dto.mapper.MeetMapper;
 import ru.company.understandablepractice.model.Meet;
 import ru.company.understandablepractice.repository.MeetRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 @Slf4j
 @Service
-public class MeetService extends CRUDService<Meet>{
+public class MeetService extends CRUDService<Meet> {
     private final MeetRepository repository;
     private final CustomerMeetInfoMapper customerMeetInfoMapper;
     private final CustomerService customerService;
@@ -31,7 +32,7 @@ public class MeetService extends CRUDService<Meet>{
 
     @Override
     public Optional<Meet> create(Meet entity) throws Exception {
-        if(entity.getCustomer() != null && entity.getCustomer().getId() == 0) {
+        if (entity.getCustomer() != null && entity.getCustomer().getId() == 0) {
             entity.getCustomer().setId(customerService.saveCustomer(entity.getCustomer()));
         }
 
@@ -60,7 +61,17 @@ public class MeetService extends CRUDService<Meet>{
         CustomerMeetInfoResponse response = new CustomerMeetInfoResponse();
         List<Meet> meets = repository.findMeetByCustomerId(customerId);
         if (meets != null) {
-            response = customerMeetInfoMapper.fromEntityToResponse(customerId, meets);
+            var dates = meets.stream().map(Meet::getDateMeet).toList();
+            Optional<LocalDate> last = dates.stream()
+                    .filter(date -> date.isBefore(LocalDate.now()))
+                    .max(LocalDate::compareTo);
+            Optional<LocalDate> next = dates.stream()
+                    .filter(date -> date.isAfter(LocalDate.now()))
+                    .min(LocalDate::compareTo);
+
+            response.setLastMeetDate(last.orElse(null));
+            response.setNextMeetDate(next.orElse(null));
+            response.setCountMeet(meets.size());
         }
 
         return Optional.ofNullable(response);

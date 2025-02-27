@@ -31,9 +31,6 @@ public class Pair extends Customer {
     @Column(name = "client2_request_for_therapy_desired_outcome", columnDefinition = "TEXT")
     private String clientSecondRequestTherapyDesiredOutcome;
 
-    @Column(name = "family_status")
-    private FamilyStatus familyStatus;
-
     @Column(name = "full_name_cotherapy")
     private String fullNameCotherapy;
 
