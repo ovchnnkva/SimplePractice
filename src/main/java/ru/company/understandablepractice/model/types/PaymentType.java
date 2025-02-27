@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum PaymentType {
     CASHLESS("Безналичная"),
-    CASH("Наличные");
+    CASH("Наличная");
 
     private final String title;
 }

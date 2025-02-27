@@ -17,7 +17,7 @@ public class PaymentTypeConverter implements AttributeConverter<PaymentType, Str
             case "Безналичная" -> {
                 return PaymentType.CASHLESS;
             }
-            case "Наличные" -> {
+            case "Наличная" -> {
                 return PaymentType.CASH;
             }
             default -> throw new IllegalArgumentException(s + " not supported.");
