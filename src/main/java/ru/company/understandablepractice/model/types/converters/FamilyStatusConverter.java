@@ -39,6 +39,9 @@ public class FamilyStatusConverter implements AttributeConverter<FamilyStatus, S
             case "Семьи с детьми" -> {
                 return FamilyStatus.FAMILIES_WITH_CHILDREN;
             }
+            case "Пара" -> {
+                return FamilyStatus.PAIR;
+            }
             default -> throw new IllegalArgumentException(s + " not supported.");
         }
     }

@@ -10,6 +10,7 @@ import ru.company.understandablepractice.model.Meet;
 import ru.company.understandablepractice.repository.MeetRepository;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,19 +62,26 @@ public class MeetService extends CRUDService<Meet> {
         CustomerMeetInfoResponse response = new CustomerMeetInfoResponse();
         List<Meet> meets = repository.findMeetByCustomerId(customerId);
         if (meets != null) {
-            var dates = meets.stream().map(Meet::getDateMeet).toList();
-            Optional<LocalDate> last = dates.stream()
-                    .filter(date -> date.isBefore(LocalDate.now()))
-                    .max(LocalDate::compareTo);
-            Optional<LocalDate> next = dates.stream()
-                    .filter(date -> date.isAfter(LocalDate.now()))
-                    .min(LocalDate::compareTo);
+            Optional<Meet> last = meets.stream()
+                    .filter(meet -> meet.getDateMeet().isBefore(LocalDate.now()))
+                    .max(Comparator.comparing(Meet::getDateMeet));
+            Optional<Meet> next = meets.stream()
+                    .filter(meet -> meet.getDateMeet().isAfter(LocalDate.now()))
+                    .min(Comparator.comparing(Meet::getDateMeet));
 
-            response.setLastMeetDate(last.orElse(null));
-            response.setNextMeetDate(next.orElse(null));
+            last.ifPresent(meet -> {
+                response.setLastMeetDate(meet.getDateMeet());
+                response.setLastMeetStart(meet.getStartMeet());
+                response.setLastMeetEnd(meet.getEndMeet());
+            });
+            next.ifPresent(meet -> {
+                response.setNextMeetDate(meet.getDateMeet());
+                response.setNextMeetStart(meet.getStartMeet());
+                response.setNextMeetEnd(meet.getEndMeet());
+            });
             response.setCountMeet(meets.size());
         }
 
-        return Optional.ofNullable(response);
+        return Optional.of(response);
     }
 }
