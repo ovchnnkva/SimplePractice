@@ -11,7 +11,7 @@ public enum OnlinePlatform {
     TELEGRAM("Telegram"),
     WHATS_APP("WhatsApp"),
     SKYPE("Skype"),
-    GOOGLE_MEET("GoogleMeet"),
+    GOOGLE_MEET("Google Meet"),
     DISCORD("Discord");
 
     private final String tittle;

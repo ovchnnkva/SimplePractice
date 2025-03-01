@@ -8,13 +8,14 @@ import lombok.Setter;
 @AllArgsConstructor
 public enum FamilyStatus {
     MARRIED("Женат/Замужем"),
-    UNMARRIED("Холост/Незамужем"),
+    UNMARRIED("Холост/Не замужем"),
     DIVORCED("В разводе"),
     WIDOWER("Вдовец/Вдова"),
     FAILED_MARRIAGE("Сожительство/Несостоявшийся брак"),
     MARRIAGE_WITH_SEPARATION("Официальный брак с раздельным проживанием"),
     LONELINESS("Одиночество/Не в постоянных отношениях"),
-    FAMILIES_WITH_CHILDREN("Семьи с детьми");
+    FAMILIES_WITH_CHILDREN("Семьи с детьми"),
+    PAIR("Пара");
 
     private final String tittle;
 }
