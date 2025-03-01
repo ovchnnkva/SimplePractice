@@ -40,6 +40,7 @@ public abstract class ChildMapper {
     @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormat(response))")
     @Mapping(target = "fullName", expression = "java(mapFullName(response))")
     @Mapping(target = "priorityCommunicationChannel", expression = "java(mapPriorityCommunicationChannel(response))")
+    @Mapping(target = "supervisionStatusThisClient", expression = "java(yesNoConverter.stringToBoolean(response.getSupervisionStatusThisClient()))")
     @Mapping(target = "familyStatus", expression = "java(mapFamilyStatus(response))")
     public abstract Child fromResponseToEntity(ChildResponse response);
 

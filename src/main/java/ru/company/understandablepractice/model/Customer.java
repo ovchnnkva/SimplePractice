@@ -118,7 +118,7 @@ public class Customer {
     protected PriorityCommunicationChannel priorityCommunicationChannel;
 
     @Column(name = "supervision_status_this_client")
-    protected boolean supervisionStatusThisClient = false;
+    protected boolean supervisionStatusThisClient;
 
     @Column(name = "name_and_contact_supervisor")
     protected String contactSupervisor;

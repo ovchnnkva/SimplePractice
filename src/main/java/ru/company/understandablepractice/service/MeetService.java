@@ -54,6 +54,21 @@ public class MeetService extends CRUDService<Meet> {
         return response;
     }
 
+    @Override
+    public Optional<Meet> getById(long id) {
+        Optional<Meet> meet = super.getById(id);
+        meet.ifPresent(item -> {
+            var customerMeetInfo = getCustomerMeetInfo(item.getCustomer().getId());
+            customerMeetInfo.ifPresent(info -> {
+                item.setNextDayMeet(info.getNextMeetDate());
+                item.setNextStartMeet(info.getNextMeetStart());
+                item.setNextEndMeet(info.getNextMeetEnd());
+            });
+        });
+
+        return meet;
+    }
+
     public List<Meet> getByUserIdAndCustomerId(long userId, long customerId, long offset, long limit) {
         return repository.findByUserIdAndCustomerId(userId, customerId, offset, limit);
     }

@@ -36,6 +36,7 @@ public abstract class PairMapper {
     @Mapping(target = "meetingFormat", expression = "java(mapMeetingFormat(response))")
     @Mapping(target = "fullName", expression = "java(mapFullName(response))")
     @Mapping(target = "priorityCommunicationChannel", expression = "java(mapPriorityCommunicationChannel(response))")
+    @Mapping(target = "supervisionStatusThisClient", expression = "java(yesNoConverter.stringToBoolean(response.getSupervisionStatusThisClient()))")
     public abstract Pair fromResponseToEntity(PairResponse response);
 
     @Mapping(target = "clientType", expression = "java(mapClientTypeString(entity))")
