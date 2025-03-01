@@ -144,7 +144,7 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
 
         return new QuestionnaireListMinResponse(repository.findByUser_id(PageRequest.of(offset, limit, sort), userId).stream()
                 .map(questionnaireMapper::fromEntityToMinResponse)
-                .collect(Collectors.toList()), repository.count());
+                .collect(Collectors.toList()), repository.countByUserId(userId));
     }
 
     public ClientResultListMinResponse getAllByCustomer(long customerId, int offset, int limit, Sort sort) {
@@ -152,7 +152,7 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
         List<ClientResult> result = clientResultRepository.findByCustomer_idAndQuestionnaire_User_id(PageRequest.of(offset, limit, sort), customerId, userId);
         return new ClientResultListMinResponse(
                 result.stream().map(clientResultMapper::fromEntityToMinResponse).collect(Collectors.toList()),
-                clientResultRepository.count());
+                clientResultRepository.countByCustomerIdAndUserId(customerId));
     }
 
     public Optional<ClientResult> createClientResult(ClientResultRequest request) {

@@ -18,4 +18,6 @@ import java.util.Set;
 public interface QuestionnaireRepository extends JpaRepository<Questionnaire, Long> {
     List<Questionnaire> findByUser_id(PageRequest pageRequest, Long id);
 
+    @Query("SELECT COUNT(q) FROM Questionnaire q WHERE q.user.id = :userId")
+    int countByUserId(long userId);
 }
