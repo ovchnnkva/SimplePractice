@@ -37,7 +37,7 @@ public abstract class QuestionnaireMapper {
     List<Question> mapQuestions(QuestionnaireDto dto) {
         return dto.getQuestions()
                 .stream()
-                .map(questionDto -> questionMapper.fromDtoToEntity(questionDto))
+                .map(questionDto -> questionMapper.fromDtoToEntity(questionDto, dto.getId()))
                 .collect(Collectors.toList());
     }
 

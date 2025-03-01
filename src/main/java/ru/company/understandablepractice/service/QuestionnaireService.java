@@ -89,14 +89,16 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
         entity.ifPresent(questionnaire -> {
             questionnaireMapper.updateEntityFromDto(response, questionnaire);
             questionnaire.setUser(new User(requestService.getIdFromRequestToken()));
-            updateQuestions(response.getQuestions(), questionnaire.getQuestions());
+            updateQuestions(response.getQuestions(), questionnaire.getQuestions(), questionnaire.getId());
             repository.save(questionnaire);
         });
 
         return response;
     }
 
-    private void updateQuestions(List<QuestionDto> questionDtos, List<Question> questions) {
+    private void updateQuestions(List<QuestionDto> questionDtos,
+                                 List<Question> questions,
+                                 long questionnaireId) {
         if(questionDtos.isEmpty()) return;
 
         for(Question question : questions) {
@@ -112,7 +114,7 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
             questions.addAll(
                     questionDtos.stream()
                             .filter(questionDto -> questionDto.getId() == 0)
-                            .map(questionMapper::fromDtoToEntity)
+                            .map(question -> questionMapper.fromDtoToEntity(question, questionnaireId))
                             .toList()
             );
         }
@@ -142,7 +144,7 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
 
         return new QuestionnaireListMinResponse(repository.findByUser_id(PageRequest.of(offset, limit, sort), userId).stream()
                 .map(questionnaireMapper::fromEntityToMinResponse)
-                .collect(Collectors.toList()), repository.count());
+                .collect(Collectors.toList()), repository.countByUserId(userId));
     }
 
     public ClientResultListMinResponse getAllByCustomer(long customerId, int offset, int limit, Sort sort) {
@@ -150,7 +152,7 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
         List<ClientResult> result = clientResultRepository.findByCustomer_idAndQuestionnaire_User_id(PageRequest.of(offset, limit, sort), customerId, userId);
         return new ClientResultListMinResponse(
                 result.stream().map(clientResultMapper::fromEntityToMinResponse).collect(Collectors.toList()),
-                clientResultRepository.count());
+                clientResultRepository.countByCustomerIdAndUserId(customerId));
     }
 
     public Optional<ClientResult> createClientResult(ClientResultRequest request) {

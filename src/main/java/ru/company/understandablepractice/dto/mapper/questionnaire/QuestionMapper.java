@@ -19,9 +19,10 @@ public abstract class QuestionMapper {
     @Autowired
     AnswerOptionMapper answerOptionMapper;
 
+    @Mapping(target = "questionnaire", expression = "java(mapQuestionnaire(questionnaireId))")
     @Mapping(target = "type", expression = "java(mapType(dto))")
     @Mapping(target = "answerOptions", expression = "java(mapAnswerOptions(dto))")
-    public abstract Question fromDtoToEntity(QuestionDto dto);
+    public abstract Question fromDtoToEntity(QuestionDto dto, long questionnaireId);
 
     @Mapping(target = "type", expression = "java(mapTypeString(entity))")
     @Mapping(target = "answerOptions", expression = "java(mapAnswerOptionDto(entity))")
@@ -35,6 +36,10 @@ public abstract class QuestionMapper {
     @Mapping(target = "type", expression = "java(updateType(dto, entity))")
     @Mapping(target = "answerOptions", ignore = true)
     public abstract void updateEntityFromDto(QuestionDto dto, @MappingTarget Question entity);
+
+    Questionnaire mapQuestionnaire(long questionnaireId) {
+        return new Questionnaire(questionnaireId);
+    }
 
     QuestionType mapType(QuestionDto dto) {
         return Arrays.stream(QuestionType.values())
