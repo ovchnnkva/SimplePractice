@@ -57,7 +57,7 @@ public abstract class SearchCustomerMapper {
 
     LocalDate mapMeetDate(Customer customer){
         if(customer.getMeets().isEmpty()) return null;
-        return customer.getMeets().stream().map(Meet::getDateMeet).sorted(Comparator.reverseOrder()).toList().get(0);
+        return customer.getMeets().stream().map(Meet::getDateMeet).filter(date -> date.isBefore(LocalDate.now())).max(LocalDate::compareTo).orElse(null);
     }
 
     int mapMeetCount(Customer customer) {
