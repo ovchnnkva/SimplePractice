@@ -89,14 +89,16 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
         entity.ifPresent(questionnaire -> {
             questionnaireMapper.updateEntityFromDto(response, questionnaire);
             questionnaire.setUser(new User(requestService.getIdFromRequestToken()));
-            updateQuestions(response.getQuestions(), questionnaire.getQuestions());
+            updateQuestions(response.getQuestions(), questionnaire.getQuestions(), questionnaire.getId());
             repository.save(questionnaire);
         });
 
         return response;
     }
 
-    private void updateQuestions(List<QuestionDto> questionDtos, List<Question> questions) {
+    private void updateQuestions(List<QuestionDto> questionDtos,
+                                 List<Question> questions,
+                                 long questionnaireId) {
         if(questionDtos.isEmpty()) return;
 
         for(Question question : questions) {
@@ -112,7 +114,7 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
             questions.addAll(
                     questionDtos.stream()
                             .filter(questionDto -> questionDto.getId() == 0)
-                            .map(questionMapper::fromDtoToEntity)
+                            .map(question -> questionMapper.fromDtoToEntity(question, questionnaireId))
                             .toList()
             );
         }
