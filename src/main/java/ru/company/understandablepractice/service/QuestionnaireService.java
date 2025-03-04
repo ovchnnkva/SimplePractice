@@ -86,12 +86,31 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
     @Override
     public Optional<Questionnaire> getById(long id) {
         long customerId = getPersonId();
+        Optional<Questionnaire> questionnaire;
         if(customerRepository.findById(customerId).isPresent()) {
-            return clientResultRepository.findByCustomer_idAndQuestionnaire_id(customerId, id) != null ? Optional.empty() : repository.findById(id);
-        }
-        return repository.findById(id);
+            questionnaire = clientResultRepository.findByCustomer_idAndQuestionnaire_id(customerId, id) != null ? Optional.empty() : repository.findById(id);
+        } else questionnaire = repository.findById(id);
+
+        questionnaire.ifPresent(this::clearArchiveValues);
+
+        return questionnaire;
     }
 
+    private void clearArchiveValues(Questionnaire questionnaire) {
+        questionnaire.getQuestions()
+                .removeAll(questionnaire.getQuestions().stream()
+                        .filter(Question::isArchiveValue)
+                        .toList()
+                );
+
+        questionnaire.getQuestions()
+                .forEach(question -> question.getAnswerOptions()
+                        .removeAll(question.getAnswerOptions().stream()
+                                .filter(AnswerOption::isArchiveValue)
+                                .toList()
+                        )
+                );
+    }
 
     public QuestionnaireDto update(QuestionnaireDto response) {
         Optional<Questionnaire> entity = repository.findById(response.getId());
@@ -114,20 +133,19 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
         for(Question question : questions) {
             questionDtos.stream()
                     .filter(questionDto -> questionDto.getId() == question.getId()).findFirst()
-                    .ifPresent(questionDto -> {
+                    .ifPresentOrElse(questionDto -> {
                         questionMapper.updateEntityFromDto(questionDto, question);
                         updateAnswerOptions(questionDto.getAnswerOptions(), question);
-                    });
+                    }, () -> question.setArchiveValue(true));
         }
 
-        if(questionDtos.size() > questions.size()) {
-            questions.addAll(
-                    questionDtos.stream()
-                            .filter(questionDto -> questionDto.getId() == 0)
-                            .map(question -> questionMapper.fromDtoToEntity(question, questionnaireId))
-                            .toList()
-            );
-        }
+        questions.addAll(
+                questionDtos.stream()
+                        .filter(questionDto -> questionDto.getId() == 0)
+                        .map(question -> questionMapper.fromDtoToEntity(question, questionnaireId))
+                        .toList()
+        );
+
     }
 
     private void updateAnswerOptions(List<AnswerOptionDto> answerOptionDtos, Question question) {
@@ -136,17 +154,18 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
         for (AnswerOption answerOption : question.getAnswerOptions()) {
             answerOptionDtos.stream()
                     .filter(answerOptionDto -> answerOptionDto.getId() == answerOption.getId()).findFirst()
-                    .ifPresent(answerOptionDto -> answerOptionMapper.updateEntityFromDto(answerOptionDto, answerOption));
+                    .ifPresentOrElse(
+                            answerOptionDto -> answerOptionMapper.updateEntityFromDto(answerOptionDto, answerOption),
+                            () -> answerOption.setArchiveValue(true)
+                    );
         }
 
-        if(answerOptionDtos.size() > question.getAnswerOptions().size()) {
-            question.getAnswerOptions().addAll(
-                    answerOptionDtos.stream()
-                            .filter(answerOptionDto -> answerOptionDto.getId() == 0)
-                            .map(answerOptionDto -> answerOptionMapper.fromDtoToEntity(answerOptionDto, question.getId()))
-                            .toList()
-            );
-        }
+        question.getAnswerOptions().addAll(
+                answerOptionDtos.stream()
+                        .filter(answerOptionDto -> answerOptionDto.getId() == 0)
+                        .map(answerOptionDto -> answerOptionMapper.fromDtoToEntity(answerOptionDto, question.getId()))
+                        .toList()
+        );
     }
 
     public QuestionnaireListMinResponse getAllByUser(int offset, int limit, Sort sort) {

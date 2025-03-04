@@ -34,6 +34,9 @@ public class AnswerOption {
     @OneToMany(mappedBy = "answerOption", fetch = FetchType.EAGER)
     private List<ClientChoice> clientChoices;
 
+    @Column(name = "is_archive_value")
+    private boolean isArchiveValue = false;
+
     public AnswerOption(long id) {
         this.id = id;
     }
