@@ -16,6 +16,7 @@ import ru.company.understandablepractice.dto.mapper.questionnaire.QuestionnaireM
 import ru.company.understandablepractice.dto.questionnaire.*;
 import ru.company.understandablepractice.model.*;
 import ru.company.understandablepractice.model.questionnaire.*;
+import ru.company.understandablepractice.model.types.QuestionType;
 import ru.company.understandablepractice.repository.CustomerRepository;
 import ru.company.understandablepractice.repository.questionnaire.AnswerOptionRepository;
 import ru.company.understandablepractice.repository.questionnaire.ClientResultRepository;
@@ -74,14 +75,42 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
     }
 
     @Override
-    public Optional<Questionnaire> getById(long id) {
-        long customerId = getPersonId();
-        if(customerRepository.findById(customerId).isPresent()) {
-            return clientResultRepository.findByCustomer_idAndQuestionnaire_id(customerId, id) != null ? Optional.empty() : repository.findById(id);
+    public void delete(long id) {
+        Optional<Questionnaire> questionnaire = repository.findById(id);
+        if(questionnaire.isPresent()) {
+            questionnaire.get().setArchiveValue(true);
+            repository.save(questionnaire.get());
         }
-        return repository.findById(id);
     }
 
+    @Override
+    public Optional<Questionnaire> getById(long id) {
+        long customerId = getPersonId();
+        Optional<Questionnaire> questionnaire;
+        if(customerRepository.findById(customerId).isPresent()) {
+            questionnaire = clientResultRepository.findByCustomer_idAndQuestionnaire_id(customerId, id) != null ? Optional.empty() : repository.findById(id);
+        } else questionnaire = repository.findById(id);
+
+        questionnaire.ifPresent(this::clearArchiveValues);
+
+        return questionnaire;
+    }
+
+    private void clearArchiveValues(Questionnaire questionnaire) {
+        questionnaire.getQuestions()
+                .removeAll(questionnaire.getQuestions().stream()
+                        .filter(Question::isArchiveValue)
+                        .toList()
+                );
+
+        questionnaire.getQuestions()
+                .forEach(question -> question.getAnswerOptions()
+                        .removeAll(question.getAnswerOptions().stream()
+                                .filter(AnswerOption::isArchiveValue)
+                                .toList()
+                        )
+                );
+    }
 
     public QuestionnaireDto update(QuestionnaireDto response) {
         Optional<Questionnaire> entity = repository.findById(response.getId());
@@ -104,20 +133,19 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
         for(Question question : questions) {
             questionDtos.stream()
                     .filter(questionDto -> questionDto.getId() == question.getId()).findFirst()
-                    .ifPresent(questionDto -> {
+                    .ifPresentOrElse(questionDto -> {
                         questionMapper.updateEntityFromDto(questionDto, question);
                         updateAnswerOptions(questionDto.getAnswerOptions(), question);
-                    });
+                    }, () -> question.setArchiveValue(true));
         }
 
-        if(questionDtos.size() > questions.size()) {
-            questions.addAll(
-                    questionDtos.stream()
-                            .filter(questionDto -> questionDto.getId() == 0)
-                            .map(question -> questionMapper.fromDtoToEntity(question, questionnaireId))
-                            .toList()
-            );
-        }
+        questions.addAll(
+                questionDtos.stream()
+                        .filter(questionDto -> questionDto.getId() == 0)
+                        .map(question -> questionMapper.fromDtoToEntity(question, questionnaireId))
+                        .toList()
+        );
+
     }
 
     private void updateAnswerOptions(List<AnswerOptionDto> answerOptionDtos, Question question) {
@@ -126,25 +154,28 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
         for (AnswerOption answerOption : question.getAnswerOptions()) {
             answerOptionDtos.stream()
                     .filter(answerOptionDto -> answerOptionDto.getId() == answerOption.getId()).findFirst()
-                    .ifPresent(answerOptionDto -> answerOptionMapper.updateEntityFromDto(answerOptionDto, answerOption));
+                    .ifPresentOrElse(
+                            answerOptionDto -> answerOptionMapper.updateEntityFromDto(answerOptionDto, answerOption),
+                            () -> answerOption.setArchiveValue(true)
+                    );
         }
 
-        if(answerOptionDtos.size() > question.getAnswerOptions().size()) {
-            question.getAnswerOptions().addAll(
-                    answerOptionDtos.stream()
-                            .filter(answerOptionDto -> answerOptionDto.getId() == 0)
-                            .map(answerOptionDto -> answerOptionMapper.fromDtoToEntity(answerOptionDto, question.getId()))
-                            .toList()
-            );
-        }
+        question.getAnswerOptions().addAll(
+                answerOptionDtos.stream()
+                        .filter(answerOptionDto -> answerOptionDto.getId() == 0)
+                        .map(answerOptionDto -> answerOptionMapper.fromDtoToEntity(answerOptionDto, question.getId()))
+                        .toList()
+        );
     }
 
     public QuestionnaireListMinResponse getAllByUser(int offset, int limit, Sort sort) {
         long userId = requestService.getIdFromRequestToken();
 
-        return new QuestionnaireListMinResponse(repository.findByUser_id(PageRequest.of(offset, limit, sort), userId).stream()
+        return new QuestionnaireListMinResponse(
+                repository.findByUser_idAndIsArchiveValue(PageRequest.of(offset, limit, sort), userId, false).stream()
                 .map(questionnaireMapper::fromEntityToMinResponse)
-                .collect(Collectors.toList()), repository.countByUserId(userId));
+                .collect(Collectors.toList()), repository.countByUserId(userId)
+        );
     }
 
     public ClientResultListMinResponse getAllByCustomer(long customerId, int offset, int limit, Sort sort) {
@@ -166,16 +197,49 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
         Optional<ClientResult> clientResult = clientResultRepository.findById(id);
         ClientResultResponse response = null;
         if (clientResult.isPresent()) {
-            response = clientResultMapper.fromEntityToResponse(clientResult.get());
+            ClientResult result = clientResult.get();
+            response = clientResultMapper.fromEntityToResponse(result);
 
-            List<Long> clientChoiceIds = getClientChoicesIds(clientResult.get().getClientChoices());
-
+            List<Long> clientChoiceIds = getClientChoicesIds(result.getClientChoices());
             response.getQuestionnaire()
                     .getQuestions()
-                    .forEach(questionResponse -> setIsChoice(questionResponse.getAnswerOptions(), clientChoiceIds));
-
+                    .forEach(questionResponse -> {
+                        setIsChoice(questionResponse.getAnswerOptions(), clientChoiceIds);
+                        setAnswerOptionText(questionResponse, result.getClientChoices());
+                    });
         }
         return Optional.ofNullable(response);
+    }
+
+    private List<Long> getClientChoicesIds(List<ClientChoice> clientChoices) {
+        return clientChoices.stream()
+                .map(clientChoice -> clientChoice.getAnswerOption().getId())
+                .collect(Collectors.toList());
+    }
+
+    private void setIsChoice(List<AnswerOptionResponse> answerOptionResponses, List<Long> clientChoiceIds) {
+        answerOptionResponses.forEach(answerOptionResponse ->
+                answerOptionResponse.setChoice(clientChoiceIds.contains(answerOptionResponse.getId()))
+        );
+    }
+
+    private void setAnswerOptionText(QuestionResponse response, List<ClientChoice> clientChoices) {
+        if(!response.getType().equals(QuestionType.DETAILED.getKey()))
+            return;
+
+        response.getAnswerOptions()
+                .forEach(answerOptionResponse ->
+                        answerOptionResponse.setText(getAnswerOptionText(clientChoices, answerOptionResponse.getId()))
+                );
+    }
+
+    private String getAnswerOptionText(List<ClientChoice> clientChoices, long answerOptionId) {
+        final String[] text = {null};
+        clientChoices.stream()
+                .filter(clientChoice -> clientChoice.getAnswerOption().getId() == answerOptionId)
+                .findFirst().ifPresent(result -> text[0] = result.getText());
+
+        return text[0];
     }
 
     public Optional<String> createLink(long questionnaireId, long customerId) {
@@ -205,17 +269,7 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
         customerCredentials.setRoles(new HashSet<>(List.of(new Role(6, "ROLE_TEST"))));
     }
 
-    private List<Long> getClientChoicesIds(List<ClientChoice> clientChoices) {
-        return clientChoices.stream()
-                .map(clientChoice -> clientChoice.getAnswerOption().getId())
-                .collect(Collectors.toList());
-    }
 
-    private void setIsChoice(List<AnswerOptionResponse> answerOptionResponses, List<Long> clientChoiceIds) {
-        answerOptionResponses.forEach(answerOptionResponse ->
-                answerOptionResponse.setChoice(clientChoiceIds.contains(answerOptionResponse.getId()))
-        );
-    }
 
     public long getPersonId() {
         return jwtService.extractUserId(request.getHeader("Authorization"), JwtType.ACCESS);
