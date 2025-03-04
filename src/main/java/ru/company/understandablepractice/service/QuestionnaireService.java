@@ -16,6 +16,7 @@ import ru.company.understandablepractice.dto.mapper.questionnaire.QuestionnaireM
 import ru.company.understandablepractice.dto.questionnaire.*;
 import ru.company.understandablepractice.model.*;
 import ru.company.understandablepractice.model.questionnaire.*;
+import ru.company.understandablepractice.model.types.QuestionType;
 import ru.company.understandablepractice.repository.CustomerRepository;
 import ru.company.understandablepractice.repository.questionnaire.AnswerOptionRepository;
 import ru.company.understandablepractice.repository.questionnaire.ClientResultRepository;
@@ -166,16 +167,49 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
         Optional<ClientResult> clientResult = clientResultRepository.findById(id);
         ClientResultResponse response = null;
         if (clientResult.isPresent()) {
-            response = clientResultMapper.fromEntityToResponse(clientResult.get());
+            ClientResult result = clientResult.get();
+            response = clientResultMapper.fromEntityToResponse(result);
 
-            List<Long> clientChoiceIds = getClientChoicesIds(clientResult.get().getClientChoices());
-
+            List<Long> clientChoiceIds = getClientChoicesIds(result.getClientChoices());
             response.getQuestionnaire()
                     .getQuestions()
-                    .forEach(questionResponse -> setIsChoice(questionResponse.getAnswerOptions(), clientChoiceIds));
-
+                    .forEach(questionResponse -> {
+                        setIsChoice(questionResponse.getAnswerOptions(), clientChoiceIds);
+                        setAnswerOptionText(questionResponse, result.getClientChoices());
+                    });
         }
         return Optional.ofNullable(response);
+    }
+
+    private List<Long> getClientChoicesIds(List<ClientChoice> clientChoices) {
+        return clientChoices.stream()
+                .map(clientChoice -> clientChoice.getAnswerOption().getId())
+                .collect(Collectors.toList());
+    }
+
+    private void setIsChoice(List<AnswerOptionResponse> answerOptionResponses, List<Long> clientChoiceIds) {
+        answerOptionResponses.forEach(answerOptionResponse ->
+                answerOptionResponse.setChoice(clientChoiceIds.contains(answerOptionResponse.getId()))
+        );
+    }
+
+    private void setAnswerOptionText(QuestionResponse response, List<ClientChoice> clientChoices) {
+        if(!response.getType().equals(QuestionType.DETAILED.getKey()))
+            return;
+
+        response.getAnswerOptions()
+                .forEach(answerOptionResponse ->
+                        answerOptionResponse.setText(getAnswerOptionText(clientChoices, answerOptionResponse.getId()))
+                );
+    }
+
+    private String getAnswerOptionText(List<ClientChoice> clientChoices, long answerOptionId) {
+        final String[] text = {null};
+        clientChoices.stream()
+                .filter(clientChoice -> clientChoice.getAnswerOption().getId() == answerOptionId)
+                .findFirst().ifPresent(result -> text[0] = result.getText());
+
+        return text[0];
     }
 
     public Optional<String> createLink(long questionnaireId, long customerId) {
@@ -205,17 +239,7 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
         customerCredentials.setRoles(new HashSet<>(List.of(new Role(6, "ROLE_TEST"))));
     }
 
-    private List<Long> getClientChoicesIds(List<ClientChoice> clientChoices) {
-        return clientChoices.stream()
-                .map(clientChoice -> clientChoice.getAnswerOption().getId())
-                .collect(Collectors.toList());
-    }
 
-    private void setIsChoice(List<AnswerOptionResponse> answerOptionResponses, List<Long> clientChoiceIds) {
-        answerOptionResponses.forEach(answerOptionResponse ->
-                answerOptionResponse.setChoice(clientChoiceIds.contains(answerOptionResponse.getId()))
-        );
-    }
 
     public long getPersonId() {
         return jwtService.extractUserId(request.getHeader("Authorization"), JwtType.ACCESS);
