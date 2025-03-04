@@ -43,6 +43,9 @@ public class Questionnaire {
     @OneToMany(mappedBy = "questionnaire", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Question> questions;
 
+    @Column(name = "is_archive_value")
+    private boolean isArchiveValue = false;
+
     public Questionnaire(long id) {
         this.id = id;
     }

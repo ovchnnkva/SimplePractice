@@ -16,8 +16,8 @@ import java.util.Set;
 
 @Repository
 public interface QuestionnaireRepository extends JpaRepository<Questionnaire, Long> {
-    List<Questionnaire> findByUser_id(PageRequest pageRequest, Long id);
+    List<Questionnaire> findByUser_idAndIsArchiveValue(PageRequest pageRequest, Long id, boolean isArchiveValue);
 
-    @Query("SELECT COUNT(q) FROM Questionnaire q WHERE q.user.id = :userId")
+    @Query("SELECT COUNT(q) FROM Questionnaire q WHERE q.user.id = :userId AND q.isArchiveValue = false")
     int countByUserId(long userId);
 }

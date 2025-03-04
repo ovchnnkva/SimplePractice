@@ -75,6 +75,15 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
     }
 
     @Override
+    public void delete(long id) {
+        Optional<Questionnaire> questionnaire = repository.findById(id);
+        if(questionnaire.isPresent()) {
+            questionnaire.get().setArchiveValue(true);
+            repository.save(questionnaire.get());
+        }
+    }
+
+    @Override
     public Optional<Questionnaire> getById(long id) {
         long customerId = getPersonId();
         if(customerRepository.findById(customerId).isPresent()) {
@@ -143,9 +152,11 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
     public QuestionnaireListMinResponse getAllByUser(int offset, int limit, Sort sort) {
         long userId = requestService.getIdFromRequestToken();
 
-        return new QuestionnaireListMinResponse(repository.findByUser_id(PageRequest.of(offset, limit, sort), userId).stream()
+        return new QuestionnaireListMinResponse(
+                repository.findByUser_idAndIsArchiveValue(PageRequest.of(offset, limit, sort), userId, false).stream()
                 .map(questionnaireMapper::fromEntityToMinResponse)
-                .collect(Collectors.toList()), repository.countByUserId(userId));
+                .collect(Collectors.toList()), repository.countByUserId(userId)
+        );
     }
 
     public ClientResultListMinResponse getAllByCustomer(long customerId, int offset, int limit, Sort sort) {
