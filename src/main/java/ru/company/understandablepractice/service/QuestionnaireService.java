@@ -85,12 +85,7 @@ public class QuestionnaireService extends CRUDService<Questionnaire> {
 
     @Override
     public Optional<Questionnaire> getById(long id) {
-        long customerId = getPersonId();
-        Optional<Questionnaire> questionnaire;
-        if(customerRepository.findById(customerId).isPresent()) {
-            questionnaire = clientResultRepository.findByCustomer_idAndQuestionnaire_id(customerId, id) != null ? Optional.empty() : repository.findById(id);
-        } else questionnaire = repository.findById(id);
-
+        Optional<Questionnaire> questionnaire = repository.findById(id);
         questionnaire.ifPresent(this::clearArchiveValues);
 
         return questionnaire;
